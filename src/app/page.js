@@ -1,37 +1,64 @@
 'use client'
-// import SimpleHeader from '@/components/header/SimpleHeader'
-// import { handleSignIn, handleSignOut } from '../lib/auth'
-// import { useSession } from 'next-auth/react'
+
+import SearchAndUserBar from '@/components/bars/SearchAndUserBar'
+import Footer from '@/components/footer/Footer'
+import HeaderWithImage from '@/components/header/HeaderWithImage'
+import ProductCard from '@/components/product/ProductCard'
+import { handleSignIn } from '@/lib/auth'
+import { getAllProducts, getPersonByEmail } from '@/lib/graphql/queries'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 export default function Home() {
-  // const { data: session } = useSession()
+  const [products, setProducts] = useState()
+  const { data: session } = useSession()
+  const router = useRouter()
+  useEffect(() => {
+    if (session?.user?.email) {
+      const checkIfPersonExists = async () => {
+        try {
+          const response = await getPersonByEmail({ email: session.user.email })
+          if (!response) {
+            router.push('/complete-profile')
+          }
+        } catch (err) {
+          console.error('Error fetching person:', err)
+        }
+      }
 
-  // console.log(session && session)
+      checkIfPersonExists()
+    }
+  }, [session, router])
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const response = await getAllProducts()
+      setProducts(response)
+      console.log('response', response)
+    }
+    fetchProducts()
+  }, [])
+
   return (
-    <main className="flex items-center justify-center min-h-screen bg-gray-100">
-      {/* <SimpleHeader />
-      {session ? (
-        <div>
-          <h2 className="text-lg font-medium text-gray-700">
-            Welcome, {session.user.name}!
-          </h2>
-          <button
-            onClick={handleSignOut}
-            className="px-4 py-2 mt-4 text-white bg-red-500 rounded-lg hover:bg-red-600">
-            Sign Out
-          </button>
+    <div className="flex flex-col min-h-screen">
+      <HeaderWithImage />
+      <SearchAndUserBar session={session} />
+
+      {/* CONTENIDO PRINCIPAL OPCIONAL */}
+      <main className="flex-grow">
+        <div className="my-6 mx-4">
+          <h1 className="text-3xl text-center font-bold">Products</h1>
+          <div className="w-full grid grid-cols-3 gap-4">
+            {products?.map(product => {
+              return <ProductCard product={product} />
+            })}
+          </div>
         </div>
-      ) : (
-        <button
-          onClick={handleSignIn}
-          className="px-6 py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700">
-          Sign in with Google
-        </button>
-      )} */}
-      <a className="text-black" href="/login">
-        {' '}
-        Go to Login
-      </a>
-    </main>
+      </main>
+
+      {/* FOOTER PEGADO ABAJO */}
+      <Footer />
+    </div>
   )
 }

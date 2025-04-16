@@ -13,24 +13,6 @@ export const authOptions = {
       },
     }),
   ],
-  callbacks: {
-    async jwt({ token, user, account, profile }) {
-      if (account && profile) {
-        token.googleData = {
-          email: profile.email,
-          name: profile.name,
-          image: profile.picture,
-        }
-      }
-      return token
-    },
-    async session({ session, token }) {
-      if (token.googleData) {
-        session.googleData = token.googleData
-      }
-      return session
-    },
-  },
   secret: process.env.NEXTAUTH_SECRET,
 }
 

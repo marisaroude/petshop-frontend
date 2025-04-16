@@ -2,31 +2,24 @@ import axios from 'axios'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
-export async function createPerson({
+export async function createUser({
   dni,
-  nombre,
-  apellido,
-  telefono,
-  correo_electronico,
-  domicilio,
-  tipo,
+  name,
+  lastName,
+  phone,
+  email,
+  address,
+  type,
 }) {
   try {
-    if (
-      !dni ||
-      !nombre ||
-      !apellido ||
-      !telefono ||
-      !correo_electronico ||
-      !domicilio
-    ) {
+    if (!dni || !name || !lastName || !phone || !email || !address) {
       throw new Error(
         'DNI, name, last name, phone, email and address are required',
       )
     }
 
     const mutation = `
-    mutation CreatePersona($dni: String!, $nombre: String!, $apellido: String!, $telefono: String!, $correoElectronico: String!, $domicilio: String!, $tipo: Boolean!) {
+    mutation CreatePersona($dni: String!, $nombre: String!, $apellido: String!, $telefono: String!, $correoElectronico: String!, $domicilio: String!, $tipo: Boolean) {
     createPersona(dni: $dni, nombre: $nombre, apellido: $apellido, telefono: $telefono, correo_electronico: $correoElectronico, domicilio: $domicilio, tipo: $tipo) {
         id_persona
         dni
@@ -46,12 +39,12 @@ export async function createPerson({
         query: mutation,
         variables: {
           dni,
-          nombre,
-          apellido,
-          telefono,
-          correo_electronico,
-          domicilio,
-          tipo,
+          nombre: name,
+          apellido: lastName,
+          telefono: phone,
+          correoElectronico: email,
+          domicilio: address,
+          tipo: type,
         },
       },
       {
@@ -63,13 +56,12 @@ export async function createPerson({
 
     const data = response.data
     console.log('data', data)
+    return data
   } catch (error) {
     console.error(
-      'Error creating person:',
+      'Error creating user:',
       error.response ? error.response.data : error.message,
     )
-    throw new Error(
-      'Failed crrating person. Please check the GraphQL response.',
-    )
+    throw new Error('Failed crrating user. Please check the GraphQL response.')
   }
 }

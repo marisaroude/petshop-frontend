@@ -65,3 +65,52 @@ export async function createUser({
     throw new Error('Failed crrating user. Please check the GraphQL response.')
   }
 }
+
+export async function addToCart({ quantity, id_cart, id_ps, subtotal }) {
+  try {
+    if (!quantity || !id_cart || !id_ps || !subtotal) {
+      throw new Error('Quanrity, id_cart, id_ps and subtotal are required')
+    }
+
+    const mutation = `
+    mutation CreateProductoCarrito($cantidad: Int!, $subtotal: Float!, $id_ps: Int!, $id_carrito: Int!) {
+      createProductoCarrito(cantidad: $cantidad, subtotal: $subtotal, id_ps: $id_ps, id_carrito: $id_carrito) {
+        id_pc
+        cantidad
+        subtotal
+        id_ps
+        id_carrito
+      }
+    }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query: mutation,
+        variables: {
+          cantidad: quantity,
+          subtotal,
+          id_carrito: id_cart,
+          id_ps,
+        },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data
+    console.log('data', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error adding product to cart :',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed Error adding product to cart. Please check the GraphQL response.',
+    )
+  }
+}

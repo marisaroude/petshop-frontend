@@ -9,8 +9,11 @@ import { getAllProducts, getPersonByEmail } from '@/lib/graphql/queries'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { currentUser } from './signals/user'
+import { useSignals } from '@preact/signals-react/runtime'
 
 export default function Home() {
+  useSignals()
   const [products, setProducts] = useState()
   const { data: session } = useSession()
   const router = useRouter()
@@ -21,6 +24,9 @@ export default function Home() {
           const response = await getPersonByEmail({ email: session.user.email })
           if (!response) {
             router.push('/complete-profile')
+          } else {
+            console.log('hello')
+            currentUser.value = response
           }
         } catch (err) {
           console.error('Error fetching person:', err)
@@ -35,16 +41,16 @@ export default function Home() {
     const fetchProducts = async () => {
       const response = await getAllProducts()
       setProducts(response)
-      console.log('response', response)
     }
     fetchProducts()
   }, [])
+
+  console.log('user', currentUser.value)
 
   return (
     <div className="flex flex-col min-h-screen">
       <HeaderWithImage />
       <SearchAndUserBar session={session} />
-
       {/* CONTENIDO PRINCIPAL OPCIONAL */}
       <main className="flex-grow">
         <div className="my-6 mx-4">

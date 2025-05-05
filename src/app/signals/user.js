@@ -1,4 +1,5 @@
-import signal from '@preact/signals-react'
+import { signal } from '@preact/signals-react'
 
-export const userGoogleInfo = signal({})
-export const userFormRegister = signal({})
+export const userGoogleInfo = signal(null)
+export const userFormRegister = signal(null)
+export const currentUser = signal(null)

@@ -55,7 +55,7 @@ export async function createUser({
     )
 
     const data = response.data
-    console.log('data', data)
+    console.log('data from create user', data)
     return data
   } catch (error) {
     console.error(
@@ -102,7 +102,7 @@ export async function addToCart({ quantity, id_cart, id_ps, subtotal }) {
     )
 
     const data = response.data
-    console.log('data', data)
+    console.log('data from add to cart', data)
     return data
   } catch (error) {
     console.error(
@@ -111,6 +111,48 @@ export async function addToCart({ quantity, id_cart, id_ps, subtotal }) {
     )
     throw new Error(
       'Failed Error adding product to cart. Please check the GraphQL response.',
+    )
+  }
+}
+
+export async function removeProductCart({ id_pc }) {
+  try {
+    if (!id_pc) {
+      throw new Error('id_pc is required')
+    }
+
+    const mutation = `
+    mutation DeleteProductosCarrito($id_pc: Int!) {
+        deleteProductosCarrito(id_pc: $id_pc) {
+          message
+        }
+      }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query: mutation,
+        variables: {
+          id_pc: id_pc,
+        },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data.data.deleteProductosCarrito
+    console.log('data from remove product cart', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error deleting product to cart :',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed Error deleting product to cart. Please check the GraphQL response.',
     )
   }
 }

@@ -3,7 +3,6 @@ import axios from 'axios'
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 export async function getPersonByEmail({ email }) {
-  console.log('email', email)
   if (!email) {
     throw new Error('Email is required')
   }
@@ -36,9 +35,9 @@ export async function getPersonByEmail({ email }) {
       },
     )
 
-    const data = response.data
-    console.log('data', data)
-    return data.data.getPersonByEmail
+    const data = response.data.data.getPersonByEmail
+    console.log('data from get person by email ', data)
+    return data
   } catch (error) {
     console.error(
       'Error fetching person by email:',
@@ -51,7 +50,6 @@ export async function getPersonByEmail({ email }) {
 }
 
 export async function getAllPerson() {
-  console.log(' api url', API_URL)
   try {
     const query = `
           query Personas {
@@ -80,9 +78,9 @@ export async function getAllPerson() {
       },
     )
 
-    const data = response.data
-    console.log('data', data)
-    return data.data.personas
+    const data = response.data.data.personas
+    console.log('data from get all person', data)
+    return data
   } catch (error) {
     console.error(
       'Error fetching all person:',
@@ -121,9 +119,9 @@ export async function getAllProducts() {
       },
     )
 
-    const data = response.data
-    console.log('data', data)
-    return data.data.productosServicios
+    const data = response.data.data.productosServicios
+    console.log('data from get all products', data)
+    return data
   } catch (error) {
     console.error(
       'Error fetching all products:',
@@ -166,9 +164,9 @@ export async function getProductById({ id_ps }) {
       },
     )
 
-    const data = response.data
-    console.log('data', data)
-    return data.data.productoServicioById
+    const data = response.data.data.productoServicioById
+    console.log('data from get product by id', data)
+    return data
   } catch (error) {
     console.error(
       'Error fetching product by id:',
@@ -176,6 +174,49 @@ export async function getProductById({ id_ps }) {
     )
     throw new Error(
       'Failed fetching product by id. Please check the GraphQL response.',
+    )
+  }
+}
+
+export async function getAllProductsCartById({ id_carrito }) {
+  if (!id_carrito) {
+    throw new Error('ID Cart is required')
+  }
+  try {
+    const query = `
+        query ProductosCarritosById($id_carrito: Int!) {
+        productosCarritosById(id_carrito: $id_carrito) {
+          id_pc
+          cantidad
+          subtotal
+          id_ps
+          id_carrito
+        }
+      }
+          `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+        variables: { id_carrito },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data.data.productosCarritosById
+    console.log('data from get all products cart by id', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error fetching products cart by id:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed fetching products cart by id. Please check the GraphQL response.',
     )
   }
 }

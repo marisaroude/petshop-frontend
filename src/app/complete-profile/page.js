@@ -8,8 +8,6 @@ import React from 'react'
 export default function CompleteProfile() {
   const { data: session } = useSession()
 
-  console.log('session', session)
-
   return (
     session && (
       <div className="bg-white h-full w-full flex flex-col items-center">

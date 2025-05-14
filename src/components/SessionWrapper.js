@@ -1,7 +1,14 @@
 'use client' // 👈 Ensure it's a Client Component
 
+import { AuthProvider } from '../app/context/authContext'
 import { SessionProvider } from 'next-auth/react'
 
 export default function SessionWrapper({ children }) {
-  return <SessionProvider>{children}</SessionProvider>
+  return (
+    <>
+      <SessionProvider>
+        <AuthProvider>{children}</AuthProvider>
+      </SessionProvider>
+    </>
+  )
 }

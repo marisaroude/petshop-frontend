@@ -1,9 +1,9 @@
-// utils/withAuth.js
+// utils/withUserAuth.js
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '../context/authContext'
 
-const withAuth = WrappedComponent => {
+const withUserAuth = WrappedComponent => {
   const Wrapper = props => {
     const { user } = useAuth()
     const router = useRouter()
@@ -21,4 +21,4 @@ const withAuth = WrappedComponent => {
   return Wrapper
 }
 
-export default withAuth
+export default withUserAuth

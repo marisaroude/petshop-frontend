@@ -10,6 +10,13 @@ export function productSuccesfullyAdded(router) {
   })
 }
 
+export function productSuccesfullyCreated() {
+  toast.success('Producto creado exitosamente', {
+    closeButton: false,
+    hideProgressBar: true,
+  })
+}
+
 export function errorMessage(message) {
   toast.error(message, {
     closeButton: true,

@@ -4,8 +4,9 @@ import RegisterForm from '@/components/forms/RegisterForm'
 import SimpleHeader from '@/components/header/SimpleHeader'
 import { useSession } from 'next-auth/react'
 import React from 'react'
+import withoutAuth from '../utils/withoutAuth'
 
-export default function CompleteProfile() {
+function CompleteProfile() {
   const { data: session } = useSession()
 
   return (
@@ -18,3 +19,5 @@ export default function CompleteProfile() {
     )
   )
 }
+
+export default withoutAuth(CompleteProfile)

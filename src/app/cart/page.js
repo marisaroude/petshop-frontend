@@ -1,16 +1,9 @@
 'use client'
 
-import ProductCart from '@/components/product/ProductCart'
-import {
-  addToCart,
-  getAllProductsCartById,
-  getProductById,
-  removeProductCart,
-} from '@/lib/graphql'
-import { useSignals } from '@preact/signals-react/runtime'
-
 import React, { useEffect, useState } from 'react'
-import withAuth from '../utils/withAuth'
+import ProductCart from '@/components/product/ProductCart'
+import { getAllProductsCartById, removeProductCart } from '@/lib/graphql'
+import { useSignals } from '@preact/signals-react/runtime'
 import { useAuth } from '../context/authContext'
 import { useRouter } from 'next/navigation'
 import {
@@ -18,11 +11,16 @@ import {
   productSuccesfullyRemoved,
 } from '../utils/toast/toastMessages'
 import CustomButton from '@/components/inputs/CustomButton'
+import BigSpinner from '@/components/spinner/BigSpinner'
+import ModalRedirectMP from '@/components/modal/ModalRedirectMP'
+import withUserAuth from '../utils/withUserAuth'
 
 function page() {
   useSignals()
   const router = useRouter()
   const [productsCart, setProductsCart] = useState()
+  const [loading, setLoading] = useState(false)
+  const [open, setOpen] = useState(false)
   const [total, setTotal] = useState(0)
   const { user } = useAuth()
 
@@ -43,9 +41,6 @@ function page() {
       setTotal(initialTotal)
     }
   }
-  useEffect(() => {
-    user && getProductCarrito()
-  }, [user])
 
   const removeProduct = async ({ id_pc }) => {
     const response = await removeProductCart({ id_pc: id_pc })
@@ -56,15 +51,20 @@ function page() {
     }
   }
 
-  const handleClickBack = () => {
-    router.push('/')
-  }
+  useEffect(() => {
+    user && getProductCarrito()
+  }, [user])
 
-  const handleClickContinueBuy = () => {
-    //TO-DO: here i nedd to redirect mercado pago API
-  }
   return (
     <div className="flex flex-col items-center justify-between w-full h-full">
+      {loading && <BigSpinner />}
+      <ModalRedirectMP
+        productsCart={productsCart}
+        setLoading={setLoading}
+        loading={loading}
+        setOpen={setOpen}
+        open={open}
+      />
       {productsCart?.length > 0 ? (
         <>
           {productsCart.map((product, index) => (
@@ -81,8 +81,8 @@ function page() {
           </div>
 
           <div className="w-full flex items-center justify-end gap-4 p-4">
-            <CustomButton handleClick={handleClickBack} text="Volver" />
-            <CustomButton handleClick={handleClickContinueBuy} text="Comprar" />
+            <CustomButton handleClick={() => router.push('/')} text="Volver" />
+            <CustomButton handleClick={() => setOpen(true)} text="Comprar" />
           </div>
         </>
       ) : (
@@ -99,4 +99,4 @@ function page() {
   )
 }
 
-export default page
+export default withUserAuth(page)

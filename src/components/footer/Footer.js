@@ -1,10 +1,13 @@
 import React from 'react'
+import { useBackgroundColor } from '@/app/context/backgroundColorContext'
 import { FaFacebook, FaInstagram } from 'react-icons/fa'
 
 export default function Footer() {
+  const { bgColor } = useBackgroundColor()
   return (
-    <div className="bg-pink py-4 px-6 flex text-black justify-between w-full">
-      <div>
+    <div
+      className={`${bgColor} py-4 px-6 flex flex-col sm:flex-row text-black items-start justify-between w-full`}>
+      <div className="self-center">
         <img src="/LOGO-puppis.png" alt="Logo" className="h-20" />
       </div>
       <div className="flex flex-col gap-2">
@@ -34,7 +37,7 @@ export default function Footer() {
           </a>
         </div>
       </div>
-      <div className="flex flex-col items-center gap-2">
+      <div className="flex flex-col self-center items-center gap-2">
         <h1 className="font-bold text-center">FORMAS DE PAGO</h1>
         <img
           src="/LOGO-MercadoPago.png"

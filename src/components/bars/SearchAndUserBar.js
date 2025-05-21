@@ -3,15 +3,19 @@ import SearchInput from '../inputs/SearchInput'
 import UserMenu from '../menu/UserMenu'
 import { UserIcon } from '@heroicons/react/16/solid'
 import { useAuth } from '@/app/context/authContext'
+import AdminMenu from '../menu/AdminMenu'
+import { useBackgroundColor } from '@/app/context/backgroundColorContext'
 
 export default function SearchAndUserBar() {
   const { user, handleSignIn } = useAuth()
+  const { bgColor } = useBackgroundColor()
 
   return (
-    <div className="bg-pink w-full flex items-center justify-between p-4 text-black font-bold">
+    <div
+      className={`${bgColor} w-full flex flex-col sm:flex sm:flex-row items-center  gap-2 justify-between p-4 text-black font-bold`}>
       {/* necesito la logica de buscar */}
       <SearchInput />
-      <div className="flex items-center gap-4 ">
+      <div className="flex sm:items-center justify-end gap-4 w-full">
         {user ? (
           <p>
             {user.nombre} {user.apellido}
@@ -21,8 +25,12 @@ export default function SearchAndUserBar() {
             <p>Registrarse / Iniciar Sesión</p>
           </div>
         )}
-        <UserIcon className="size-6 fill-black" />
-        {user && <UserMenu />}
+        {user && (
+          <div className="flex gap-2 items-center">
+            <UserIcon className="size-6 fill-black" />
+            {user?.tipo ? <AdminMenu /> : <UserMenu />}
+          </div>
+        )}
       </div>
     </div>
   )

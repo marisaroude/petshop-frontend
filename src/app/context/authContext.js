@@ -2,10 +2,12 @@
 import { createContext, useState, useContext, useEffect } from 'react'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { getPersonByEmail } from '@/lib/graphql'
+import { useRouter } from 'next/navigation'
 
 const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
+  const router = useRouter()
   const { data: session } = useSession()
   const [user, setUser] = useState(null)
 

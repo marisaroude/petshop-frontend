@@ -6,10 +6,11 @@ import { registerSchema } from '@/lib/zod/schemas/user'
 import { createUser } from '@/lib/graphql'
 import { useRouter } from 'next/navigation'
 import InputWithLabel from '../inputs/InputWithLabel'
+import { useBackgroundColor } from '@/app/context/backgroundColorContext'
 
 export default function RegisterForm({ userInfo }) {
   const router = useRouter()
-
+  const { bgColor } = useBackgroundColor()
   const fullName = userInfo.name.split(' ')
   const name = fullName[0]
   const lastName = fullName.slice(1).join(' ')
@@ -52,9 +53,10 @@ export default function RegisterForm({ userInfo }) {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex h-full flex-col items-center gap-4 w-1/2 p-20">
+      className="flex h-full flex-col items-center gap-4 w-full p-2 sm:p-20">
       <h2 className="text-black">Ingrese sus datos</h2>
-      <div className="flex flex-col gap-4 bg-pink rounded-md w-full p-4 ">
+      <div
+        className={`flex flex-col gap-4 ${bgColor} rounded-md sm:w-1/2 w-full  p-4`}>
         {InfoForm.map(item => (
           <InputWithLabel
             key={item.value}
@@ -66,7 +68,7 @@ export default function RegisterForm({ userInfo }) {
       </div>
       <button
         type="submit"
-        className="mt-4 bg-pink text-white px-6 py-2 rounded-md">
+        className={`mt-4 ${bgColor} text-white px-6 py-2 rounded-md`}>
         Registrar
       </button>
     </form>

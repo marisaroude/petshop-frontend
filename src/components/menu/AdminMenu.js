@@ -9,10 +9,13 @@ import {
   ClockIcon,
   HeartIcon,
   ArrowRightEndOnRectangleIcon,
+  QuestionMarkCircleIcon,
+  GiftIcon,
 } from '@heroicons/react/16/solid'
 import { useRouter } from 'next/navigation'
+import { FaUpload } from 'react-icons/fa'
 
-export default function UserMenu() {
+export default function AdminMenu() {
   const router = useRouter()
   const { handleSignOut } = useAuth()
   const { bgColor } = useBackgroundColor()
@@ -28,38 +31,38 @@ export default function UserMenu() {
         className={`w-52 shadow-md origin-top-right rounded-xl border border-black/9 ${bgColor} p-1 text-sm/6 text-black transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0`}>
         <MenuItem>
           <button
-            onClick={() => router.push('/')}
+            onClick={() => router.push('/agregar-producto')}
             className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-            <HomeIcon className="size-4 fill-black" />
-            Inicio
+            <FaUpload className="size-4 fill-black" />
+            Agregar Producto
+          </button>
+        </MenuItem>
+        <MenuItem>
+          <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+            <GiftIcon className="size-4 fill-black" />
+            Promociones
           </button>
         </MenuItem>
         <MenuItem>
           <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
             <InformationCircleIcon className="size-4 fill-black" />
-            Datos
+            Informes
           </button>
         </MenuItem>
         <MenuItem>
           <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-            <ClockIcon className="size-4 fill-black" />
-            Historial
+            <QuestionMarkCircleIcon className="size-4 fill-black" />
+            Preguntas Pendientes
           </button>
         </MenuItem>
-        <MenuItem>
-          <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-            <HeartIcon className="size-4 fill-black" />
-            Mascota
-          </button>
-        </MenuItem>
-        <MenuItem>
+        {/* <MenuItem>
           <button
             onClick={() => router.push('/cart')}
             className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
             <ShoppingCartIcon className="size-4 fill-black" />
             Carrito
           </button>
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem>
           <button
             onClick={handleSignOut}

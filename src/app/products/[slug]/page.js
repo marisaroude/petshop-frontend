@@ -10,6 +10,7 @@ import SelectorQuantity from '@/components/inputs/SelectorQuantity'
 import { addToCart, getProductById } from '@/lib/graphql'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import { FaEdit } from 'react-icons/fa'
 
 export default function page() {
   const router = useRouter()
@@ -47,22 +48,37 @@ export default function page() {
       )
     }
   }
+
+  const renderEditButton = id_ps => {
+    if (user && user.tipo) {
+      return (
+        <div className="p-4">
+          <button
+            type="button"
+            onClick={() => router.push(`/editar-producto/${id_ps}`)}
+            className="bg-lightgreen font-bold text-white px-4 py-2 rounded-md cursor-pointer h-max">
+            Editar Producto
+          </button>
+        </div>
+      )
+    }
+  }
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-around">
       <div className="p-8">
         {product ? (
           <div className="flex gap-4">
             <div className="flex flex-col gap-8">
               <img
-                src="/productImage.png"
+                src={product.image || '/productImage.png'}
                 alt={product.nombre}
-                className="w-full h-48 object-cover rounded"
+                className="w-full h-48 object-contain rounded"
               />
               <Divider />
 
               <div className="flex flex-col gap-4">
-                <p>Precio: {product.precio}</p>
-                <div className="flex items-center gap-2">
+                <p>Precio: ${product.precio}</p>
+                <div className="flex items-center gap-4">
                   <p>Seleccione una cantidad</p>
                   <SelectorQuantity
                     setQuantity={setQuantity}
@@ -82,6 +98,7 @@ export default function page() {
           <p>Cargando producto...</p>
         )}
       </div>
+      {renderEditButton(product?.id_ps)}
     </div>
   )
 }

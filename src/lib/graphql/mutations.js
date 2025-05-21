@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/graphql`
 
 export async function createUser({
   dni,
@@ -19,7 +19,7 @@ export async function createUser({
     }
 
     const mutation = `
-    mutation CreatePersona($dni: String!, $nombre: String!, $apellido: String!, $telefono: String!, $correoElectronico: String!, $domicilio: String!, $tipo: Boolean) {
+    mutation CreatePersona($dni: String!, $nombre: String!, $apellido: String!, $stock: String!, $correoElectronico: String!, $domicilio: String!, $tipo: Boolean) {
     createPersona(dni: $dni, nombre: $nombre, apellido: $apellido, telefono: $telefono, correo_electronico: $correoElectronico, domicilio: $domicilio, tipo: $tipo) {
         id_persona
         dni
@@ -153,6 +153,71 @@ export async function removeProductCart({ id_pc }) {
     )
     throw new Error(
       'Failed Error deleting product to cart. Please check the GraphQL response.',
+    )
+  }
+}
+
+export async function createProductoServicio({
+  name,
+  price,
+  stock,
+  category,
+  active,
+  description,
+  image,
+}) {
+  try {
+    if (!price || !name || !stock || !category) {
+      throw new Error(
+        'DNI, name, last name, phone, email and address are required',
+      )
+    }
+
+    const mutation = `
+    mutation CreateProductoServicio($nombre: String!, $precio: Float!, $stock: Int!, $categoria: String!, $activo: Boolean!, $descripcion: String, $image: String) {
+      createProductoServicio(nombre: $nombre, precio: $precio, stock: $stock, categoria: $categoria, activo: $activo, descripcion: $descripcion, image: $image) {
+        id_ps
+        nombre
+        precio
+        stock
+        descripcion
+        categoria
+        activo
+        image
+      }
+    }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query: mutation,
+        variables: {
+          nombre: name,
+          precio: parseFloat(price),
+          stock: Number(stock),
+          categoria: category,
+          descripcion: description,
+          activo: active,
+          image: image,
+        },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data
+    console.log('data from create producto/servicio', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error creating producto/servicio:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed creating producto/servicio. Please check the GraphQL response.',
     )
   }
 }

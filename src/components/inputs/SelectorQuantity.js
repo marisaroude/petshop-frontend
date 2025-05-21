@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useBackgroundColor } from '@/app/context/backgroundColorContext'
 
 export default function SelectorQuantity({ setQuantity, quantity }) {
+  const { bgColor } = useBackgroundColor()
   const handleDecrement = () => {
     setQuantity(prev => Math.max(1, prev - 1))
   }
@@ -18,7 +20,8 @@ export default function SelectorQuantity({ setQuantity, quantity }) {
 
   return (
     <div className="flex justify-center">
-      <div className="flex items-center bg-pink rounded-full px-4 h-[40px] space-x-4 w-[125px] justify-between">
+      <div
+        className={`flex items-center ${bgColor} rounded-full px-4 h-[40px] space-x-4 w-[125px] justify-between`}>
         <button
           type="button"
           onClick={handleDecrement}

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/graphql`
 
 export async function getPersonByEmail({ email }) {
   if (!email) {
@@ -104,6 +104,7 @@ export async function getAllProducts() {
             descripcion
             categoria
             activo
+            image
           }
         }
         `
@@ -148,6 +149,7 @@ export async function getProductById({ id_ps }) {
               descripcion
               categoria
               activo
+              image
             }
           }
           `

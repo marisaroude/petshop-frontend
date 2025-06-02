@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import ProductForm from '@/components/forms/ProductForm'
 import { getProductById } from '@/lib/graphql'
 import { useParams } from 'next/navigation'
+import withAdminAuth from '@/app/utils/withAdminAuth'
 
 function page() {
   const { slug } = useParams()
@@ -23,4 +24,4 @@ function page() {
 }
 
 //To-do implemntar exportarlo con with admin auth
-export default page
+export default withAdminAuth(page)

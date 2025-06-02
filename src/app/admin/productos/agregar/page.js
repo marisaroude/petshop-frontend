@@ -1,10 +1,7 @@
 'use client'
 import React from 'react'
 import ProductForm from '@/components/forms/ProductForm'
-import withAdminAuth from '../utils/withAdminAuth'
-
-import { CldImage } from 'next-cloudinary'
-import { UploadImage } from '@/components/inputs/UploadImage'
+import withAdminAuth from '@/app/utils/withAdminAuth'
 
 function page() {
   return (
@@ -14,5 +11,4 @@ function page() {
   )
 }
 
-//To-do implemntar exportarlo con with admin auth
-export default page
+export default withAdminAuth(page)

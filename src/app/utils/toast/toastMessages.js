@@ -10,8 +10,29 @@ export function productSuccesfullyAdded(router) {
   })
 }
 
-export function productSuccesfullyCreated() {
-  toast.success('Producto creado exitosamente', {
+export function productSuccesfullyCreatedOrUpdate(updated) {
+  toast.success(`Producto ${updated ? 'modificado' : 'creado'} exitosamente`, {
+    closeButton: false,
+    hideProgressBar: true,
+  })
+}
+
+export function promoSuccesfullyCreatedOrUpdate(updated) {
+  toast.success(`Promo ${updated ? 'modificada' : 'creada'} exitosamente`, {
+    closeButton: false,
+    hideProgressBar: true,
+  })
+}
+
+export function userUpdatedSuccesfully() {
+  toast.success('Usuario actualizado exitosamente', {
+    closeButton: false,
+    hideProgressBar: true,
+  })
+}
+
+export function userCanceledSuccessfully() {
+  toast.success('Usuario dado de baja exitosamente', {
     closeButton: false,
     hideProgressBar: true,
   })

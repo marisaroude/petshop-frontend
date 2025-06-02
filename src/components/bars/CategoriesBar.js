@@ -9,13 +9,13 @@ export default function CategoriesBar() {
 
   return (
     <div
-      className={`${bgColor} w-full flex justify-around text-xl p-4 text-white font-bold`}>
+      className={`${bgColor} w-full flex gap-2 lg:flex-row flex-col items-center justify-around text-xl p-4 text-white font-bold`}>
       {categories.map((cat, index) => {
         return (
           <div key={index}>
             <span
               className="cursor-pointer"
-              onClick={() => router.push(`/${cat.value}`)}
+              onClick={() => router.push(`/productos/${cat.value}`)}
               id={cat.value}>
               {cat.label}
             </span>

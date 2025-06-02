@@ -7,30 +7,33 @@ import { useRouter } from 'next/navigation'
 const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
-  const router = useRouter()
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
 
+  const router = useRouter()
   // Actualiza el usuario cuando cambia la sesión
   useEffect(() => {
-    if (session?.user?.email) {
-      const checkIfPersonExists = async () => {
+    const checkUser = async () => {
+      if (session?.user?.email) {
         try {
-          const response = await getPersonByEmail({ email: session.user.email })
-          if (!response) {
+          const person = await getPersonByEmail({ email: session.user.email })
+          if (!person) {
             router.push('/complete-profile')
           } else {
-            setUser(response)
+            setUser(person)
           }
         } catch (err) {
           console.error('Error fetching person:', err)
         }
       }
-      checkIfPersonExists()
-    } else {
-      setUser(null)
+      setLoading(false)
     }
-  }, [session])
+
+    if (status !== 'loading') {
+      checkUser()
+    }
+  }, [session, status])
 
   // Manejo de inicio de sesión
   const handleSignIn = async () => {
@@ -53,9 +56,19 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ user, handleSignIn, handleSignOut }}>
-      {children}
+      {loading ? <FullScreenLoader /> : children}
     </AuthContext.Provider>
   )
 }
 
 export const useAuth = () => useContext(AuthContext)
+
+// Loader global
+const FullScreenLoader = () => (
+  <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+    <div
+      className="w-16 h-16 border-4 border-white  rounded-full animate-spin"
+      style={{ borderStyle: 'inset' }}
+    />
+  </div>
+)

@@ -8,8 +8,12 @@ import { categories } from '@/app/utils/data/categories'
 import Select from '../inputs/Select'
 import { productSchema } from '@/lib/zod/schemas/product'
 import { UploadImage } from '../inputs/UploadImage'
-import { createProductoServicio } from '@/lib/graphql'
-import { productSuccesfullyCreated } from '@/app/utils/toast/toastMessages'
+import { createProductoServicio, updateProductoServicio } from '@/lib/graphql'
+import {
+  productSuccesfullyCreated,
+  productSuccesfullyCreatedOrUpdate,
+} from '@/app/utils/toast/toastMessages'
+import { allProducts } from '@/app/signals/products'
 
 export default function ProductForm({ productInfo }) {
   const router = useRouter()
@@ -28,8 +32,8 @@ export default function ProductForm({ productInfo }) {
     if (productInfo) {
       reset({
         name: productInfo.nombre,
-        price: productInfo.precio,
-        stock: productInfo.stock,
+        price: productInfo.precio.toString(),
+        stock: productInfo.stock.toString(),
         category: productInfo.categoria,
         active: productInfo.activo,
         description: productInfo.descripcion,
@@ -41,24 +45,41 @@ export default function ProductForm({ productInfo }) {
   const onSubmit = async data => {
     console.log('Datos enviados:', data)
     data.image = image
+
     try {
-      const response = await createProductoServicio(data)
-      console.log('response', response)
-      if (response.data.createProductoServicio) {
-        productSuccesfullyCreated()
-        reset()
-        setImage(null)
+      const response = productInfo
+        ? await updateProductoServicio({
+            id_ps: productInfo.id_ps,
+            input: data,
+          })
+        : await createProductoServicio(data)
+
+      console.log('Response:', response)
+
+      if (response?.errors?.length > 0) {
+        response.errors.forEach(error => errorMessage(error))
+        return
       }
+
+      const newProduct = productInfo
+        ? response.data.updateProductoServicio
+        : response.data.createProductoServicio
+
+      allProducts.value = productInfo
+        ? allProducts.value.map(p =>
+            p.id_ps === newProduct.id_ps ? newProduct : p,
+          )
+        : [...allProducts.value, newProduct]
+
+      productSuccesfullyCreatedOrUpdate(!!productInfo)
+      reset()
+      setImage(null)
+      router.push('/')
     } catch (error) {
       console.error('Error:', error)
+      errorMessage('Ocurrió un error al guardar el producto.')
     }
   }
-
-  // const handleImageUpload = e => {
-  //   const file = e.target.files[0]
-  //   setImage(URL.createObjectURL(file))
-  //   console.log('image', image)
-  // }
 
   const handleRemoveFile = () => {
     setImage(null)
@@ -82,7 +103,7 @@ export default function ProductForm({ productInfo }) {
               className="object-contain w-full h-full rounded-md"
             />
           ) : (
-            <span className="text-gray-500">Foto del Producto</span>
+            <span className="text-gray-500">Sin foto</span>
           )}
         </div>
         <div className="flex mt-2 gap-2 items-center">
@@ -130,6 +151,7 @@ export default function ProductForm({ productInfo }) {
 
         <div className="flex gap-4">
           <button
+            type="button"
             onClick={() => router.push('/')}
             className="mt-4 bg-gray-300 text-black px-6 py-2 rounded-md">
             Volver

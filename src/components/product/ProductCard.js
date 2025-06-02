@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 export default function ProductCard({ product }) {
   return (
-    <Link href={`/products/${product.id_ps}`}>
+    <Link href={`/product/${product.id_ps}`}>
       <div className="cursor-pointer rounded-lg bg-[#fafafa] shadow shadow-xl/30 transition-all p-4">
         <img
           src={product.image ? product.image : '/productImage.png'}

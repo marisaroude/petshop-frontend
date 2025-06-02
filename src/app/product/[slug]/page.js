@@ -1,5 +1,6 @@
 'use client'
 import { useAuth } from '@/app/context/authContext'
+import { allPromos } from '@/app/signals/promociones'
 import {
   errorMessage,
   productSuccesfullyAdded,
@@ -10,8 +11,12 @@ import SelectorQuantity from '@/components/inputs/SelectorQuantity'
 import { addToCart, getProductById } from '@/lib/graphql'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
-import { FaEdit } from 'react-icons/fa'
-
+function isVigente(promo) {
+  const hoy = new Date()
+  const inicio = new Date(promo.fecha_inicio)
+  const fin = new Date(promo.fecha_fin)
+  return hoy >= inicio && hoy <= fin
+}
 export default function page() {
   const router = useRouter()
   const [quantity, setQuantity] = useState(1)
@@ -40,29 +45,41 @@ export default function page() {
 
     const response = await addToCart(newProduct)
 
-    if (response) {
-      productSuccesfullyAdded(router)
+    if (response?.errors?.length > 0) {
+      response.errors.forEach(error => errorMessage(error.message))
     } else {
-      errorMessage(
-        'Algo ocurrió al intentar agregar el item al carrito. Por favor, intenta nuevamente',
-      )
+      productSuccesfullyAdded(router)
     }
   }
 
-  const renderEditButton = id_ps => {
-    if (user && user.tipo) {
-      return (
-        <div className="p-4">
-          <button
-            type="button"
-            onClick={() => router.push(`/editar-producto/${id_ps}`)}
-            className="bg-lightgreen font-bold text-white px-4 py-2 rounded-md cursor-pointer h-max">
-            Editar Producto
-          </button>
-        </div>
-      )
-    }
+  const promoActiva = allPromos.value?.find(
+    promo => promo.id_ps === parseInt(slug) && isVigente(promo),
+  )
+
+  const precioOriginal = product?.precio
+  const valorDescuento = promoActiva?.valor || 0
+  const precioConDescuento = precioOriginal - valorDescuento
+  const porcentajeDescuento = Math.round(
+    (valorDescuento / precioOriginal) * 100,
+  )
+
+  const renderPrice = () => {
+    return promoActiva ? (
+      <div className="flex flex-col gap-1">
+        <p className="text-sm text-green-700 font-semibold">
+          ¡Este producto está en promoción!
+        </p>
+        <p className="line-through text-gray-500">${precioOriginal}</p>
+        <p className="text-black text-xl font-bold">${precioConDescuento}</p>
+        <span className="text-sm bg-green-600 text-white px-2 py-1 rounded w-fit">
+          {porcentajeDescuento}% OFF
+        </span>
+      </div>
+    ) : (
+      <p className="text-black text-xl font-bold">Precio: ${precioOriginal}</p>
+    )
   }
+
   return (
     <div className="flex justify-around">
       <div className="p-8">
@@ -77,16 +94,21 @@ export default function page() {
               <Divider />
 
               <div className="flex flex-col gap-4">
-                <p>Precio: ${product.precio}</p>
-                <div className="flex items-center gap-4">
-                  <p>Seleccione una cantidad</p>
-                  <SelectorQuantity
-                    setQuantity={setQuantity}
-                    quantity={quantity}
-                  />
-                </div>
+                {renderPrice()}
 
-                <ButtonAddToCart handleClick={handleAddToCart} />
+                {!user?.tipo && (
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center gap-4">
+                      <p>Seleccione una cantidad</p>
+                      <SelectorQuantity
+                        setQuantity={setQuantity}
+                        quantity={quantity}
+                      />
+                    </div>
+
+                    <ButtonAddToCart handleClick={handleAddToCart} />
+                  </div>
+                )}
               </div>
             </div>
             <div className="flex flex-col gap-2">
@@ -98,7 +120,6 @@ export default function page() {
           <p>Cargando producto...</p>
         )}
       </div>
-      {renderEditButton(product?.id_ps)}
     </div>
   )
 }

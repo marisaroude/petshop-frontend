@@ -1,45 +1,45 @@
-'use client'
-import React from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { registerSchema } from '@/lib/zod/schemas/user'
-import { createUser } from '@/lib/graphql'
-import { useRouter } from 'next/navigation'
-import InputWithLabel from '../inputs/InputWithLabel'
-import { useBackgroundColor } from '@/app/context/backgroundColorContext'
+'use client';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { userSchema } from '@/lib/zod/schemas/user';
+import { createUser } from '@/lib/graphql';
+import { useRouter } from 'next/navigation';
+import InputWithLabel from '../inputs/InputWithLabel';
+import { useBackgroundColor } from '@/app/context/backgroundColorContext';
 
 export default function RegisterForm({ userInfo }) {
-  const router = useRouter()
-  const { bgColor } = useBackgroundColor()
-  const fullName = userInfo.name.split(' ')
-  const name = fullName[0]
-  const lastName = fullName.slice(1).join(' ')
+  const router = useRouter();
+  const { bgColor } = useBackgroundColor();
+  const fullName = userInfo.name.split(' ');
+  const name = fullName[0];
+  const lastName = fullName.slice(1).join(' ');
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(userSchema),
     defaultValues: {
       name,
       lastName,
       email: userInfo?.email || '',
     },
-  })
+  });
 
   const onSubmit = async data => {
-    console.log('Datos enviados:', data)
+    console.log('Datos enviados:', data);
     try {
-      const response = await createUser(data)
-      console.log('response', response)
+      const response = await createUser(data);
+      console.log('response', response);
       if (response.data.createPersona) {
-        router.push('/')
+        router.push('/');
       }
     } catch (error) {
-      console.error('Error:', error)
+      console.error('Error:', error);
     }
-  }
+  };
 
   const InfoForm = [
     { label: 'DNI', value: 'dni' },
@@ -48,7 +48,7 @@ export default function RegisterForm({ userInfo }) {
     { label: 'Domicilio', value: 'address' },
     { label: 'Correo Electrónico', value: 'email' },
     { label: 'Teléfono', value: 'phone' },
-  ]
+  ];
 
   return (
     <form
@@ -72,5 +72,5 @@ export default function RegisterForm({ userInfo }) {
         Registrar
       </button>
     </form>
-  )
+  );
 }

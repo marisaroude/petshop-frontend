@@ -51,6 +51,14 @@ function page() {
     }
   }
 
+  const updateProductInCart = (id_pc, updatedFields) => {
+    setProductsCart(prev =>
+      prev.map(product =>
+        product.id_pc === id_pc ? { ...product, ...updatedFields } : product,
+      ),
+    )
+  }
+
   useEffect(() => {
     user && getProductCarrito()
   }, [user])
@@ -73,6 +81,7 @@ function page() {
               productCart={product}
               updateTotal={updateTotal}
               removeProduct={removeProduct}
+              updateProductInCart={updateProductInCart}
             />
           ))}
 

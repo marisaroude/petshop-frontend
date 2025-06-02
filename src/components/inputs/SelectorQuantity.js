@@ -21,7 +21,7 @@ export default function SelectorQuantity({ setQuantity, quantity }) {
   return (
     <div className="flex justify-center">
       <div
-        className={`flex items-center ${bgColor} rounded-full px-4 h-[40px] space-x-4 w-[125px] justify-between`}>
+        className={`flex items-center ${bgColor} cursor-pointer px-6 py-2 rounded-md space-x-4 w-[125px] justify-between`}>
         <button
           type="button"
           onClick={handleDecrement}
@@ -30,6 +30,7 @@ export default function SelectorQuantity({ setQuantity, quantity }) {
         </button>
         <input
           type="text"
+          disabled
           value={quantity}
           onChange={handleChange}
           className="w-6 text-center bg-transparent text-white text-base font-semibold focus:outline-none"

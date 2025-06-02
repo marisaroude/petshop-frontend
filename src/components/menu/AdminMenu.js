@@ -11,6 +11,10 @@ import {
   ArrowRightEndOnRectangleIcon,
   QuestionMarkCircleIcon,
   GiftIcon,
+  PlusCircleIcon,
+  ShoppingBagIcon,
+  TagIcon,
+  SwatchIcon,
 } from '@heroicons/react/16/solid'
 import { useRouter } from 'next/navigation'
 import { FaUpload } from 'react-icons/fa'
@@ -31,20 +35,41 @@ export default function AdminMenu() {
         className={`w-52 shadow-md origin-top-right rounded-xl border border-black/9 ${bgColor} p-1 text-sm/6 text-black transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0`}>
         <MenuItem>
           <button
-            onClick={() => router.push('/agregar-producto')}
+            onClick={() => router.push('/admin/productos/agregar')}
             className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-            <FaUpload className="size-4 fill-black" />
+            <PlusCircleIcon className="size-4 fill-black" />
             Agregar Producto
           </button>
         </MenuItem>
         <MenuItem>
-          <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-            <GiftIcon className="size-4 fill-black" />
-            Promociones
+          <button
+            onClick={() => router.push('/admin/productos')}
+            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+            <ShoppingBagIcon className="size-4 fill-black" />
+            Ver Productos
           </button>
         </MenuItem>
         <MenuItem>
-          <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+          <button
+            onClick={() => router.push('/admin/promociones/agregar')}
+            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+            <TagIcon className="size-4 fill-black" />
+            Agregar Promocion
+          </button>
+        </MenuItem>
+
+        <MenuItem>
+          <button
+            onClick={() => router.push('/admin/promociones')}
+            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+            <SwatchIcon className="size-4 fill-black" />
+            Ver Promociones
+          </button>
+        </MenuItem>
+        <MenuItem>
+          <button
+            onClick={() => router.push('/admin/informes')}
+            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
             <InformationCircleIcon className="size-4 fill-black" />
             Informes
           </button>

@@ -8,35 +8,43 @@ export default function ProductCart({
   productCart,
   updateTotal,
   removeProduct,
+  updateProductInCart,
 }) {
   const [product, setProduct] = useState()
-  const [subtotal, setSubtotal] = useState(productCart.subtotal)
   const [quantity, setQuantity] = useState(productCart.cantidad)
+
+  const initialUnitPrice = useState(
+    productCart.subtotal / productCart.cantidad,
+  )[0]
+
+  const [subtotal, setSubtotal] = useState(
+    parseFloat(initialUnitPrice) * productCart.cantidad,
+  )
 
   useEffect(() => {
     const fetchProductById = async () => {
       const response = await getProductById({ id_ps: productCart.id_ps })
-      if (response) {
-        setProduct(response)
-      }
+      if (response) setProduct(response)
     }
     fetchProductById()
   }, [])
 
   useEffect(() => {
-    if (product) {
-      const newSubtotal = product.precio * quantity
-      const difference = newSubtotal - subtotal
-      setSubtotal(newSubtotal)
-      updateTotal(difference)
-    }
-  }, [quantity, product])
+    const newSubtotal = parseFloat(initialUnitPrice) * quantity
+    const difference = newSubtotal - subtotal
 
+    setSubtotal(newSubtotal)
+    updateTotal(difference)
+    updateProductInCart(productCart.id_pc, {
+      cantidad: quantity,
+      subtotal: newSubtotal,
+    })
+  }, [quantity])
   return (
     <div className="flex flex-row w-full p-4 justify-around items-center gap-4">
       <div className="flex gap-2">
         <img
-          src="/productImage.png"
+          src={product?.image ? product.image : '/productImage.png'}
           alt={product?.name}
           className=" h-48 object-contain rounded"
         />

@@ -19,7 +19,7 @@ export async function createUser({
     }
 
     const mutation = `
-    mutation CreatePersona($dni: String!, $nombre: String!, $apellido: String!, $stock: String!, $correoElectronico: String!, $domicilio: String!, $tipo: Boolean) {
+    mutation CreatePersona($dni: String!, $nombre: String!, $apellido: String!,telefono: String!, $correoElectronico: String!, $domicilio: String!, $tipo: Boolean) {
     createPersona(dni: $dni, nombre: $nombre, apellido: $apellido, telefono: $telefono, correo_electronico: $correoElectronico, domicilio: $domicilio, tipo: $tipo) {
         id_persona
         dni
@@ -219,5 +219,68 @@ export async function createProductoServicio({
     throw new Error(
       'Failed creating producto/servicio. Please check the GraphQL response.',
     )
+  }
+}
+
+export async function createPregunta({
+  description,    
+  personId,       
+  productId,      
+  status,       
+}) {
+  try {
+    if (!description || !personId || !productId) {
+      throw new Error('Description, person ID and product ID are required');
+    }
+
+    const mutation = `
+      mutation CreatePregunta(
+        $descripcion: String!,
+        $id_persona: Int!,
+        $id_ps: Int!,
+        $estado: Boolean
+      ) {
+        createPregunta(
+          descripcion: $descripcion,
+          id_persona: $id_persona,
+          id_ps: $id_ps,
+          estado: $estado
+        ) {
+          id_preguntas
+          descripcion
+          estado
+          id_persona
+          id_ps
+        }
+      }
+    `;
+
+    const response = await axios.post(
+      API_URL,
+      {
+        query: mutation,
+        variables: {
+          descripcion: description,        
+          id_persona: parseInt(personId),  
+          id_ps: parseInt(productId),      
+          estado: status || false       
+        }
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+
+    const data = response.data;
+    console.log('Data from create question:', data);
+    return data;
+  } catch (error) {
+    console.error(
+      'Error creating question:',
+      error.response ? error.response.data : error.message
+    );
+    throw new Error('Failed creating question. Please check the GraphQL response.');
   }
 }

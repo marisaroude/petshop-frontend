@@ -135,6 +135,46 @@ export async function getAllProducts() {
   }
 }
 
+export async function getAllPromociones() {
+  try {
+    const query = `
+      query Promociones {
+        promociones {
+          id_promocion
+          valor
+          fecha_inicio
+          fecha_fin
+          activo
+          id_ps
+        }
+      }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data.data.promociones
+    console.log('data from get all promos', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error fetching all promos:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed fetchin all promos. Please check the GraphQL response.',
+    )
+  }
+}
+
 export async function getProductById({ id_ps }) {
   if (!id_ps) {
     throw new Error('ID is required')

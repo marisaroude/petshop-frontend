@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import ProductForm from '@/components/forms/ProductForm'
-import { getProductById, getUserById } from '@/lib/graphql'
+import { getProductById, getPersonById } from '@/lib/graphql'
 import { useParams } from 'next/navigation'
 import withAdminAuth from '@/app/utils/withAdminAuth'
 import UserInfo from '@/components/users/UserInfo'
@@ -13,7 +13,7 @@ function page() {
 
   useEffect(() => {
     const fetchUserById = async () => {
-      const response = await getUserById({ id_persona: parseInt(slug) })
+      const response = await getPersonById({ id_persona: parseInt(slug) })
       setUser(response)
     }
     fetchUserById()

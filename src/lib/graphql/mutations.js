@@ -20,7 +20,7 @@ export async function createUser({
     }
 
     const mutation = `
-    mutation CreatePersona($dni: String!, $nombre: String!, $apellido: String!,telefono: String!, $correoElectronico: String!, $domicilio: String!, $tipo: Boolean) {
+    mutation CreatePersona($dni: String!, $nombre: String!, $apellido: String!,$telefono: String!, $correoElectronico: String!, $domicilio: String!, $tipo: Boolean) {
     createPersona(dni: $dni, nombre: $nombre, apellido: $apellido, telefono: $telefono, correo_electronico: $correoElectronico, domicilio: $domicilio, tipo: $tipo) {
         id_persona
         dni

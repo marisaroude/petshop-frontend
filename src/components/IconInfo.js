@@ -4,7 +4,7 @@ import React from 'react'
 export default function IconInfo({ info }) {
   const router = useRouter()
   return (
-    <div className="p-8 w-[20%] h-max bg-[#D9D9D9] flex flex-col items-center gap-6 rounded-2xl">
+    <div className="p-8 sm:w-[25%] w-full h-max bg-[#D9D9D9] flex flex-col items-center gap-6 rounded-2xl">
       {info.icon}
       <p>{info.title}</p>
       <button

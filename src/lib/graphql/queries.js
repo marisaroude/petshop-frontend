@@ -351,3 +351,114 @@ export async function getPersonById({ id_persona }) {
     )
   }
 }
+
+export async function getAllFacturas() {
+  try {
+    const query = `
+    query GetAllFacturaWithDetails {
+      getAllFacturaWithDetails {
+        factura {
+          id_factura
+          id_pago
+          fecha
+          total
+        }
+        pago {
+          id_pago
+          id_mercadopago
+          id_carrito
+          fecha
+          monto
+        }
+        detalles {
+          id_df
+          cantidad
+          precio
+          id_ps
+          id_factura
+        }
+      }
+    }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data
+    console.log('data from get all facturas', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error fetching all facturas:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed fetchin all facturas. Please check the GraphQL response.',
+    )
+  }
+}
+
+export async function getFacturaById({ id_factura }) {
+  try {
+    const query = `
+      query GetFacturaWithDetailsById($id_factura: Int!) {
+        getFacturaWithDetailsById(id_factura: $id_factura) {
+          factura {
+            id_factura
+            id_pago
+            fecha
+            total
+          }
+          pago {
+            id_pago
+            id_mercadopago
+            id_carrito
+            fecha
+            monto
+          }
+          detalles {
+            id_df
+            cantidad
+            precio
+            id_ps
+            id_factura
+          }
+        }
+      }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+        variables: {
+          id_factura,
+        },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data
+    console.log('data from get factura by id', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error fetching factura by id:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed fetchin factura by id. Please check the GraphQL response.',
+    )
+  }
+}

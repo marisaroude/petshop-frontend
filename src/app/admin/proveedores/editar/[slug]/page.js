@@ -1,24 +1,24 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { getPersonById } from '@/lib/graphql'
 import { useParams } from 'next/navigation'
 import withAdminAuth from '@/app/utils/withAdminAuth'
-import UserForm from '@/components/forms/UserForm'
+import ProveedorForm from '@/components/forms/ProveedorForm'
+import { getProveedorById } from '@/lib/graphql'
 
 function page() {
   const { slug } = useParams()
-  const [user, setUser] = useState(null)
+  const [proveedor, setProveedor] = useState(null)
 
   useEffect(() => {
-    const fetchUserById = async () => {
-      const response = await getPersonById({ id_persona: parseInt(slug) })
-      setUser(response)
+    const fetchProveedorById = async () => {
+      const response = await getProveedorById({ id_proveedor: parseInt(slug) })
+      setProveedor(response)
     }
-    fetchUserById()
+    fetchProveedorById()
   }, [])
   return (
     <div className="bg-white h-full w-full flex flex-col p-6 items-center">
-      <UserForm user={user} />
+      <ProveedorForm proveedor={proveedor} />
     </div>
   )
 }

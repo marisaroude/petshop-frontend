@@ -152,7 +152,7 @@ export default function ProductForm({ productInfo }) {
         <div className="flex gap-4">
           <button
             type="button"
-            onClick={() => router.push('/')}
+            onClick={() => router.back()}
             className="mt-4 bg-gray-300 text-black px-6 py-2 rounded-md">
             Volver
           </button>

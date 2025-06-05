@@ -1,31 +1,26 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import InputWithLabel from '../inputs/InputWithLabel'
-import Select from '../inputs/Select'
-
-import { createPromo, updatePromocion } from '@/lib/graphql'
+import { createProveedor, updateProveedor } from '@/lib/graphql'
 import {
   errorMessage,
-  promoSuccesfullyCreatedOrUpdate,
+  proveedorSuccesfullyCreatedOrUpdate,
 } from '@/app/utils/toast/toastMessages'
-import { allProducts } from '@/app/signals/products'
-import { promocionSchema } from '@/lib/zod/schemas/promocion'
-import { allPromos } from '@/app/signals/promociones'
+import { proveedorSchema } from '@/lib/zod/schemas/proveedor'
+import { allProveedores } from '@/app/signals/proveedores'
 
-export default function PromocionForm({ promo }) {
-  const [products, setProducts] = useState()
+export default function ProveedorForm({ proveedor }) {
   const router = useRouter()
-
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(promocionSchema),
+    resolver: zodResolver(proveedorSchema),
     defaultValues: { active: false },
   })
 
@@ -33,13 +28,12 @@ export default function PromocionForm({ promo }) {
     console.log('Datos enviados:', data)
 
     try {
-      4
-      const response = promo
-        ? await updatePromocion({
-            id_promocion: promo.id_promocion,
+      const response = proveedor
+        ? await updateProveedor({
+            id_proveedor: proveedor.id_proveedor,
             input: data,
           })
-        : await createPromo(data)
+        : await createProveedor(data)
 
       console.log('Response:', response)
 
@@ -48,51 +42,39 @@ export default function PromocionForm({ promo }) {
         return
       }
 
-      const newPromo = promo
-        ? response.data.updatePromocion
-        : response.data.createPromocion
+      const newProveedor = proveedor
+        ? response.data.updateProveedor
+        : response.data.createProveedor
 
-      allPromos.value = promo
-        ? allPromos.value.map(p =>
-            p.id_promocion === newPromo.id_promocion ? newPromo : p,
+      allProveedores.value = proveedor
+        ? allProveedores.value?.map(p =>
+            p.id_proveedor === newProveedor.id_proveedor ? newProveedor : p,
           )
-        : [...allPromos.value, newPromo]
+        : [...allProveedores.value, newProveedor]
 
-      promoSuccesfullyCreatedOrUpdate(!!promo)
+      proveedorSuccesfullyCreatedOrUpdate(!!proveedor)
       reset()
-      router.push('/')
+      router.push('/admin/proveedores')
     } catch (error) {
       console.error('Error:', error)
-      errorMessage('Ocurrió un error al guardar la promocion.')
+      errorMessage('Ocurrió un error al guardar el proveedor.')
     }
   }
 
   const InfoForm = [
-    { label: 'Inicio de la promo', value: 'start_date', type: 'date' },
-    { label: 'Fin de la promo', value: 'end_date', type: 'date' },
-    { label: 'Valor Descuento (en pesos)', value: 'cost', type: 'number' },
+    { label: 'Nombre proveedor', value: 'name' },
+    { label: 'Cuit Proveedor', value: 'cuit' },
   ]
 
   useEffect(() => {
-    if (promo) {
+    if (proveedor) {
       reset({
-        start_date: promo.fecha_inicio,
-        end_date: promo.fecha_fin,
-        cost: promo.valor.toString(),
-        id_ps: promo.id_ps.toString(),
-        active: promo.activo,
+        cuit: proveedor.cuit,
+        name: proveedor.nombre,
+        active: proveedor.activo,
       })
     }
-  }, [promo, reset])
-
-  useEffect(() => {
-    setProducts(
-      allProducts?.value?.map(product => ({
-        label: product.nombre,
-        value: product.id_ps,
-      })),
-    )
-  }, [allProducts.value])
+  }, [proveedor, reset])
 
   return (
     <div className="flex items-center justify-center bg-lightgreen p-8 rounded-lg shadow-lg">
@@ -109,19 +91,9 @@ export default function PromocionForm({ promo }) {
           />
         ))}
 
-        {/* Select de Producto */}
-        {products && (
-          <Select
-            label="Producto"
-            register={register('id_ps')}
-            error={errors.id_ps?.message}
-            options={products}
-          />
-        )}
-
         {/* Checkbox Activo */}
         <div className="flex items-center gap-2">
-          <label className="text-black">Promo activa</label>
+          <label className="text-black">Proveedor activo</label>
           <input
             defaultChecked={true}
             type="checkbox"
@@ -140,7 +112,7 @@ export default function PromocionForm({ promo }) {
           <button
             type="submit"
             className="mt-4 bg-gray-300 text-black px-6 py-2 rounded-md">
-            {promo ? 'Modificar' : 'Agregar'}
+            {proveedor ? 'Modificar' : 'Agregar'}
           </button>
         </div>
       </form>

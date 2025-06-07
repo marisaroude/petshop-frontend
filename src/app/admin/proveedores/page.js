@@ -30,7 +30,7 @@ function page() {
     if (!allProveedores.value) {
       const fetchProveedores = async () => {
         const response = await getAllProveedores()
-        allProveedores.value = response.data.proveedores
+        allProveedores.value = response
       }
       fetchProveedores()
     }

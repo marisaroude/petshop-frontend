@@ -85,6 +85,14 @@ export default function AdminMenu() {
         </MenuItem>
         <MenuItem>
           <button
+            onClick={() => router.push('/admin/ingresos/agregar')}
+            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+            <PlusCircleIcon className="size-4 fill-black" />
+            Cargar Ingreso
+          </button>
+        </MenuItem>
+        <MenuItem>
+          <button
             onClick={handleSignOut}
             className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
             <ArrowRightEndOnRectangleIcon className="size-4 fill-black" />

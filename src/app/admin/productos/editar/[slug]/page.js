@@ -23,5 +23,4 @@ function page() {
   )
 }
 
-//To-do implemntar exportarlo con with admin auth
 export default withAdminAuth(page)

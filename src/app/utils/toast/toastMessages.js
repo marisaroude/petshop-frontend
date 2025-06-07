@@ -31,6 +31,13 @@ export function proveedorSuccesfullyCreatedOrUpdate(updated) {
   })
 }
 
+export function ingresoSuccessfullyCreated() {
+  toast.success(`Ingreso creado exitosamente`, {
+    closeButton: false,
+    hideProgressBar: true,
+  })
+}
+
 export function userUpdatedSuccesfully() {
   toast.success('Usuario actualizado exitosamente', {
     closeButton: false,

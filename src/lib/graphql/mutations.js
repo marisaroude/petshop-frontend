@@ -683,3 +683,71 @@ export async function updateProveedor({ id_proveedor, input }) {
   }
 }
 //#endregion Proveedor
+
+// #region Ingreso Producto
+export async function createIngresoProducto({
+  id_proveedor,
+  subtotal,
+  id_ps,
+  quantity,
+}) {
+  try {
+    if (!quantity || !id_proveedor || !id_ps || !subtotal) {
+      throw new Error('Quantity, id_proveedor, id_ps and subtotal are required')
+    }
+
+    const mutation = `
+    mutation CreateIngresoProducto($id_proveedor: Int!, $subtotal: Float!, $cantidad: Int!, $id_ps: Int!) {
+      createIngresoProducto(id_proveedor: $id_proveedor, subtotal: $subtotal, cantidad: $cantidad, id_ps: $id_ps) {
+        ingreso {
+          id_ip
+          id_proveedor
+          subtotal
+          cantidad
+          id_ps
+        }
+        updatedProduct {
+          id_ps
+          nombre
+          precio
+          stock
+          descripcion
+          categoria
+          activo
+          image
+        }
+      }
+    }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query: mutation,
+        variables: {
+          cantidad: parseInt(quantity),
+          subtotal: parseFloat(subtotal),
+          id_proveedor: id_proveedor,
+          id_ps,
+        },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data
+    console.log('data from ingreso producto', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error adding ingreso producto :',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed Error adding ingreso producto. Please check the GraphQL response.',
+    )
+  }
+}
+//#endregion Ingreso Producto

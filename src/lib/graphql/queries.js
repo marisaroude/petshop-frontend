@@ -487,7 +487,7 @@ export async function getAllProveedores() {
       },
     )
 
-    const data = response.data
+    const data = response.data.data.proveedores
     console.log('data from get all proveedores', data)
     return data
   } catch (error) {

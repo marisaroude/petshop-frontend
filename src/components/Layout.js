@@ -73,7 +73,7 @@ export default function Layout({ children }) {
       }
     }
 
-    if (user.tipo) {
+    if (user?.tipo) {
       loadProveedores()
     }
   }, [user])

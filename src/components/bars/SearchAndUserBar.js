@@ -45,7 +45,7 @@ export default function SearchAndUserBar() {
             {user.nombre} {user.apellido}
           </p>
         ) : (
-          <div onClick={handleSignIn}>
+          <div className="cursor-pointer" onClick={handleSignIn}>
             <p>Registrarse / Iniciar Sesión</p>
           </div>
         )}

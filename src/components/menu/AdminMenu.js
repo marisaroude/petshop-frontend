@@ -3,21 +3,16 @@ import { useBackgroundColor } from '@/app/context/backgroundColorContext'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import {
   Bars3Icon,
-  HomeIcon,
   InformationCircleIcon,
-  ShoppingCartIcon,
-  ClockIcon,
-  HeartIcon,
   ArrowRightEndOnRectangleIcon,
   QuestionMarkCircleIcon,
-  GiftIcon,
   PlusCircleIcon,
   ShoppingBagIcon,
   TagIcon,
   SwatchIcon,
+  TruckIcon,
 } from '@heroicons/react/16/solid'
 import { useRouter } from 'next/navigation'
-import { FaUpload } from 'react-icons/fa'
 
 export default function AdminMenu() {
   const router = useRouter()
@@ -80,14 +75,22 @@ export default function AdminMenu() {
             Preguntas Pendientes
           </button>
         </MenuItem>
-        {/* <MenuItem>
+        <MenuItem>
           <button
-            onClick={() => router.push('/cart')}
+            onClick={() => router.push('/admin/proveedores')}
             className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-            <ShoppingCartIcon className="size-4 fill-black" />
-            Carrito
+            <TruckIcon className="size-4 fill-black" />
+            Proveedores
           </button>
-        </MenuItem> */}
+        </MenuItem>
+        <MenuItem>
+          <button
+            onClick={() => router.push('/admin/ingresos/agregar')}
+            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+            <PlusCircleIcon className="size-4 fill-black" />
+            Cargar Ingreso
+          </button>
+        </MenuItem>
         <MenuItem>
           <button
             onClick={handleSignOut}

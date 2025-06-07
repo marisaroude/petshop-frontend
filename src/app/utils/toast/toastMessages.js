@@ -24,6 +24,20 @@ export function promoSuccesfullyCreatedOrUpdate(updated) {
   })
 }
 
+export function proveedorSuccesfullyCreatedOrUpdate(updated) {
+  toast.success(`Proveedor ${updated ? 'modificado' : 'creado'} exitosamente`, {
+    closeButton: false,
+    hideProgressBar: true,
+  })
+}
+
+export function ingresoSuccessfullyCreated() {
+  toast.success(`Ingreso creado exitosamente`, {
+    closeButton: false,
+    hideProgressBar: true,
+  })
+}
+
 export function userUpdatedSuccesfully() {
   toast.success('Usuario actualizado exitosamente', {
     closeButton: false,

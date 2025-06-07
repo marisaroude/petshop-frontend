@@ -582,3 +582,172 @@ export async function createPregunta({
 }
 
 //#endregion Preguntas
+
+//#region Proveedor
+export async function createProveedor({ name, cuit, active }) {
+  try {
+    if (!name || !cuit || !active) {
+      throw new Error('name, cuit, and active are required')
+    }
+
+    const mutation = `
+      mutation CreateProveedor($nombre: String!, $cuit: String!, $activo: Boolean!) {
+        createProveedor(nombre: $nombre, cuit: $cuit, activo: $activo) {
+          id_proveedor
+          nombre
+          cuit
+          activo
+        }
+      }
+    `
+    const response = await axios.post(
+      API_URL,
+      {
+        query: mutation,
+        variables: {
+          nombre: name,
+          activo: active,
+          cuit: cuit,
+        },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data
+    console.log('data from create proveedor', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error creating user:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed crrating proveedor. Please check the GraphQL response.',
+    )
+  }
+}
+
+export async function updateProveedor({ id_proveedor, input }) {
+  try {
+    if (!id_proveedor || !input) {
+      throw new Error('ID and input are required')
+    }
+
+    const { name, cuit, active } = input
+    const mutation = `
+    mutation UpdateProveedor($id_proveedor: Int!, $input: UpdateProveedorInput!) {
+      updateProveedor(id_proveedor: $id_proveedor, input: $input) {
+        id_proveedor
+        nombre
+        cuit
+        activo
+      }
+    }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query: mutation,
+        variables: {
+          id_proveedor: parseInt(id_proveedor),
+          input: {
+            nombre: name,
+            cuit: cuit,
+            activo: active,
+          },
+        },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    console.log('response', response)
+    const data = response.data
+    console.log('data from update proveedor', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error updating proveedor:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed updating proveedor. Please check the GraphQL response.',
+    )
+  }
+}
+//#endregion Proveedor
+
+// #region Ingreso Producto
+export async function createIngresoProducto({
+  id_proveedor,
+  subtotal,
+  id_ps,
+  quantity,
+}) {
+  try {
+    if (!quantity || !id_proveedor || !id_ps || !subtotal) {
+      throw new Error('Quantity, id_proveedor, id_ps and subtotal are required')
+    }
+
+    const mutation = `
+    mutation CreateIngresoProducto($id_proveedor: Int!, $subtotal: Float!, $cantidad: Int!, $id_ps: Int!) {
+      createIngresoProducto(id_proveedor: $id_proveedor, subtotal: $subtotal, cantidad: $cantidad, id_ps: $id_ps) {
+        ingreso {
+          id_ip
+          id_proveedor
+          subtotal
+          cantidad
+          id_ps
+        }
+        updatedProduct {
+          id_ps
+          nombre
+          precio
+          stock
+          descripcion
+          categoria
+          activo
+          image
+        }
+      }
+    }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query: mutation,
+        variables: {
+          cantidad: parseInt(quantity),
+          subtotal: parseFloat(subtotal),
+          id_proveedor: id_proveedor,
+          id_ps,
+        },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data
+    console.log('data from ingreso producto', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error adding ingreso producto :',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed Error adding ingreso producto. Please check the GraphQL response.',
+    )
+  }
+}
+//#endregion Ingreso Producto

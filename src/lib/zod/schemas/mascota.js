@@ -1,3 +1,4 @@
+import { parseLocalDate } from '@/app/utils/date/date'
 import { z } from 'zod'
 
 export const mascotaSchema = z.object({
@@ -8,5 +9,12 @@ export const mascotaSchema = z.object({
 })
 
 export const mascotaSchemaWithFechaBaja = mascotaSchema.extend({
-  discharge_date: z.union([z.string().datetime(), z.null()]),
+  // discharge_date: z.union([z.string().datetime(), z.null()]),
+  discharge_date: z
+    .string()
+    .nonempty('Fecha de baja requerida.')
+    .transform(parseLocalDate)
+    .refine(date => date instanceof Date, {
+      message: 'Fecha de baja requerida.',
+    }),
 })

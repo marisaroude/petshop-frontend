@@ -17,10 +17,12 @@ import {
   mascotaSuccesfullyCreatedOrUpdate,
 } from '@/app/utils/toast/toastMessages'
 import ModalConfirmCancel from '../modal/ModalConfirmCancel'
+import { useBackgroundColor } from '@/app/context/backgroundColorContext'
 
 export default function MascotaForm({ mascotaInfo }) {
   const router = useRouter()
   const { user } = useAuth()
+  const { bgColor } = useBackgroundColor()
   const [image, setImage] = useState(null)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
 
@@ -111,7 +113,8 @@ export default function MascotaForm({ mascotaInfo }) {
   ]
 
   return (
-    <div className="flex items-center justify-center bg-pink p-8 rounded-lg shadow-lg">
+    <div
+      className={`flex items-center justify-center ${bgColor} p-8 rounded-lg shadow-lg`}>
       <div className="flex flex-col items-center gap-4">
         <div className="w-64 h-64 bg-gray-200 rounded-md flex items-center justify-center">
           {image ? (

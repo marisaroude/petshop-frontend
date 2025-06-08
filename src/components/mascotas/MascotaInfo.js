@@ -1,10 +1,16 @@
 import React from 'react'
 import Link from 'next/link'
-
+import { useBackgroundColor } from '@/app/context/backgroundColorContext'
+import { useAuth } from '@/app/context/authContext'
+// /admin/clientes/24/mascotas/18/editar
 export default function MascotaInfo({ mascota }) {
   if (!mascota) return <></>
+
+  const { bgColor, textButtonColor, bgButtonColor } = useBackgroundColor()
+  const { user } = useAuth()
   return (
-    <div className="bg-pink rounded-xl p-8 shadow-md max-w-4xl space-y-4 w-full mx-auto">
+    <div
+      className={`${bgColor} rounded-xl p-8 shadow-md max-w-4xl space-y-4 w-full mx-auto`}>
       <h2 className="text-xl font-semibold text-gray-800 ">Mascota</h2>
 
       <div className="flex flex-row gap-6 w-full justify-start items-start">
@@ -45,8 +51,12 @@ export default function MascotaInfo({ mascota }) {
 
       <div className="flex justify-end">
         <Link
-          href={`/cliente/mascotas/editar/${mascota.id_mascota}`}
-          className="bg-pink-300 hover:bg-pink-400 text-pink-900 font-medium py-1.5 px-4 rounded-md transition-colors">
+          href={
+            user?.tipo
+              ? `/admin/clientes/${user.id_persona}/mascotas/${mascota.id_mascota}/editar`
+              : `/cliente/mascotas/editar/${mascota.id_mascota}`
+          }
+          className={`${bgButtonColor}-300 hover:${bgButtonColor}-400 ${textButtonColor}-900 font-medium py-1.5 px-4 rounded-md transition-colors`}>
           Editar Mascota
         </Link>
       </div>

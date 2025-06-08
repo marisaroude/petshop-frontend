@@ -6,6 +6,7 @@ import withUserAuth from '@/app/utils/withUserAuth'
 import { getMascotaByPersonaId } from '@/lib/graphql'
 import { useAuth } from '@/app/context/authContext'
 import MascotaInfo from '@/components/mascotas/MascotaInfo'
+import Link from 'next/link'
 
 const isActive = mascota => mascota.fecha_baja === null
 
@@ -35,7 +36,7 @@ function page() {
   }, [])
   return (
     <div className="bg-white min-h-screen p-6 w-full flex flex-col items-center gap-6">
-      <div className="w-full max-w-2xl flex justify-end">
+      <div className="w-full gap-2 max-w-4xl flex justify-end">
         <select
           className="border border-gray-300 rounded-md p-2 text-sm"
           value={filtro}
@@ -44,6 +45,14 @@ function page() {
           <option value="activas">Solo mascotas activas</option>
           <option value="no activas">Solo mascotas dadas de baja</option>
         </select>
+
+        <div className="flex justify-end">
+          <Link
+            href={`/cliente/mascotas/agregar`}
+            className="bg-pink-300 hover:bg-pink-400 text-pink-900 font-medium py-1.5 px-4 rounded-md transition-colors">
+            Agregar una mascota
+          </Link>
+        </div>
       </div>
       <h1 className="text-3xl">Mis mascotas 🐾</h1>
       {mascotasFiltered?.map((mascota, index) => (

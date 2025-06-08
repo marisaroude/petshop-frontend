@@ -1,8 +1,13 @@
 import React from 'react'
 import Link from 'next/link'
+import { allMascotas } from '@/app/signals/mascota'
 
 export default function UserInfo({ user }) {
   if (!user) return <></>
+
+  const hasMascotas = user =>
+    allMascotas.value?.some(masc => masc.id_persona === user.id_persona)
+
   return (
     <div className="bg-lightgreen rounded-xl p-8 shadow-md max-w-4xl space-y-4 w-full mx-auto">
       <h2 className="text-xl font-semibold text-gray-800 ">Usuario</h2>
@@ -37,7 +42,14 @@ export default function UserInfo({ user }) {
         </div>
       </div>
 
-      <div className="flex justify-end">
+      <div className="flex gap-2 justify-end">
+        {hasMascotas(user) && (
+          <Link
+            href={`/admin/clientes/${user.id_persona}/mascotas`}
+            className="bg-green-300 hover:bg-green-400 text-green-900 font-medium py-1.5 px-4 rounded-md transition-colors">
+            Ver Mascotas de este cliente
+          </Link>
+        )}
         <Link
           href={`/admin/clientes/editar/${user.id_persona}`}
           className="bg-green-300 hover:bg-green-400 text-green-900 font-medium py-1.5 px-4 rounded-md transition-colors">

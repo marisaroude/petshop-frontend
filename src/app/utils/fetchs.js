@@ -1,4 +1,5 @@
 import {
+  getAllMascotas,
   getAllProducts,
   getAllPromociones,
   getAllProveedores,
@@ -16,5 +17,10 @@ export const fetchPromos = async () => {
 
 export const fetchProveedores = async () => {
   const response = await getAllProveedores()
+  return response
+}
+
+export const fetchsMascotas = async () => {
+  const response = await getAllMascotas()
   return response
 }

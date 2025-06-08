@@ -13,11 +13,13 @@ import {
   fetchProducts,
   fetchPromos,
   fetchProveedores,
+  fetchsMascotas,
 } from '@/app/utils/fetchs'
 import { useSignals } from '@preact/signals-react/runtime'
 import { allPromos } from '@/app/signals/promociones'
 import { allProveedores } from '@/app/signals/proveedores'
 import { useAuth } from '@/app/context/authContext'
+import { allMascotas } from '@/app/signals/mascota'
 
 export default function Layout({ children }) {
   useSignals()
@@ -73,8 +75,22 @@ export default function Layout({ children }) {
       }
     }
 
+    const loadMascotas = async () => {
+      if (!allMascotas.value || allMascotas.value.length === 0) {
+        try {
+          const response = await fetchsMascotas()
+          if (response) {
+            allMascotas.value = response
+          }
+        } catch (error) {
+          console.error('Error al cargar las mascotas en Layout:', error)
+        }
+      }
+    }
+
     if (user?.tipo) {
       loadProveedores()
+      loadMascotas()
     }
   }, [user])
 

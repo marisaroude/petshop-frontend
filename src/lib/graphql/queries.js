@@ -629,3 +629,45 @@ export async function getMascotaById({ id_mascota }) {
     )
   }
 }
+
+export async function getAllMascotas() {
+  try {
+    const query = `
+    query Mascotas {
+      mascotas {
+        id_mascota
+        id_persona
+        nombre
+        tipo
+        raza
+        descripcion
+        fecha_baja
+        image
+      }
+    }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data.data.mascotas
+    console.log('data from get all mascotas', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error fetching all mascotas:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed fetchin all mascotas. Please check the GraphQL response.',
+    )
+  }
+}

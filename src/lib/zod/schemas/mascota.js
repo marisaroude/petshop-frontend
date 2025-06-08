@@ -9,12 +9,8 @@ export const mascotaSchema = z.object({
 })
 
 export const mascotaSchemaWithFechaBaja = mascotaSchema.extend({
-  // discharge_date: z.union([z.string().datetime(), z.null()]),
   discharge_date: z
     .string()
-    .nonempty('Fecha de baja requerida.')
-    .transform(parseLocalDate)
-    .refine(date => date instanceof Date, {
-      message: 'Fecha de baja requerida.',
-    }),
+    .nullish()
+    .transform(val => (val ? parseLocalDate(val) : null)),
 })

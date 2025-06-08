@@ -14,9 +14,6 @@ export const userSchemaWithFechaBaja = userSchema.extend({
   // fecha_baja: z.union([z.string().datetime(), z.null()]),
   fecha_baja: z
     .string()
-    .nonempty('Fecha de baja requerida.')
-    .transform(parseLocalDate)
-    .refine(date => date instanceof Date, {
-      message: 'Fecha de baja requerida.',
-    }),
+    .nullish()
+    .transform(val => (val ? parseLocalDate(val) : null)),
 })

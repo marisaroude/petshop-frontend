@@ -11,6 +11,7 @@ import {
   TagIcon,
   SwatchIcon,
   TruckIcon,
+  ArchiveBoxArrowDownIcon,
 } from '@heroicons/react/16/solid'
 import { useRouter } from 'next/navigation'
 
@@ -81,6 +82,14 @@ export default function AdminMenu() {
             className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
             <TruckIcon className="size-4 fill-black" />
             Proveedores
+          </button>
+        </MenuItem>
+        <MenuItem>
+          <button
+            onClick={() => router.push('/admin/ingresos')}
+            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+            <ArchiveBoxArrowDownIcon className="size-4 fill-black" />
+            Ingresos
           </button>
         </MenuItem>
         <MenuItem>

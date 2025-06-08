@@ -671,3 +671,42 @@ export async function getAllMascotas() {
     )
   }
 }
+
+export async function getAllIngresosProductos() {
+  try {
+    const query = `
+    query IngresosProductos {
+      ingresosProductos {
+        id_ip
+        id_proveedor
+        subtotal
+        cantidad
+        id_ps
+      }
+    }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data.data.ingresosProductos
+    console.log('data from get all ingresos productos', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error fetching all ingresos productos:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed fetchin all ingresos productos. Please check the GraphQL response.',
+    )
+  }
+}

@@ -751,3 +751,173 @@ export async function createIngresoProducto({
   }
 }
 //#endregion Ingreso Producto
+
+//#region Mascota
+export async function createMascota({
+  id_persona,
+  name,
+  type,
+  race,
+  description,
+  image,
+}) {
+  try {
+    if (!id_persona || !type || !name) {
+      throw new Error('id_persona, type and name are required')
+    }
+
+    const mutation = `
+    mutation CreateMascota($id_persona: Int!, $nombre: String!, $tipo: String!, $raza: String, $descripcion: String, $fecha_baja: String, $image: String) {
+      createMascota(id_persona: $id_persona, nombre: $nombre, tipo: $tipo, raza: $raza, descripcion: $descripcion, fecha_baja: $fecha_baja, image: $image) {
+        id_mascota
+        id_persona
+        nombre
+        tipo
+        raza
+        descripcion
+        fecha_baja
+        image
+      }
+    }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query: mutation,
+        variables: {
+          nombre: name,
+          id_persona: id_persona,
+          tipo: type,
+          raza: race,
+          descripcion: description,
+          image: image,
+        },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data
+    console.log('data from create mascota', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error adding create mascota :',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed Error adding create mascota. Please check the GraphQL response.',
+    )
+  }
+}
+
+export async function updateMascota({ id_mascota, input }) {
+  try {
+    if (!id_mascota || !input) {
+      throw new Error('ID and input are required')
+    }
+
+    const mutation = `
+    mutation UpdateMascota($id_mascota: Int!, $input: UpdateMascotaInput!) {
+      updateMascota(id_mascota: $id_mascota, input: $input) {
+        id_mascota
+        id_persona
+        nombre
+        tipo
+        raza
+        descripcion
+        fecha_baja
+        image
+      }
+    }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query: mutation,
+        variables: {
+          id_mascota,
+          input: {
+            id_persona: input.id_persona,
+            nombre: input.name,
+            tipo: input.type,
+            raza: input.race,
+            descripcion: input.description,
+            fecha_baja: input.discharge_date,
+            image: input.image,
+          },
+        },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data
+    console.log('data from update mascota', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error updating mascota:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed updating mascota. Please check the GraphQL response.',
+    )
+  }
+}
+
+export async function cancelMascota({ id_mascota }) {
+  try {
+    if (!id_mascota) {
+      throw new Error('ID is required')
+    }
+
+    const mutation = `
+      mutation CancelMascota($id_mascota: Int!) {
+        cancelMascota(id_mascota: $id_mascota) {
+          id_mascota
+          id_persona
+          nombre
+          tipo
+          raza
+          descripcion
+          fecha_baja
+          image
+        }
+      }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query: mutation,
+        variables: {
+          id_mascota,
+        },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data
+    console.log('data from cancel mascota', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error cancelling mascota:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed cancelling mascota. Please check the GraphQL response.',
+    )
+  }
+}
+//#endregion Mascota

@@ -533,11 +533,99 @@ export async function getProveedorById({ id_proveedor }) {
     return response.data.data.proveedorById
   } catch (error) {
     console.error(
-      'Error fetching question by proveedor id:',
+      'Error fetching proveedor by id:',
       error.response ? error.response.data : error.message,
     )
     throw new Error(
-      'Error fetching question by proveedor  id:. Please check the GraphQL response.',
+      'Error fetching proveedor by id:. Please check the GraphQL response.',
+    )
+  }
+}
+
+export async function getMascotaByPersonaId({ id_persona }) {
+  if (!id_persona) {
+    throw new Error('ID is required')
+  }
+  try {
+    const query = `
+    query MascotasByPersona($id_persona: Int!) {
+      mascotasByPersona(id_persona: $id_persona) {
+        id_mascota
+        id_persona
+        nombre
+        tipo
+        raza
+        descripcion
+        fecha_baja
+        image
+      }
+    }
+  `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+        variables: { id_persona },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    console.log(response.data.data.mascotasByPersona)
+    return response.data.data.mascotasByPersona
+  } catch (error) {
+    console.error(
+      'Error fetching mascotas by persona id:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Error fetching mascotas by persona id:. Please check the GraphQL response.',
+    )
+  }
+}
+
+export async function getMascotaById({ id_mascota }) {
+  if (!id_mascota) {
+    throw new Error('ID is required')
+  }
+  try {
+    const query = `
+      query MascotaById($id_mascota: Int!) {
+        mascotaById(id_mascota: $id_mascota) {
+          id_mascota
+          id_persona
+          nombre
+          tipo
+          raza
+          descripcion
+          fecha_baja
+          image
+        }
+      }
+  `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+        variables: { id_mascota },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    console.log(response.data.data.mascotaById)
+    return response.data.data.mascotaById
+  } catch (error) {
+    console.error(
+      'Error fetching mascotas by id:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Error fetching mascotas by id:. Please check the GraphQL response.',
     )
   }
 }

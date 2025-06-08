@@ -31,6 +31,20 @@ export function proveedorSuccesfullyCreatedOrUpdate(updated) {
   })
 }
 
+export function mascotaSuccesfullyCreatedOrUpdate(updated) {
+  toast.success(`Mascota ${updated ? 'modificada' : 'creada'} exitosamente`, {
+    closeButton: false,
+    hideProgressBar: true,
+  })
+}
+
+export function mascotaCanceledSuccessfully() {
+  toast.success('Mascota dada de baja exitosamente', {
+    closeButton: false,
+    hideProgressBar: true,
+  })
+}
+
 export function ingresoSuccessfullyCreated() {
   toast.success(`Ingreso creado exitosamente`, {
     closeButton: false,

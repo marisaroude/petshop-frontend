@@ -60,7 +60,9 @@ function page() {
   }
 
   useEffect(() => {
-    user && getProductCarrito()
+    if (!productsCart) {
+      user && getProductCarrito()
+    }
   }, [user])
 
   return (

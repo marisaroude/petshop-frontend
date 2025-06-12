@@ -710,3 +710,69 @@ export async function getAllIngresosProductos() {
     )
   }
 }
+
+export async function pagosByPersona({ id_persona }) {
+  if (!id_persona) {
+    throw new Error('ID is required')
+  }
+  try {
+    const query = `
+    query PagosByPersonaId($id_persona: Int!) {
+      pagosByPersonaId(id_persona: $id_persona) {
+        pago {
+          id_pago
+          id_mercadopago
+          id_carrito
+          fecha
+          monto
+        }
+        factura {
+          id_factura
+          id_pago
+          fecha
+          total
+          detalles_factura {
+            id_df
+            cantidad
+            precio
+            id_ps
+            id_factura
+            producto_servicio {
+              id_ps
+              nombre
+              precio
+              stock
+              descripcion
+              categoria
+              activo
+              image
+            }
+          }
+        }
+      }
+    }
+  `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+        variables: { id_persona },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    console.log(response.data.data.pagosByPersonaId)
+    return response.data.data.pagosByPersonaId
+  } catch (error) {
+    console.error(
+      'Error fetching pagos by persona id:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Error fetching pagos by persona id:. Please check the GraphQL response.',
+    )
+  }
+}

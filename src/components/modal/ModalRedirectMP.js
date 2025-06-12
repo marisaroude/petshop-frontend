@@ -1,6 +1,7 @@
 'use client'
 
 import { useBackgroundColor } from '@/app/context/backgroundColorContext'
+import { updateProductCart } from '@/lib/graphql'
 import { onSubmitMercadoPago } from '@/lib/mercadopago/initMercadoPago'
 import { Dialog, DialogTitle, DialogPanel } from '@headlessui/react'
 
@@ -14,8 +15,31 @@ export default function ModalRedirectMP({
   const { bgColor } = useBackgroundColor()
   const handleContinueMercadoPago = async () => {
     if (loading) return
-    setOpen(false)
-    await onSubmitMercadoPago(setLoading, productsCart)
+
+    try {
+      setOpen(false)
+
+      // actualizar todos los productos en el backend
+      const updatePromises = productsCart.map(product =>
+        updateProductCart({
+          id_pc: product.id_pc,
+          input: {
+            quantity: product.cantidad,
+            subtotal: product.subtotal,
+            id_ps: product.id_ps,
+            id_cart: product.id_carrito,
+          },
+        }),
+      )
+
+      const response = await Promise.all(updatePromises)
+
+      await onSubmitMercadoPago(setLoading, productsCart)
+    } catch (error) {
+      console.error('Error antes de redirigir a MercadoPago:', error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (

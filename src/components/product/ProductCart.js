@@ -46,8 +46,8 @@ export default function ProductCart({
       <div className="flex gap-2">
         <img
           src={
-            product.image ||
-            (product.categoria === 'servicios'
+            product?.image ||
+            (product?.categoria === 'servicios'
               ? '/pets.png'
               : '/productImage.png')
           }

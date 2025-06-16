@@ -68,6 +68,7 @@ export async function createUser({
 }
 
 export async function updateUser({ id_persona, input }) {
+  console.log('input', input)
   try {
     if (!id_persona || !input) {
       throw new Error('ID and input are required')
@@ -95,11 +96,11 @@ export async function updateUser({ id_persona, input }) {
         variables: {
           id_persona,
           input: {
-            dni,
+            dni: input.dni,
             nombre: input.name,
             apellido: input.lastName,
             telefono: input.phone,
-            correoElectronico: input.email,
+            correo_electronico: input.email,
             domicilio: input.address,
           },
         },

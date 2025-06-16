@@ -716,3 +716,96 @@ export async function getRespuestasByPreguntaId({ id_preguntas }) {
     )
   }
 }
+
+export async function getUserById(id_persona) {
+  const query = `
+    query GetPersona($id_persona: Int!) {
+      persona(id_persona: $id_persona) {
+        id_persona
+        dni
+        nombre
+        apellido
+        telefono
+        correo_electronico
+        domicilio
+        tipo
+        fecha_baja
+      }
+    }
+  `
+
+  const response = await axios.post(
+    API_URL,
+    {
+      query,
+      variables: { id_persona },
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  )
+
+  return response.data.data.persona
+}
+
+export async function getAllPreguntas() {
+  try {
+    const query = `
+        query Preguntas {
+          preguntas {
+            id_preguntas
+            descripcion
+            estado
+            id_persona
+            id_ps
+          }
+        }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data.data.proveedores
+    console.log('data from get all proveedores', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error fetching all preguntas:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed fetchin all preguntas. Please check the GraphQL response.',
+    )
+  }
+}
+
+// export async function getPreguntasWithProductInfo() {
+//   const query = `
+//     query {
+//       GetAllpreguntas {
+//         id_preguntas
+//         descripcion
+//         id_persona
+//         id_ps
+//       }
+//     }
+//   `
+
+//   try {
+//     const result = await request(GRAPHQL_URL, query)
+//     return result.allPreguntas
+//   } catch (error) {
+//     console.error('Error fetching preguntas with product info:', error)
+//     throw error
+//   }
+// }

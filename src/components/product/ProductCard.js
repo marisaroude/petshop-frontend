@@ -7,7 +7,12 @@ export default function ProductCard({ product }) {
     <Link href={`/product/${product.id_ps}`}>
       <div className="cursor-pointer rounded-lg bg-[#fafafa] shadow shadow-xl/30 transition-all p-4">
         <img
-          src={product.image ? product.image : '/productImage.png'}
+          src={
+            product.image ||
+            (product.categoria === 'servicios'
+              ? '/pets.png'
+              : '/productImage.png')
+          }
           alt={product.name}
           className="w-full h-48 object-contain rounded"
         />

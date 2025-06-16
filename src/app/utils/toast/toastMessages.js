@@ -30,6 +30,13 @@ export function productSuccesfullyCreatedOrUpdate(updated) {
   })
 }
 
+export function serviceSuccesfullyCreatedOrUpdate(updated) {
+  toast.success(`Servicio ${updated ? 'modificado' : 'creado'} exitosamente`, {
+    closeButton: false,
+    hideProgressBar: true,
+  })
+}
+
 export function promoSuccesfullyCreatedOrUpdate(updated) {
   toast.success(`Promo ${updated ? 'modificada' : 'creada'} exitosamente`, {
     closeButton: false,

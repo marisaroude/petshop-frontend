@@ -21,15 +21,26 @@ export default function Page() {
 
   if (!allowedCategories) return
 
+  const today = new Date()
+
   const filterProducts =
     products?.length > 0 &&
     products
-      ?.filter(product =>
+      .filter(product =>
         product.categoria?.trim().toLowerCase().includes(categoria),
       )
       .filter(product => product.activo && product.stock > 0)
+      .filter(product => {
+        if (product.categoria === 'servicios') {
+          // Filtra que tenga al menos una fecha posterior o igual a hoy
+          return product.fechas_servicios?.some(fechaStr => {
+            const fecha = new Date(fechaStr)
+            return fecha >= today
+          })
+        }
+        return true
+      })
       .sort((a, b) => a.nombre.localeCompare(b.nombre))
-
   useEffect(() => {
     if (!user) return
 

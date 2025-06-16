@@ -106,6 +106,7 @@ export async function getAllProducts() {
             categoria
             activo
             image
+            fechas_servicios
           }
         }
         `
@@ -191,6 +192,7 @@ export async function getProductById({ id_ps }) {
               categoria
               activo
               image
+              fechas_servicios
             }
           }
           `
@@ -235,6 +237,7 @@ export async function getAllProductsCartById({ id_carrito }) {
           subtotal
           id_ps
           id_carrito
+          fecha_servicio
         }
       }
           `
@@ -430,6 +433,7 @@ export async function getFacturaById({ id_factura }) {
             precio
             id_ps
             id_factura
+            fecha_servicio
           }
         }
       }

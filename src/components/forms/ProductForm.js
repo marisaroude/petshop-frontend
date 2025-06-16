@@ -9,15 +9,15 @@ import Select from '../inputs/Select'
 import { productSchema } from '@/lib/zod/schemas/product'
 import { UploadImage } from '../inputs/UploadImage'
 import { createProductoServicio, updateProductoServicio } from '@/lib/graphql'
-import {
-  productSuccesfullyCreated,
-  productSuccesfullyCreatedOrUpdate,
-} from '@/app/utils/toast/toastMessages'
+import { productSuccesfullyCreatedOrUpdate } from '@/app/utils/toast/toastMessages'
 import { allProducts } from '@/app/signals/products'
 
 export default function ProductForm({ productInfo }) {
   const router = useRouter()
   const [image, setImage] = useState(null)
+  const categoriesForProduct = categories.filter(
+    cat => cat.value !== 'servicios',
+  )
   const {
     register,
     handleSubmit,
@@ -135,7 +135,7 @@ export default function ProductForm({ productInfo }) {
           label="Categoría"
           register={register('category')}
           error={errors.category?.message}
-          options={categories}
+          options={categoriesForProduct}
         />
 
         {/* Checkbox Activo */}

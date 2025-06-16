@@ -3,16 +3,26 @@ import Link from 'next/link'
 
 export default function ProductInfo({ product }) {
   if (!product) return <></>
+  const isService = product.categoria === 'servicios'
+
   return (
     <div className="bg-lightgreen rounded-xl p-8 shadow-md max-w-4xl space-y-4 w-full mx-auto">
-      <h2 className="text-xl font-semibold text-gray-800 ">Producto</h2>
+      <h2 className="text-xl font-semibold text-gray-800 ">
+        {isService ? 'Servicio' : 'Producto'}
+      </h2>
 
       <div className="flex flex-row gap-6 w-full justify-start items-start">
         <div className="flex flex-row w-full gap-6 justify-start items-start">
           <div className="w-40 h-40 bg-gray-200 rounded-md flex items-center justify-center text-center text-sm text-gray-500 px-2">
-            {product.image ? (
+            {product.image && product.categoria !== 'servicios' ? (
               <img
                 src={product.image}
+                alt="Product"
+                className="object-contain w-full h-full rounded-md"
+              />
+            ) : isService ? (
+              <img
+                src={'/pets.png'}
                 alt="Product"
                 className="object-contain w-full h-full rounded-md"
               />
@@ -38,7 +48,18 @@ export default function ProductInfo({ product }) {
             <p className="font-semibold">Categoria:</p>
             <p>{product.categoria}</p>
 
-            <p className="font-semibold">Producto Activo:</p>
+            {isService && (
+              <>
+                <p className="font-semibold">
+                  Fechas disponibles del servicio:
+                </p>
+                <p>{product.fechas_servicios?.join(' / ')}</p>
+              </>
+            )}
+
+            <p className="font-semibold">
+              {isService ? 'Servicio' : 'Producto'} Activo:
+            </p>
             <p>{product.activo ? 'Sí' : 'No'}</p>
           </div>
         </div>
@@ -46,9 +67,11 @@ export default function ProductInfo({ product }) {
 
       <div className="flex justify-end">
         <Link
-          href={`/admin/productos/editar/${product.id_ps}`}
+          href={`/admin/${isService ? 'servicios' : 'productos'}/editar/${
+            product.id_ps
+          }`}
           className="bg-green-300 hover:bg-green-400 text-green-900 font-medium py-1.5 px-4 rounded-md transition-colors">
-          Editar Producto
+          Editar {isService ? 'Servicio' : 'Producto'}
         </Link>
       </div>
     </div>

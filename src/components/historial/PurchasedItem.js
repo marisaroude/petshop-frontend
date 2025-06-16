@@ -53,7 +53,12 @@ export default function PurchasedItem({ purchase }) {
               key={item.id_df}
               className="border border-gray-200 rounded-lg p-4 flex flex-col items-center text-center">
               <img
-                src={producto.image || '/productImage.png'}
+                src={
+                  producto.image ||
+                  (producto.categoria === 'servicios'
+                    ? '/pets.png'
+                    : '/productImage.png')
+                }
                 alt={producto.nombre}
                 className="h-40 object-contain rounded mb-4"
               />

@@ -36,7 +36,7 @@ export default function ProductForm({ productInfo }) {
         stock: productInfo.stock.toString(),
         category: productInfo.categoria,
         active: productInfo.activo,
-        description: productInfo.descripcion,
+        description: productInfo.descripcion || '',
       })
       setImage(productInfo.image || null)
     }

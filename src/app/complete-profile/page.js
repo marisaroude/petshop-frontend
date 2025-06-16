@@ -1,0 +1,23 @@
+'use client'
+import BannerBottom from '@/components/banner/BannerBottom'
+import RegisterForm from '@/components/forms/RegisterForm'
+import SimpleHeader from '@/components/header/SimpleHeader'
+import { useSession } from 'next-auth/react'
+import React from 'react'
+import withoutAuth from '../utils/withoutAuth'
+
+function CompleteProfile() {
+  const { data: session } = useSession()
+
+  return (
+    session && (
+      <div className="bg-white h-full w-full flex flex-col items-center">
+        <SimpleHeader />
+        <RegisterForm userInfo={session.user} />
+        <BannerBottom />
+      </div>
+    )
+  )
+}
+
+export default withoutAuth(CompleteProfile)

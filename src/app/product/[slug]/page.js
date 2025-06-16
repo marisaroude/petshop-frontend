@@ -204,6 +204,7 @@ export default function page() {
   // }, [])
 
   const handleAddToCart = async () => {
+    if (!user) return errorMessage('Debe ser usuario registrado para comprar.')
     const productPrice = product.precio
     const subtotal = productPrice * quantity
     const newProduct = {

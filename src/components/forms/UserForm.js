@@ -69,14 +69,19 @@ export default function UserForm({ user }) {
 
   const onConfirmBaja = async () => {
     try {
-      await cancelPersona({ id_persona: user.id_persona })
+      const response = await cancelPersona({ id_persona: user.id_persona })
       //   allUsers.value = allUsers.value?.map(u =>
       //     u.id_persona === response.data.cancelPersona.id_persona
       //       ? response.data.cancelPersona
       //       : u,
       //   )
-      userCanceledSuccessfully()
+
       setShowConfirmModal(false)
+      if (response?.errors?.length > 0) {
+        response.errors.forEach(error => errorMessage(error.message))
+        return
+      }
+      userCanceledSuccessfully()
       router.push('/')
     } catch (error) {
       console.error(error)
@@ -128,7 +133,7 @@ export default function UserForm({ user }) {
         <div className="flex gap-4">
           <button
             type="button"
-            onClick={() => router.push('/')}
+            onClick={() => router.back()}
             className="mt-4 bg-gray-300 text-black px-6 py-2 rounded-md">
             Volver
           </button>
@@ -145,6 +150,8 @@ export default function UserForm({ user }) {
         <ModalConfirmCancel
           openModal={setShowConfirmModal}
           onClickConfirm={onConfirmBaja}
+          textAlert={'¿Estás seguro?'}
+          bodyText={'¿Desea dar de baja a este usuario?'}
         />
       )}
     </div>

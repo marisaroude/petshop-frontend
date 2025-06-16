@@ -177,20 +177,27 @@ export async function cancelPersona({ id_persona }) {
 
 //#region Carrito
 
-export async function addToCart({ quantity, id_cart, id_ps, subtotal }) {
+export async function addToCart({
+  quantity,
+  id_cart,
+  id_ps,
+  subtotal,
+  service_date,
+}) {
   try {
     if (!quantity || !id_cart || !id_ps || !subtotal) {
       throw new Error('Quanrity, id_cart, id_ps and subtotal are required')
     }
 
     const mutation = `
-    mutation CreateProductoCarrito($cantidad: Int!, $subtotal: Float!, $id_ps: Int!, $id_carrito: Int!) {
-      createProductoCarrito(cantidad: $cantidad, subtotal: $subtotal, id_ps: $id_ps, id_carrito: $id_carrito) {
+    mutation CreateProductoCarrito($cantidad: Int!, $subtotal: Float!, $id_ps: Int!, $id_carrito: Int!, $fecha_servicio: String) {
+      createProductoCarrito(cantidad: $cantidad, subtotal: $subtotal, id_ps: $id_ps, id_carrito: $id_carrito, fecha_servicio: $fecha_servicio) {
         id_pc
         cantidad
         subtotal
         id_ps
         id_carrito
+        fecha_servicio
       }
     }
         `
@@ -203,6 +210,7 @@ export async function addToCart({ quantity, id_cart, id_ps, subtotal }) {
           subtotal,
           id_carrito: id_cart,
           id_ps,
+          fecha_servicio: service_date,
         },
       },
       {
@@ -282,6 +290,7 @@ export async function updateProductCart({ id_pc, input }) {
         subtotal
         id_ps
         id_carrito
+        fecha_servicio
       }
     }
         `
@@ -332,17 +341,22 @@ export async function createProductoServicio({
   active,
   description,
   image,
+  services_dates,
 }) {
   try {
-    if (!price || !name || !stock || !category) {
+    let isService = false
+    if (category === 'servicios') {
+      isService = true
+    }
+    if (!price || !name || (!stock && !isService) || !category) {
       throw new Error(
         'DNI, name, last name, phone, email and address are required',
       )
     }
 
     const mutation = `
-    mutation CreateProductoServicio($nombre: String!, $precio: Float!, $stock: Int!, $categoria: String!, $activo: Boolean!, $descripcion: String, $image: String) {
-      createProductoServicio(nombre: $nombre, precio: $precio, stock: $stock, categoria: $categoria, activo: $activo, descripcion: $descripcion, image: $image) {
+    mutation CreateProductoServicio($nombre: String!, $precio: Float!, $stock: Int!, $categoria: String!, $activo: Boolean!, $descripcion: String, $image: String, $fechas_servicios: [String]) {
+      createProductoServicio(nombre: $nombre, precio: $precio, stock: $stock, categoria: $categoria, activo: $activo, descripcion: $descripcion, image: $image, fechas_servicios: $fechas_servicios) {
         id_ps
         nombre
         precio
@@ -351,6 +365,7 @@ export async function createProductoServicio({
         categoria
         activo
         image
+        fechas_servicios
       }
     }
         `
@@ -361,11 +376,12 @@ export async function createProductoServicio({
         variables: {
           nombre: name,
           precio: parseFloat(price),
-          stock: Number(stock),
+          stock: isService ? 9999 : Number(stock),
           categoria: category,
           descripcion: description,
           activo: active,
           image: image,
+          fechas_servicios: services_dates,
         },
       },
       {
@@ -395,7 +411,16 @@ export async function updateProductoServicio({ id_ps, input }) {
       throw new Error('ID and input are required')
     }
 
-    const { name, price, stock, category, active, description, image } = input
+    const {
+      name,
+      price,
+      stock,
+      category,
+      active,
+      description,
+      image,
+      services_dates,
+    } = input
     const mutation = `
     mutation UpdateProductoServicio($id_ps: Int!, $input: UpdateProductoServicioInput!) {
       updateProductoServicio(id_ps: $id_ps, input: $input) {
@@ -407,6 +432,7 @@ export async function updateProductoServicio({ id_ps, input }) {
         categoria
         activo
         image
+        fechas_servicios
       }
     }
         `
@@ -424,6 +450,7 @@ export async function updateProductoServicio({ id_ps, input }) {
             activo: active,
             descripcion: description,
             image,
+            fechas_servicios: services_dates,
           },
         },
       },

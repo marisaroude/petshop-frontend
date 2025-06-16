@@ -1,3 +1,4 @@
+import { parseLocalDate } from '@/app/utils/date/date'
 import { z } from 'zod'
 
 export const productSchema = z.object({
@@ -6,5 +7,13 @@ export const productSchema = z.object({
   stock: z.string().min(1, 'El stock debe ser mayor o igual a 0'),
   category: z.string().min(1, 'La categoría es obligatoria'),
   active: z.boolean(),
-  description: z.string(),
+  description: z.string().optional(),
+})
+
+export const serviceSchema = z.object({
+  name: z.string().min(1, 'El nombre del servicio es obligatorio'),
+  price: z.string().min(1, 'El precio debe ser mayor o igual a 0'),
+  category: z.string().min(1, 'La categoría es obligatoria'),
+  active: z.boolean(),
+  description: z.string().optional(),
 })

@@ -40,11 +40,17 @@ export default function ProductCart({
       subtotal: newSubtotal,
     })
   }, [quantity])
+
   return (
     <div className="flex flex-row w-full p-4 justify-around items-center gap-4">
       <div className="flex gap-2">
         <img
-          src={product?.image ? product.image : '/productImage.png'}
+          src={
+            product?.image ||
+            (product?.categoria === 'servicios'
+              ? '/pets.png'
+              : '/productImage.png')
+          }
           alt={product?.name}
           className=" h-48 object-contain rounded"
         />
@@ -53,6 +59,11 @@ export default function ProductCart({
             {product?.nombre}
           </h3>
           <p className="font-bold">Subtotal: ${subtotal}</p>
+          {productCart?.fecha_servicio && (
+            <p className="font-bold">
+              Fecha del servicio: {productCart.fecha_servicio}
+            </p>
+          )}
           <div className="flex flex-row items-center gap-3">
             <p>Seleccione Cantidad</p>
             <SelectorQuantity quantity={quantity} setQuantity={setQuantity} />

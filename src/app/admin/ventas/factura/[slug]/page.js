@@ -50,6 +50,7 @@ function FacturaDetailPage() {
             id: detalle.id_df,
             cantidad: detalle.cantidad,
             precio: detalle.precio,
+            fecha_servicio: detalle.fecha_servicio,
             ...producto,
           }
         })
@@ -106,6 +107,7 @@ function FacturaDetailPage() {
             imagen: detalle.image,
             precio: detalle.precio,
             cantidad: detalle.cantidad,
+            fecha_servicio: detalle.fecha_servicio,
           }))}
           columns={[
             { field: 'id', headerName: 'ID', flex: 1 },
@@ -131,6 +133,11 @@ function FacturaDetailPage() {
             { field: 'descripcion', headerName: 'Descripción', flex: 3 },
             { field: 'precio', headerName: 'Precio', flex: 1 },
             { field: 'cantidad', headerName: 'Cantidad', flex: 1 },
+            {
+              field: 'fecha_servicio',
+              headerName: 'Fecha del servicio',
+              flex: 1,
+            },
           ]}
         />
       )}

@@ -28,6 +28,7 @@ function isVigente(promo) {
 export default function page() {
   const router = useRouter()
   const [quantity, setQuantity] = useState(1)
+  const [selectedFecha, setSelectedFecha] = useState('')
 
   const [product, setProduct] = useState()
   const { slug } = useParams()
@@ -205,6 +206,14 @@ export default function page() {
 
   const handleAddToCart = async () => {
     if (!user) return errorMessage('Debe ser usuario registrado para comprar.')
+    if (
+      product.categoria === 'servicios' &&
+      (!selectedFecha || selectedFecha.trim === '')
+    ) {
+      return errorMessage(
+        'Debe seleccionar una fecha para contratar el servicio.',
+      )
+    }
     const productPrice = product.precio
     const subtotal = productPrice * quantity
     const newProduct = {
@@ -212,6 +221,7 @@ export default function page() {
       id_cart: parseInt(user.id_persona),
       subtotal: subtotal,
       id_ps: parseInt(slug),
+      service_date: selectedFecha,
     }
 
     const response = await addToCart(newProduct)
@@ -251,6 +261,53 @@ export default function page() {
       <p className="text-black text-xl font-bold">Precio: ${precioOriginal}</p>
     )
   }
+
+  const renderInfoServicio = () => {
+    const today = new Date()
+
+    if (product.categoria === 'servicios' && !user?.tipo) {
+      return (
+        <>
+          <div className="bg-pink p-4 text-white font-bold rounded-md shadow-md">
+            <h3>Fechas disponibles para contratar el servicio</h3>
+
+            <select
+              value={selectedFecha}
+              onChange={e => setSelectedFecha(e.target.value)}
+              className="p-2 bg-white text-black rounded-md mt-2">
+              <option value="">Seleccione una fecha</option>
+              {product.fechas_servicios?.map((item, index) => {
+                const fecha = new Date(item)
+                if (fecha >= today)
+                  return (
+                    <option key={index} value={item}>
+                      {item}
+                    </option>
+                  )
+              })}
+            </select>
+
+            {selectedFecha && (
+              <p className="text-white font-bold mt-2">
+                Fecha seleccionada: {selectedFecha}
+              </p>
+            )}
+          </div>
+
+          <div className="text-md italic">
+            <p>
+              Importante: este tipo de servicio se realiza en el local por{' '}
+              <strong>orden de llegada.</strong>
+            </p>
+            <p>
+              Los horarios de atención son de <strong>Lunes a Viernes</strong>{' '}
+              entre las <strong>10:00hs y 17:00hs.</strong>{' '}
+            </p>
+          </div>
+        </>
+      )
+    }
+  }
   return (
     <div className="flex justify-center">
       <div className="w-full max-w-4xl p-4">
@@ -262,7 +319,12 @@ export default function page() {
                 {/* Imagen del producto */}
                 <div className="md:w-1/2">
                   <img
-                    src={product.image || '/productImage.png'}
+                    src={
+                      product.image ||
+                      (product.categoria === 'servicios'
+                        ? '/pets.png'
+                        : '/productImage.png')
+                    }
                     alt={product.nombre}
                     className="w-full h-64 object-contain rounded"
                   />
@@ -272,7 +334,7 @@ export default function page() {
                 <div className="md:w-1/2 flex flex-col gap-4">
                   <h1 className="text-2xl font-bold">{product.nombre}</h1>
                   <p className="text-gray-700">{product.descripcion}</p>
-
+                  {renderInfoServicio()}
                   <div className="mt-4">{renderPrice()}</div>
 
                   {!isAdmin && (

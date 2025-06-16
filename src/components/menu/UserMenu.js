@@ -9,6 +9,7 @@ import {
   ClockIcon,
   HeartIcon,
   ArrowRightEndOnRectangleIcon,
+  QuestionMarkCircleIcon,
 } from '@heroicons/react/16/solid'
 import { useRouter } from 'next/navigation'
 
@@ -64,6 +65,14 @@ export default function UserMenu() {
             className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
             <ShoppingCartIcon className="size-4 fill-black" />
             Carrito
+          </button>
+        </MenuItem>
+        <MenuItem>
+          <button
+            onClick={() => router.push('/preguntas-frecuentes')}
+            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+            <QuestionMarkCircleIcon className="size-4 fill-black" />
+            Preguntas Frecuentes
           </button>
         </MenuItem>
         <MenuItem>

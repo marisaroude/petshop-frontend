@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(false)
     }
 
-    if (status !== 'loading') {
+    if (status !== 'loading' || status === 'unauthenticated') {
       checkUser()
     }
   }, [session, status])

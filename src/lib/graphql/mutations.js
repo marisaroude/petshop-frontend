@@ -267,6 +267,59 @@ export async function removeProductCart({ id_pc }) {
     )
   }
 }
+
+export async function updateProductCart({ id_pc, input }) {
+  try {
+    if (!id_pc || !input) {
+      throw new Error('ID and input are required')
+    }
+
+    const mutation = `
+    mutation UpdateProductoCarrito($id_pc: Int!, $input: UpdateProductoCarritoInput!) {
+      updateProductoCarrito(id_pc: $id_pc, input: $input) {
+        id_pc
+        cantidad
+        subtotal
+        id_ps
+        id_carrito
+      }
+    }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query: mutation,
+        variables: {
+          id_pc: id_pc,
+          input: {
+            cantidad: input.quantity,
+            subtotal: input.subtotal,
+            id_ps: input.id_ps,
+            id_carrito: input.id_cart,
+          },
+        },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data.data.updateProductoCarrito
+    console.log('data from update  cart', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error updating product from cart :',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed Error updating product from cart. Please check the GraphQL response.',
+    )
+  }
+}
+
 //#endregion Carrito
 
 //#region Producto Servicio
@@ -621,6 +674,8 @@ export async function createRespuesta({ descripcion, id_preguntas }) {
     )
   }
 }
+
+//#endregion Respuesta
 
 //#region Proveedor
 export async function createProveedor({ name, cuit, active }) {

@@ -16,9 +16,10 @@ export default function SearchPage() {
     if (query && allProducts.value?.length) {
       const filtered = allProducts.value.filter(
         p =>
-          p.nombre?.toLowerCase().includes(query) ||
-          p.descripcion?.toLowerCase().includes(query) ||
-          p.categoria?.toLowerCase().includes(query),
+          (p.nombre?.toLowerCase().includes(query) ||
+            p.descripcion?.toLowerCase().includes(query) ||
+            p.categoria?.toLowerCase().includes(query)) &&
+          p.categoria !== 'servicios',
       )
       setResults(filtered)
     }

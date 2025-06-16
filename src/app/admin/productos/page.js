@@ -10,6 +10,10 @@ function isActive(product) {
   return product.activo
 }
 
+function hasFewProducts(product) {
+  return product.stock < 10
+}
+
 function page() {
   useSignals()
 
@@ -19,6 +23,8 @@ function page() {
     ?.filter(product => {
       if (filtro === 'activos') return isActive(product)
       if (filtro === 'no activos') return !isActive(product)
+      if (filtro === 'escasos') return hasFewProducts(product)
+
       return true
     })
     ?.sort((a, b) => b.id_ps - a.id_ps)
@@ -33,6 +39,7 @@ function page() {
           <option value="todos">Todos</option>
           <option value="activos">Solo activos</option>
           <option value="no activos">Solo no activos</option>
+          <option value="escasos">Escasos</option>
         </select>
       </div>
       <h1 className="text-3xl">Listado de Productos</h1>

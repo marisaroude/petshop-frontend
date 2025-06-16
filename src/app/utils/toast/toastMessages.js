@@ -10,6 +10,19 @@ export function productSuccesfullyAdded(router) {
   })
 }
 
+export function productsSuccesfullyAdded(router) {
+  toast.success(
+    'Productos añadidos al carrito, clickeame para ir al carrito!',
+    {
+      closeButton: false,
+      hideProgressBar: true,
+      onClick: () => {
+        router.push('/cart')
+      },
+    },
+  )
+}
+
 export function productSuccesfullyCreatedOrUpdate(updated) {
   toast.success(`Producto ${updated ? 'modificado' : 'creado'} exitosamente`, {
     closeButton: false,

@@ -23,7 +23,12 @@ export default function Home() {
 
   const renderProducts = () => {
     return allProducts.value
-      ?.filter(product => product.activo && product.stock > 0)
+      ?.filter(
+        product =>
+          product.activo &&
+          product.stock > 0 &&
+          product.categoria !== 'servicios',
+      )
       .sort((a, b) => a.nombre.localeCompare(b.nombre))
       .map((product, index) => <ProductCard key={index} product={product} />)
   }

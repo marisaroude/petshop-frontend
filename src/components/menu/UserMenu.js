@@ -43,7 +43,9 @@ export default function UserMenu() {
           </button>
         </MenuItem>
         <MenuItem>
-          <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+          <button
+            onClick={() => router.push('/cliente/historial')}
+            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
             <ClockIcon className="size-4 fill-black" />
             Historial
           </button>

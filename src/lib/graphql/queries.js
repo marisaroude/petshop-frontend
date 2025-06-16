@@ -673,6 +673,111 @@ export async function getAllMascotas() {
   }
 }
 
+export async function getAllIngresosProductos() {
+  try {
+    const query = `
+    query IngresosProductos {
+      ingresosProductos {
+        id_ip
+        id_proveedor
+        subtotal
+        cantidad
+        id_ps
+      }
+    }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data.data.ingresosProductos
+    console.log('data from get all ingresos productos', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error fetching all ingresos productos:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed fetchin all ingresos productos. Please check the GraphQL response.',
+    )
+  }
+}
+
+export async function pagosByPersona({ id_persona }) {
+  if (!id_persona) {
+    throw new Error('ID is required')
+  }
+  try {
+    const query = `
+    query PagosByPersonaId($id_persona: Int!) {
+      pagosByPersonaId(id_persona: $id_persona) {
+        pago {
+          id_pago
+          id_mercadopago
+          id_carrito
+          fecha
+          monto
+        }
+        factura {
+          id_factura
+          id_pago
+          fecha
+          total
+          detalles_factura {
+            id_df
+            cantidad
+            precio
+            id_ps
+            id_factura
+            producto_servicio {
+              id_ps
+              nombre
+              precio
+              stock
+              descripcion
+              categoria
+              activo
+              image
+            }
+          }
+        }
+      }
+    }
+  `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+        variables: { id_persona },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    console.log(response.data.data.pagosByPersonaId)
+    return response.data.data.pagosByPersonaId
+  } catch (error) {
+    console.error(
+      'Error fetching pagos by persona id:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Error fetching pagos by persona id:. Please check the GraphQL response.',
+    )
+  }
+}
+
 export async function getRespuestasByPreguntaId({ id_preguntas }) {
   try {
     if (!id_preguntas) {
@@ -688,14 +793,12 @@ export async function getRespuestasByPreguntaId({ id_preguntas }) {
         }
       }
     `
-
     const response = await axios.post(
       API_URL,
       {
         query,
         variables: { id_preguntas: parseInt(id_preguntas) },
       },
-
       {
         headers: {
           'Content-Type': 'application/json',
@@ -715,39 +818,6 @@ export async function getRespuestasByPreguntaId({ id_preguntas }) {
       'Failed fetching respuestas. Please check the GraphQL response.',
     )
   }
-}
-
-export async function getUserById(id_persona) {
-  const query = `
-    query GetPersona($id_persona: Int!) {
-      persona(id_persona: $id_persona) {
-        id_persona
-        dni
-        nombre
-        apellido
-        telefono
-        correo_electronico
-        domicilio
-        tipo
-        fecha_baja
-      }
-    }
-  `
-
-  const response = await axios.post(
-    API_URL,
-    {
-      query,
-      variables: { id_persona },
-    },
-    {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    },
-  )
-
-  return response.data.data.persona
 }
 
 export async function getAllPreguntas() {
@@ -775,8 +845,8 @@ export async function getAllPreguntas() {
       },
     )
 
-    const data = response.data.data.proveedores
-    console.log('data from get all proveedores', data)
+    const data = response.data.data.preguntas
+    console.log('data from get all preguntas', data)
     return data
   } catch (error) {
     console.error(
@@ -807,5 +877,9 @@ export async function getAllPreguntas() {
 //   } catch (error) {
 //     console.error('Error fetching preguntas with product info:', error)
 //     throw error
+//   }
+// }
+//       'Failed fetchin all facturas. Please check the GraphQL response.',
+//     )
 //   }
 // }

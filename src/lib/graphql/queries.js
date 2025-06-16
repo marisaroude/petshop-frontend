@@ -776,3 +776,45 @@ export async function pagosByPersona({ id_persona }) {
     )
   }
 }
+
+export async function getRespuestasByPreguntaId({ id_preguntas }) {
+  try {
+    if (!id_preguntas) {
+      throw new Error('ID de pregunta es requerido')
+    }
+
+    const query = `
+      query RespuestasByPreguntaId($id_preguntas: Int!) {
+        respuestasByPreguntaId(id_preguntas: $id_preguntas) {
+          id_respuesta
+          descripcion
+          id_preguntas
+        }
+      }
+    `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+        variables: { id_preguntas: parseInt(id_preguntas) },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data.data.respuestasByPreguntaId
+    console.log('Data from get respuestas:', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error fetching respuestas:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed fetchin all facturas. Please check the GraphQL response.',
+    )
+  }
+}

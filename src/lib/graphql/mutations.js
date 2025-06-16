@@ -581,17 +581,8 @@ export async function createPregunta({
     }
 
     const mutation = `
-      mutation CreatePregunta(
-        $descripcion: String!,
-        $id_persona: Int!,
-        $id_ps: Int!,
-        $estado: Boolean
-      ) {
-        createPregunta(
-          descripcion: $descripcion,
-          id_persona: $id_persona,
-          id_ps: $id_ps,
-          estado: $estado
+      mutation CreatePregunta($descripcion: String!,$id_persona: Int!,$id_ps: Int!,$estado: Boolean) {
+        createPregunta(descripcion: $descripcion,id_persona: $id_persona,id_ps: $id_ps,estado: $estado
         ) {
           id_preguntas
           descripcion
@@ -635,6 +626,55 @@ export async function createPregunta({
 }
 
 //#endregion Preguntas
+
+//#region Respuesta
+export async function createRespuesta({ descripcion, id_preguntas }) {
+  try {
+    if (!descripcion || !id_preguntas) {
+      throw new Error('Description, and ID and preg ID are required')
+    }
+
+    const mutation = `
+      mutation CreateRespuesta($descripcion: String!,$id_preguntas: Int!) {
+        createRespuesta(descripcion: $descripcion,id_preguntas: $id_preguntas) {
+          id_respuesta
+          descripcion
+          id_preguntas
+        }
+      }
+    `
+
+    const response = await axios.post(
+      API_URL,
+      {
+        query: mutation,
+        variables: {
+          descripcion: descripcion,
+          id_preguntas: parseInt(id_preguntas),
+        },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data
+    console.log('Data from create respuesta:', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error creating respuesta:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed creating respuesta. Please check the GraphQL response.',
+    )
+  }
+}
+
+//#endregion Respuesta
 
 //#region Proveedor
 export async function createProveedor({ name, cuit, active }) {

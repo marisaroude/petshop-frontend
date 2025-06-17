@@ -7,6 +7,7 @@ import { allProducts } from '@/app/signals/products'
 import { categories } from '@/app/utils/data/categories'
 import { useAuth } from '@/app/context/authContext'
 import { getMascotaByPersonaId } from '@/lib/graphql'
+import { formatLocalDate } from '@/app/utils/date/date'
 
 export default function Page() {
   useSignals()
@@ -22,7 +23,7 @@ export default function Page() {
   if (!allowedCategories) return
 
   const today = new Date()
-
+  const formattedToday = formatLocalDate(today)
   const filterProducts =
     products?.length > 0 &&
     products
@@ -35,7 +36,8 @@ export default function Page() {
           // Filtra que tenga al menos una fecha posterior o igual a hoy
           return product.fechas_servicios?.some(fechaStr => {
             const fecha = new Date(fechaStr)
-            return fecha >= today
+            const formattedFecha = formatLocalDate(fecha)
+            return formattedFecha >= formattedToday
           })
         }
         return true

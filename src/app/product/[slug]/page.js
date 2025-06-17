@@ -18,6 +18,7 @@ import {
   getPersonById,
   getRespuestasByPreguntaId,
 } from '@/lib/graphql'
+import { formatLocalDate } from '@/app/utils/date/date'
 
 function isVigente(promo) {
   const hoy = new Date()
@@ -264,6 +265,7 @@ export default function page() {
 
   const renderInfoServicio = () => {
     const today = new Date()
+    const formattedToday = formatLocalDate(today)
 
     if (product.categoria === 'servicios' && !user?.tipo) {
       return (
@@ -278,7 +280,8 @@ export default function page() {
               <option value="">Seleccione una fecha</option>
               {product.fechas_servicios?.map((item, index) => {
                 const fecha = new Date(item)
-                if (fecha >= today)
+                const formattedFecha = formatLocalDate(fecha)
+                if (formattedFecha >= formattedToday)
                   return (
                     <option key={index} value={item}>
                       {item}

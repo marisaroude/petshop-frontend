@@ -863,6 +863,43 @@ export async function getAllPreguntas() {
   }
 }
 
+export async function getAllRespuestas() {
+  try {
+    const query = `
+        query Respuestas   {
+          respuestas {
+            id_respuesta
+            descripcion
+             id_preguntas
+          }
+        }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data.data.respuestas
+    console.log('data from get all respuestas', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error fetching all respuestas:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed fetchin all respuestas. Please check the GraphQL response.',
+    )
+  }
+}
+
 // export async function getPreguntasWithProductInfo() {
 //   const query = `
 //     query {

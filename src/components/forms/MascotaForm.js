@@ -18,6 +18,7 @@ import {
 } from '@/app/utils/toast/toastMessages'
 import ModalConfirmCancel from '../modal/ModalConfirmCancel'
 import { useBackgroundColor } from '@/app/context/backgroundColorContext'
+import { allMascotas } from '@/app/signals/mascota'
 
 export default function MascotaForm({ mascotaInfo }) {
   const router = useRouter()
@@ -72,6 +73,11 @@ export default function MascotaForm({ mascotaInfo }) {
         return
       }
 
+      const mascotaUpdated = response.data.updateMascota
+      allMascotas.value = allMascotas.value.map(u =>
+        u.id_mascota === mascotaUpdated.id_mascota ? mascotaUpdated : u,
+      )
+
       mascotaSuccesfullyCreatedOrUpdate(!!mascotaInfo)
       reset()
       setImage(null)
@@ -87,6 +93,11 @@ export default function MascotaForm({ mascotaInfo }) {
       const response = await cancelMascota({
         id_mascota: mascotaInfo.id_mascota,
       })
+      const mascotaCanceled = response.data.cancelMascota
+      allMascotas.value = allMascotas.value.map(u =>
+        u.id_mascota === mascotaCanceled.id_mascota ? mascotaCanceled : u,
+      )
+
       setShowConfirmModal(false)
 
       if (response?.errors?.length > 0) {

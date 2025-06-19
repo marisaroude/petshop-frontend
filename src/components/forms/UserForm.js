@@ -60,7 +60,7 @@ export default function UserForm({ user }) {
       )
 
       userUpdatedSuccesfully()
-      router.push('/')
+      router.back()
     } catch (error) {
       console.error('Error:', error)
       errorMessage('Ocurrió un error al actualizar el usuario.')
@@ -70,11 +70,11 @@ export default function UserForm({ user }) {
   const onConfirmBaja = async () => {
     try {
       const response = await cancelPersona({ id_persona: user.id_persona })
-      //   allUsers.value = allUsers.value?.map(u =>
-      //     u.id_persona === response.data.cancelPersona.id_persona
-      //       ? response.data.cancelPersona
-      //       : u,
-      //   )
+      allUsers.value = allUsers.value?.map(u =>
+        u.id_persona === response.data.cancelPersona.id_persona
+          ? response.data.cancelPersona
+          : u,
+      )
 
       setShowConfirmModal(false)
       if (response?.errors?.length > 0) {
@@ -82,7 +82,7 @@ export default function UserForm({ user }) {
         return
       }
       userCanceledSuccessfully()
-      router.push('/')
+      router.back()
     } catch (error) {
       console.error(error)
       errorMessage('Error al dar de baja al usuario')

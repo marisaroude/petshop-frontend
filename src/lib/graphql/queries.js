@@ -900,6 +900,49 @@ export async function getAllRespuestas() {
   }
 }
 
+export async function getPromoById({ id_promocion }) {
+  if (!id_promocion) {
+    throw new Error('ID is required')
+  }
+  try {
+    const query = `
+      query PromocionById($id_promocion: Int!) {
+        promocionById(id_promocion: $id_promocion) {
+          id_promocion
+          valor
+          fecha_inicio
+          fecha_fin
+          activo
+          id_ps
+        }
+      }
+          `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+        variables: { id_promocion },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data.data.promocionById
+    console.log('data from get promo by id', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error fetching promo by id:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed fetching promo by id. Please check the GraphQL response.',
+    )
+  }
+}
 // export async function getPreguntasWithProductInfo() {
 //   const query = `
 //     query {

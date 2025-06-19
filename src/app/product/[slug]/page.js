@@ -431,23 +431,24 @@ export default function page() {
                 )}
               </div>
 
-              {/* Formulario para nueva pregunta */}
-              <div className="mt-8 pt-4 border-t">
-                <div className="flex flex-col md:flex-row gap-2">
-                  <input
-                    type="text"
-                    value={nuevaPregunta}
-                    onChange={e => setNuevaPregunta(e.target.value)}
-                    placeholder="Escribe tu pregunta..."
-                    className="flex-1 p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <button
-                    onClick={handleEnviarPregunta}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded transition">
-                    Enviar pregunta
-                  </button>
+              {user && !user.tipo && (
+                <div className="mt-8 pt-4 border-t">
+                  <div className="flex flex-col md:flex-row gap-2">
+                    <input
+                      type="text"
+                      value={nuevaPregunta}
+                      onChange={e => setNuevaPregunta(e.target.value)}
+                      placeholder="Escribe tu pregunta..."
+                      className="flex-1 p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <button
+                      onClick={handleEnviarPregunta}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded transition">
+                      Enviar pregunta
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         ) : (

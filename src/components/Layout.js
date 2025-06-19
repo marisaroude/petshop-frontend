@@ -38,7 +38,7 @@ export default function Layout({ children }) {
         try {
           const response = await fetchProducts()
           if (response) {
-            allProducts.value = response
+            allProducts.value = response.filter(Boolean)
           }
         } catch (error) {
           console.error('Error al cargar productos en Layout:', error)
@@ -50,7 +50,7 @@ export default function Layout({ children }) {
         try {
           const response = await fetchPromos()
           if (response) {
-            allPromos.value = response
+            allPromos.value = response.filter(Boolean)
           }
         } catch (error) {
           console.error('Error al cargar las promociones en Layout:', error)
@@ -67,7 +67,7 @@ export default function Layout({ children }) {
         try {
           const response = await fetchProveedores()
           if (response) {
-            allProveedores.value = response
+            allProveedores.value = response.filter(Boolean)
           }
         } catch (error) {
           console.error('Error al cargar los proveedores en Layout:', error)
@@ -80,7 +80,7 @@ export default function Layout({ children }) {
         try {
           const response = await fetchsMascotas()
           if (response) {
-            allMascotas.value = response
+            allMascotas.value = response.filter(Boolean)
           }
         } catch (error) {
           console.error('Error al cargar las mascotas en Layout:', error)

@@ -1,4 +1,4 @@
-import { formatLocalDate, parseLocalDate } from '@/app/utils/date/date'
+// import { formatLocalDate, parseLocalDate } from '@/app/utils/date/date'
 import React, { useState } from 'react'
 
 function DatesFieldServices({ label, dates, setDates }) {
@@ -38,8 +38,9 @@ function DatesFieldServices({ label, dates, setDates }) {
       <ul className="bg-gray-100 p-2 rounded-md">
         {dates.map((date, index) => (
           <li key={index} className="flex justify-between items-center p-1">
-            <span>{formatLocalDate(parseLocalDate(date))}</span>
+            {/* <span>{formatLocalDate(parseLocalDate(date))}</span> */}
             {/* <span>{parseLocalDate(date)}</span> */}
+            <span>{date}</span>
             <button
               type="button"
               onClick={() => handleRemove(date)}

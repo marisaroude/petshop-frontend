@@ -73,10 +73,12 @@ export default function MascotaForm({ mascotaInfo }) {
         return
       }
 
-      const mascotaUpdated = response.data.updateMascota
-      allMascotas.value = allMascotas.value.map(u =>
-        u.id_mascota === mascotaUpdated.id_mascota ? mascotaUpdated : u,
-      )
+      if (mascotaInfo) {
+        const mascotaUpdated = response.data.updateMascota
+        allMascotas.value = allMascotas.value.map(u =>
+          u.id_mascota === mascotaUpdated.id_mascota ? mascotaUpdated : u,
+        )
+      }
 
       mascotaSuccesfullyCreatedOrUpdate(!!mascotaInfo)
       reset()
@@ -93,10 +95,6 @@ export default function MascotaForm({ mascotaInfo }) {
       const response = await cancelMascota({
         id_mascota: mascotaInfo.id_mascota,
       })
-      const mascotaCanceled = response.data.cancelMascota
-      allMascotas.value = allMascotas.value.map(u =>
-        u.id_mascota === mascotaCanceled.id_mascota ? mascotaCanceled : u,
-      )
 
       setShowConfirmModal(false)
 
@@ -104,6 +102,11 @@ export default function MascotaForm({ mascotaInfo }) {
         response.errors.forEach(error => errorMessage(error.message))
         return
       }
+      const mascotaCanceled = response.data.cancelMascota
+      allMascotas.value = allMascotas.value.map(u =>
+        u.id_mascota === mascotaCanceled.id_mascota ? mascotaCanceled : u,
+      )
+
       mascotaCanceledSuccessfully()
       router.back()
     } catch (error) {

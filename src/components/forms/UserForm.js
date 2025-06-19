@@ -25,7 +25,7 @@ export default function UserForm({ user }) {
     reset,
   } = useForm({
     resolver: zodResolver(userSchemaWithFechaBaja),
-    defaultValues: { active: false },
+    // defaultValues: { active: false },
   })
 
   useEffect(() => {
@@ -70,17 +70,17 @@ export default function UserForm({ user }) {
   const onConfirmBaja = async () => {
     try {
       const response = await cancelPersona({ id_persona: user.id_persona })
-      allUsers.value = allUsers.value?.map(u =>
-        u.id_persona === response.data.cancelPersona.id_persona
-          ? response.data.cancelPersona
-          : u,
-      )
 
       setShowConfirmModal(false)
       if (response?.errors?.length > 0) {
         response.errors.forEach(error => errorMessage(error.message))
         return
       }
+      const personaCanceled = response.data.cancelPersona
+      allUsers.value = allUsers.value?.map(u =>
+        u.id_persona === personaCanceled.id_persona ? personaCanceled : u,
+      )
+
       userCanceledSuccessfully()
       router.back()
     } catch (error) {

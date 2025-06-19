@@ -9,7 +9,10 @@ import Select from '../inputs/Select'
 import { productSchema } from '@/lib/zod/schemas/product'
 import { UploadImage } from '../inputs/UploadImage'
 import { createProductoServicio, updateProductoServicio } from '@/lib/graphql'
-import { productSuccesfullyCreatedOrUpdate } from '@/app/utils/toast/toastMessages'
+import {
+  errorMessage,
+  productSuccesfullyCreatedOrUpdate,
+} from '@/app/utils/toast/toastMessages'
 import { allProducts } from '@/app/signals/products'
 
 export default function ProductForm({ productInfo }) {

@@ -142,11 +142,9 @@ function UserProfilePage() {
                           name={key}
                           value={value}
                           onChange={handleChange}
-                          disabled={
-                            key === 'dni' || key === 'correo_electronico'
-                          }
+                          disabled={key === 'dni' || key === 'email'}
                           className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm p-2 ${
-                            key === 'dni' || key === 'correo_electronico'
+                            key === 'dni' || key === 'email'
                               ? 'bg-gray-100 text-gray-400 border border-gray-300 cursor-not-allowed'
                               : 'border border-pink-300 focus:ring-pink-500 focus:border-pink-500'
                           }`}

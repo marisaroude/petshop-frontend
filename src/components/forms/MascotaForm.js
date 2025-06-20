@@ -73,7 +73,7 @@ export default function MascotaForm({ mascotaInfo }) {
         return
       }
 
-      if (mascotaInfo) {
+      if (mascotaInfo && user?.tipo) {
         const mascotaUpdated = response.data.updateMascota
         allMascotas.value = allMascotas.value.map(u =>
           u.id_mascota === mascotaUpdated.id_mascota ? mascotaUpdated : u,
@@ -103,9 +103,12 @@ export default function MascotaForm({ mascotaInfo }) {
         return
       }
       const mascotaCanceled = response.data.cancelMascota
-      allMascotas.value = allMascotas.value.map(u =>
-        u.id_mascota === mascotaCanceled.id_mascota ? mascotaCanceled : u,
-      )
+
+      if (user?.tipo) {
+        allMascotas.value = allMascotas.value.map(u =>
+          u.id_mascota === mascotaCanceled.id_mascota ? mascotaCanceled : u,
+        )
+      }
 
       mascotaCanceledSuccessfully()
       router.back()

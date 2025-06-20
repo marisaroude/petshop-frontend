@@ -2,6 +2,7 @@
 import React from 'react'
 import { faqs } from '../utils/data/faqs'
 import CustomDisclosure from '@/components/disclosure/CustomDisclosure'
+import withUserAuth from '../utils/withUserAuth'
 
 function page() {
   return (
@@ -19,4 +20,4 @@ function page() {
   )
 }
 
-export default page
+export default withUserAuth(page)

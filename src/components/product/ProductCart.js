@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import SelectorQuantity from '../inputs/SelectorQuantity'
 import { getProductById } from '@/lib/graphql'
 import CustomButton from '../inputs/CustomButton'
+import { useBackgroundColor } from '@/app/context/backgroundColorContext'
 
 export default function ProductCart({
   productCart,
@@ -10,6 +11,8 @@ export default function ProductCart({
   removeProduct,
   updateProductInCart,
 }) {
+  const { bgColor } = useBackgroundColor()
+
   const [product, setProduct] = useState()
   const [quantity, setQuantity] = useState(productCart.cantidad)
 
@@ -35,10 +38,13 @@ export default function ProductCart({
 
     setSubtotal(newSubtotal)
     updateTotal(difference)
-    updateProductInCart(productCart.id_pc, {
+
+    const updatedProduct = {
+      ...productCart,
       cantidad: quantity,
       subtotal: newSubtotal,
-    })
+    }
+    updateProductInCart(updatedProduct)
   }, [quantity])
 
   return (
@@ -78,7 +84,7 @@ export default function ProductCart({
               id_ps: productCart.id_ps,
             })
           }
-          bgColor={'#F0DFEF'}
+          bgColor={bgColor}
           text="Quitar Producto"
         />
       </div>

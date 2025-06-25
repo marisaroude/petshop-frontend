@@ -5,7 +5,6 @@ import {
   Bars3Icon,
   HomeIcon,
   InformationCircleIcon,
-  ShoppingCartIcon,
   ClockIcon,
   HeartIcon,
   ArrowRightEndOnRectangleIcon,
@@ -57,14 +56,6 @@ export default function UserMenu() {
             className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
             <HeartIcon className="size-4 fill-black" />
             Mis Mascotas
-          </button>
-        </MenuItem>
-        <MenuItem>
-          <button
-            onClick={() => router.push('/cart')}
-            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-            <ShoppingCartIcon className="size-4 fill-black" />
-            Carrito
           </button>
         </MenuItem>
         <MenuItem>

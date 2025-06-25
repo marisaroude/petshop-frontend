@@ -6,9 +6,12 @@ import {
 } from '@/app/utils/toast/toastMessages'
 import { addToCart } from '@/lib/graphql'
 import { useRouter } from 'next/navigation'
+import { useProductsCart } from '@/app/hooks/useProductsCart'
 
 export default function PurchasedItem({ purchase }) {
   const { user } = useAuth()
+  const { handleProductsCart } = useProductsCart()
+
   const { pago, factura } = purchase
   const { detalles_factura, fecha, total } = factura
   const router = useRouter()
@@ -29,6 +32,7 @@ export default function PurchasedItem({ purchase }) {
       if (errors.length > 0) {
         errors.forEach(error => errorMessage(error.message))
       } else {
+        responses.map(res => handleProductsCart(res.data.createProductoCarrito))
         productsSuccesfullyAdded(router)
       }
     } catch (err) {

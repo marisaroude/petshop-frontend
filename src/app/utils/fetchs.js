@@ -1,6 +1,7 @@
 import {
   getAllMascotas,
   getAllProducts,
+  getAllProductsCartById,
   getAllPromociones,
   getAllProveedores,
 } from '@/lib/graphql'
@@ -22,5 +23,10 @@ export const fetchProveedores = async () => {
 
 export const fetchsMascotas = async () => {
   const response = await getAllMascotas()
+  return response
+}
+
+export const fetchsProductsCartById = async id => {
+  const response = await getAllProductsCartById({ id_carrito: id })
   return response
 }

@@ -6,7 +6,8 @@ import { useSignals } from '@preact/signals-react/runtime'
 import { updateUser } from '@/lib/graphql'
 import { errorMessage } from '../utils/toast/toastMessages'
 import { useRouter } from 'next/navigation'
-import { ChevronLeft } from 'lucide-react'
+import { ArrowLeftIcon } from '@heroicons/react/24/outline'
+
 function UserProfilePage() {
   useSignals()
   const { user, setUser } = useAuth()
@@ -112,11 +113,10 @@ function UserProfilePage() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Botón de volver con flechita */}
         <button
           onClick={() => router.push('/')}
           className="mb-6 flex items-center text-gray-700 hover:text-pink-500 transition-colors group">
-          <ChevronLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
+          <ArrowLeftIcon className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
           <span className="font-medium">Volver a la Tienda</span>
         </button>
 

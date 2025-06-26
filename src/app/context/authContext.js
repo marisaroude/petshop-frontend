@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
       if (session?.user?.email) {
         try {
           const person = await getPersonByEmail({ email: session.user.email })
+          session.user.profileCompleted = !!person
           setUser(person)
         } catch (err) {
           console.error('Error fetching person:', err)
@@ -34,10 +35,7 @@ export const AuthProvider = ({ children }) => {
   // Manejo de inicio de sesión
   const handleSignIn = async () => {
     try {
-      if (status === 'authenticated' && !user) {
-        return await signIn('google', { callbackUrl: '/complete-profile' })
-      }
-      await signIn('google')
+      await signIn('google', { callbackUrl: '/complete-profile' })
     } catch (error) {
       console.error('Error in login:', error)
     }

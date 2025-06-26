@@ -90,9 +90,10 @@ export default function Layout({ children }) {
       }
     }
     const loadProductsCart = async () => {
+      if (!user) return
       if (!allProductsCart.value || allProductsCart.value.length === 0) {
         try {
-          const response = await fetchsProductsCartById(user.id_persona)
+          const response = await fetchsProductsCartById(user?.id_persona)
           if (response) {
             allProductsCart.value = response.filter(Boolean)
           }

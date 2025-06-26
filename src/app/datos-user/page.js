@@ -5,10 +5,13 @@ import withUserAuth from '../utils/withUserAuth'
 import { useSignals } from '@preact/signals-react/runtime'
 import { updateUser } from '@/lib/graphql'
 import { errorMessage } from '../utils/toast/toastMessages'
-
+import { useRouter } from 'next/navigation'
+import { ChevronLeft } from 'lucide-react'
 function UserProfilePage() {
   useSignals()
-  const { user } = useAuth()
+  const { user, setUser } = useAuth()
+  const router = useRouter()
+
   const [isEditing, setIsEditing] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [saveError, setSaveError] = useState(null)
@@ -77,6 +80,15 @@ function UserProfilePage() {
         response.errors.forEach(error => errorMessage(error.message))
         return
       }
+
+      setUser(prevUser => ({
+        ...prevUser,
+        nombre: name,
+        apellido: lastName,
+        domicilio: address,
+        telefono: phone,
+      }))
+
       setSuccessMessage('Tus cambios se han guardado correctamente')
       setIsEditing(false)
     } catch (error) {
@@ -100,6 +112,14 @@ function UserProfilePage() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 py-8">
+        {/* Botón de volver con flechita */}
+        <button
+          onClick={() => router.push('/')}
+          className="mb-6 flex items-center text-gray-700 hover:text-pink-500 transition-colors group">
+          <ChevronLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
+          <span className="font-medium">Volver a la Tienda</span>
+        </button>
+
         <div className="flex flex-col md:flex-row gap-8">
           <div className="flex-1">
             <div className="bg-white rounded-lg shadow-sm overflow-hidden">

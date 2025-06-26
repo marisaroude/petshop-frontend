@@ -93,11 +93,9 @@ export function errorMessage(message) {
   })
 }
 
-export function productSuccesfullyRemoved(message, getProductCarrito) {
+export function productSuccesfullyRemoved(message) {
   toast.success(message, {
-    closeOnClick: true,
-    onClose: () => {
-      getProductCarrito()
-    },
+    closeButton: false,
+    hideProgressBar: true,
   })
 }

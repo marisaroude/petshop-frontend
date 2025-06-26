@@ -19,6 +19,7 @@ import {
   getRespuestasByPreguntaId,
 } from '@/lib/graphql'
 import { formatLocalDate } from '@/app/utils/date/date'
+import { useProductsCart } from '@/app/hooks/useProductsCart'
 
 function isVigente(promo) {
   const hoy = new Date()
@@ -28,12 +29,13 @@ function isVigente(promo) {
 }
 export default function page() {
   const router = useRouter()
+  const { slug } = useParams()
+  const { user } = useAuth()
+  const { handleProductsCart } = useProductsCart()
   const [quantity, setQuantity] = useState(1)
   const [selectedFecha, setSelectedFecha] = useState('')
 
   const [product, setProduct] = useState()
-  const { slug } = useParams()
-  const { user } = useAuth()
 
   //para las preguntas y rtas
   const [preguntas, setPreguntas] = useState([])
@@ -209,7 +211,7 @@ export default function page() {
     if (!user) return errorMessage('Debe ser usuario registrado para comprar.')
     if (
       product.categoria === 'servicios' &&
-      (!selectedFecha || selectedFecha.trim === '')
+      (!selectedFecha || selectedFecha.trim() === '')
     ) {
       return errorMessage(
         'Debe seleccionar una fecha para contratar el servicio.',
@@ -230,6 +232,8 @@ export default function page() {
     if (response?.errors?.length > 0) {
       response.errors.forEach(error => errorMessage(error.message))
     } else {
+      const data = response.data.createProductoCarrito
+      handleProductsCart(data)
       productSuccesfullyAdded(router)
     }
   }

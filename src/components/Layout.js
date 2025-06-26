@@ -14,12 +14,14 @@ import {
   fetchPromos,
   fetchProveedores,
   fetchsMascotas,
+  fetchsProductsCartById,
 } from '@/app/utils/fetchs'
 import { useSignals } from '@preact/signals-react/runtime'
 import { allPromos } from '@/app/signals/promociones'
 import { allProveedores } from '@/app/signals/proveedores'
 import { useAuth } from '@/app/context/authContext'
 import { allMascotas } from '@/app/signals/mascota'
+import { allProductsCart } from '@/app/signals/cart'
 
 export default function Layout({ children }) {
   useSignals()
@@ -87,11 +89,27 @@ export default function Layout({ children }) {
         }
       }
     }
+    const loadProductsCart = async () => {
+      if (!allProductsCart.value || allProductsCart.value.length === 0) {
+        try {
+          const response = await fetchsProductsCartById(user.id_persona)
+          if (response) {
+            allProductsCart.value = response.filter(Boolean)
+          }
+        } catch (error) {
+          console.error(
+            'Error al cargar los productos del carrito en Layout:',
+            error,
+          )
+        }
+      }
+    }
 
     if (user?.tipo) {
       loadProveedores()
       loadMascotas()
     }
+    loadProductsCart()
   }, [user])
 
   return (

@@ -46,8 +46,8 @@ function page() {
         </select>
       </div>
 
-      {promosFiltered?.map((promo, index) => (
-        <div className="w-full" key={index}>
+      {promosFiltered?.map(promo => (
+        <div className="w-full" key={promo.id_promocion}>
           <PromocionInfo promo={promo} />
         </div>
       ))}

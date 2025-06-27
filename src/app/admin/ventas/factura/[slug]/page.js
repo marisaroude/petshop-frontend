@@ -49,7 +49,7 @@ function FacturaDetailPage() {
           return {
             id: detalle.id_df,
             cantidad: detalle.cantidad,
-            precio: detalle.precio,
+            subtotal: detalle.precio,
             fecha_servicio: detalle.fecha_servicio,
             ...producto,
           }
@@ -105,7 +105,8 @@ function FacturaDetailPage() {
             nombre: detalle.nombre,
             descripcion: detalle.descripcion,
             imagen: detalle.image,
-            precio: detalle.precio,
+            precioIndividual: detalle.precio,
+            subtotal: detalle.subtotal,
             cantidad: detalle.cantidad,
             fecha_servicio: detalle.fecha_servicio,
           }))}
@@ -131,7 +132,13 @@ function FacturaDetailPage() {
             },
             { field: 'nombre', headerName: 'Producto', flex: 2 },
             { field: 'descripcion', headerName: 'Descripción', flex: 3 },
-            { field: 'precio', headerName: 'Precio', flex: 1 },
+            {
+              field: 'precioIndividual',
+              headerName: 'Precio Individual',
+              flex: 1,
+            },
+            { field: 'subtotal', headerName: 'Subtotal', flex: 1 },
+
             { field: 'cantidad', headerName: 'Cantidad', flex: 1 },
             {
               field: 'fecha_servicio',

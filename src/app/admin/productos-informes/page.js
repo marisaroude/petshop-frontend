@@ -17,23 +17,24 @@ function page() {
     { field: 'stock', headerName: 'Stock', flex: 1 },
     { field: 'cantidad_ventas', headerName: 'Cantidad de Ventas', flex: 1 },
     { field: 'total_facturado', headerName: 'Total Facturado', flex: 1 },
-    // {
-    //   field: 'accion',
-    //   headerName: 'Acción',
-    //   flex: 1,
-    //   renderCell: params => (
-    //     <Button
-    //       variant="contained"
-    //       size="small"
-    //       style={{ background: '#bae5d5', color: 'black' }}
-    //       onClick={() => {
-    //         console.log('params', params)
-    //         // router.push(`/admin/ventas/factura/${params.row.id}`)
-    //       }}>
-    //       Ver detalle
-    //     </Button>
-    //   ),
-    // },
+    {
+      field: 'accion',
+      headerName: 'Acción',
+      flex: 1,
+      renderCell: params => (
+        <Button
+          variant="contained"
+          size="small"
+          style={{ background: '#bae5d5', color: 'black' }}
+          onClick={() => {
+            router.push(
+              `/admin/productos-informes/ingresos-producto/${params.row.id}`,
+            )
+          }}>
+          Ver ingresos
+        </Button>
+      ),
+    },
   ]
 
   useEffect(() => {
@@ -64,7 +65,7 @@ function page() {
   return (
     <div className="bg-white min-h-screen p-6 w-full flex flex-col items-center gap-6">
       <CustomTable
-        title="Informe de productos"
+        title="Informe de productos vendidos"
         rows={[...salesProducts].sort(
           (a, b) => b.cantidad_ventas - a.cantidad_ventas,
         )}

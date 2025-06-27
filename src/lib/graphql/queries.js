@@ -1009,3 +1009,52 @@ export async function getAllSalesQuantityProduct() {
     )
   }
 }
+
+export async function getInformationIngresosByProductId({ id_ps }) {
+  if (!id_ps) {
+    throw new Error('ID de producto es requerido')
+  }
+  try {
+    const query = `
+      query InformationIngresosByProductId($id_ps: Int!) {
+        informationIngresosByProductId(id_ps: $id_ps) {
+          id_ps
+          cantidad
+          subtotal
+          proveedor {
+            id_proveedor
+            nombre
+            cuit
+            activo
+          }
+        }
+      }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+        variables: {
+          id_ps: id_ps,
+        },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data.data.informationIngresosByProductId
+    console.log('data from get all info ingresos', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error fetching all info ingresos:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed fetchin all info ingresos. Please check the GraphQL response.',
+    )
+  }
+}

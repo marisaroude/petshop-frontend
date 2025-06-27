@@ -63,7 +63,7 @@ function page() {
   }, [])
 
   return (
-    <div className="bg-white min-h-screen p-6 w-full flex flex-col items-center gap-6">
+    <div className="bg-white min-h-screen sm:p-6 w-full flex flex-col items-center gap-6">
       <CustomTable
         title="Informe de productos vendidos"
         rows={[...salesProducts].sort(

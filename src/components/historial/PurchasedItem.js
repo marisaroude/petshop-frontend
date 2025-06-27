@@ -83,7 +83,7 @@ export default function PurchasedItem({ purchase }) {
         })}
       </div>
 
-      <div className="mt-6 flex justify-between items-center">
+      <div className="mt-6 flex sm:flex-row flex-col gap-2 justify-between items-center">
         <div className="flex flex-col gap-2">
           <p className="text-lg font-bold text-gray-900">
             Total de la factura: ${total.toFixed(2)}

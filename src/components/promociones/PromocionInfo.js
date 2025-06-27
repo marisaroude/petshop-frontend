@@ -1,4 +1,5 @@
 import { allProducts } from '@/app/signals/products'
+import { formatLocalDate } from '@/app/utils/date/date'
 import Link from 'next/link'
 import React from 'react'
 
@@ -6,6 +7,8 @@ export default function PromocionInfo({ promo }) {
   const product = allProducts.value.find(
     product => product.id_ps === promo.id_ps,
   )
+  const formattedStartDate = formatLocalDate(new Date(promo.fecha_inicio))
+  const formattedEndDate = formatLocalDate(new Date(promo.fecha_fin))
 
   return (
     <div className="bg-lightgreen rounded-xl p-6 shadow-md space-y-4 w-full max-w-2xl mx-auto">
@@ -31,12 +34,12 @@ export default function PromocionInfo({ promo }) {
 
           <div>
             <p className="font-medium">Inicio:</p>
-            <p>{new Date(promo.fecha_inicio).toLocaleDateString()}</p>
+            <p>{formattedStartDate}</p>
           </div>
 
           <div>
             <p className="font-medium">Fin:</p>
-            <p>{new Date(promo.fecha_fin).toLocaleDateString()}</p>
+            <p>{formattedEndDate}</p>
           </div>
 
           <div>

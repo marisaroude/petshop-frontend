@@ -131,8 +131,8 @@ export default function MascotaForm({ mascotaInfo }) {
 
   return (
     <div
-      className={`flex items-center justify-center ${bgColor} p-8 rounded-lg shadow-lg`}>
-      <div className="flex flex-col items-center gap-4">
+      className={`sm:w-auto w-full flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 ${bgColor} sm:p-8 p-4 rounded-lg shadow-lg`}>
+      <div className="w-full flex flex-col items-center gap-4">
         <div className="w-64 h-64 bg-gray-200 rounded-md flex items-center justify-center">
           {image ? (
             <img
@@ -157,7 +157,7 @@ export default function MascotaForm({ mascotaInfo }) {
       </div>
 
       {/* Formulario de información */}
-      <form onSubmit={handleSubmit(onSubmit)} className="ml-8 space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
         {InfoForm.map(item => (
           <InputWithLabel
             key={item.value}
@@ -187,7 +187,7 @@ export default function MascotaForm({ mascotaInfo }) {
             </div>
           ))}
 
-        <div className="flex gap-4">
+        <div className="flex gap-4 justify-center sm:justify-end">
           <button
             type="button"
             onClick={() => router.back()}

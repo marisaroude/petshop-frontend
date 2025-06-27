@@ -65,7 +65,7 @@ function FacturaDetailPage() {
   }, [])
 
   return (
-    <div className="flex flex-col gap-8 p-4">
+    <div className="flex flex-col gap-8 sm:p-4">
       <h1 className="text-2xl font-semibold">Factura #{factura?.id}</h1>
 
       {factura && pago && cliente && (

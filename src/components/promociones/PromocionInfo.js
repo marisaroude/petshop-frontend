@@ -14,7 +14,7 @@ export default function PromocionInfo({ promo }) {
     <div className="bg-lightgreen rounded-xl p-6 shadow-md space-y-4 w-full max-w-2xl mx-auto">
       <h2 className="text-xl font-semibold text-gray-800 ">Promoción</h2>
 
-      <div className="flex flex-row gap-6 justify-around">
+      <div className="flex sm:flex-row flex-col gap-6 items-center justify-around">
         <div className="w-40 h-40 bg-gray-200 rounded-md flex items-center justify-center">
           {product.image ? (
             <img
@@ -26,7 +26,7 @@ export default function PromocionInfo({ promo }) {
             <span className="text-gray-500">Sin foto del producto</span>
           )}
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-lg text-gray-700">
+        <div className="grid grid-cols-2 sm:gap-8 gap-2 text-lg text-gray-700">
           <div>
             <p className="font-medium">Producto:</p>
             <p>{product?.nombre || 'Producto no encontrado'}</p>
@@ -53,7 +53,7 @@ export default function PromocionInfo({ promo }) {
         </div>
       </div>
 
-      <div className="flex justify-end">
+      <div className="flex sm:justify-end justify-center">
         <Link
           href={`/admin/promociones/editar/${promo.id_promocion}`}
           className="bg-green-300 hover:bg-green-400 text-green-900 font-medium py-1.5 px-4 rounded-md transition-colors">

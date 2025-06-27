@@ -13,8 +13,8 @@ export default function MascotaInfo({ mascota }) {
       className={`${bgColor} rounded-xl p-8 shadow-md max-w-4xl space-y-4 w-full mx-auto`}>
       <h2 className="text-xl font-semibold text-gray-800 ">Mascota</h2>
 
-      <div className="flex flex-row gap-6 w-full justify-start items-start">
-        <div className="flex flex-row w-full gap-6 justify-start items-start">
+      <div className="flex sm:flex-row flex-col gap-6 w-full sm:justify-start justify-center sm:items-start items-center">
+        <div className="flex sm:flex-row flex-col w-full gap-6 sm:justify-start justify-center sm:items-start items-center">
           <div className="w-40 h-40 bg-gray-200 rounded-md flex items-center justify-center text-center text-sm text-gray-500 px-2">
             {mascota.image ? (
               <img
@@ -28,7 +28,7 @@ export default function MascotaInfo({ mascota }) {
           </div>
 
           {/* Información de la mascota */}
-          <div className="grid grid-cols-2 gap-y-2 gap-x-4 w-full">
+          <div className="grid grid-cols-2 gap-y-2 gap-x-4 w-full break-words">
             <p className="font-semibold">Nombre:</p>
             <p>{mascota.nombre}</p>
 
@@ -49,7 +49,7 @@ export default function MascotaInfo({ mascota }) {
         </div>
       </div>
 
-      <div className="flex justify-end">
+      <div className="flex sm:justify-end justify-center">
         <Link
           href={
             user?.tipo

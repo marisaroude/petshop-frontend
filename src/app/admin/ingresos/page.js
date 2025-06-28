@@ -11,7 +11,7 @@ function page() {
   useSignals()
   const [ingresos, setIngresos] = useState([])
   const columns = [
-    { field: 'id', headerName: 'Ingreso', flex: 1 },
+    { field: 'fecha_ingreso', headerName: 'Fecha Ingreso', flex: 1 },
     { field: 'proveedor', headerName: 'Proveedor', flex: 1 },
     { field: 'subtotal', headerName: 'Subotal', flex: 1 },
     { field: 'producto', headerName: 'Producto', flex: 1 },
@@ -25,6 +25,7 @@ function page() {
 
         const rows = response.map(ingreso => ({
           id: ingreso.id_ip,
+          fecha_ingreso: ingreso.fecha_ingreso,
           proveedor: allProveedores.value?.find(
             prov => prov.id_proveedor === ingreso.id_proveedor,
           )?.nombre,

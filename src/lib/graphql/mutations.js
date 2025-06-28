@@ -811,16 +811,20 @@ export async function createIngresoProducto({
   subtotal,
   id_ps,
   quantity,
+  dateEntry,
 }) {
   try {
-    if (!quantity || !id_proveedor || !id_ps || !subtotal) {
-      throw new Error('Quantity, id_proveedor, id_ps and subtotal are required')
+    if (!quantity || !id_proveedor || !id_ps || !subtotal || !dateEntry) {
+      throw new Error(
+        'Quantity, id_proveedor, id_ps, date entry and subtotal are required',
+      )
     }
 
     const mutation = `
-    mutation CreateIngresoProducto($id_proveedor: Int!, $subtotal: Float!, $cantidad: Int!, $id_ps: Int!) {
-      createIngresoProducto(id_proveedor: $id_proveedor, subtotal: $subtotal, cantidad: $cantidad, id_ps: $id_ps) {
+    mutation CreateIngresoProducto($id_proveedor: Int!, $fecha_ingreso: String! ,$subtotal: Float!, $cantidad: Int!, $id_ps: Int!) {
+      createIngresoProducto(id_proveedor: $id_proveedor, fecha_ingreso: $fecha_ingreso, subtotal: $subtotal, cantidad: $cantidad, id_ps: $id_ps) {
         ingreso {
+          fecha_ingreso
           id_ip
           id_proveedor
           subtotal
@@ -849,6 +853,7 @@ export async function createIngresoProducto({
           subtotal: parseFloat(subtotal),
           id_proveedor: id_proveedor,
           id_ps,
+          fecha_ingreso: dateEntry,
         },
       },
       {

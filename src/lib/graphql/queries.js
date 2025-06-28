@@ -683,6 +683,7 @@ export async function getAllIngresosProductos() {
     query IngresosProductos {
       ingresosProductos {
         id_ip
+        fecha_ingreso
         id_proveedor
         subtotal
         cantidad
@@ -1021,6 +1022,7 @@ export async function getInformationIngresosByProductId({ id_ps }) {
           id_ps
           cantidad
           subtotal
+          fecha_ingreso
           proveedor {
             id_proveedor
             nombre

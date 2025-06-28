@@ -53,7 +53,7 @@ export default function SearchAndUserBar() {
     <div
       className={`${bgColor} w-full flex flex-col sm:flex sm:flex-row items-center  gap-2 justify-between p-4 text-black font-bold`}>
       <SearchInput value={searchValue} onChange={handleSearchChange} />
-      <div className="flex sm:items-center capitalize justify-end gap-4 w-full">
+      <div className="flex items-center capitalize justify-end gap-4 w-full">
         {user ? (
           <p>
             {user.nombre} {user.apellido}

@@ -81,20 +81,27 @@ function page() {
       {productsCart.value?.length > 0 ? (
         <>
           {productsCart.value.map((product, index) => (
-            <ProductCart
+            <div
               key={product.id_pc}
-              productCart={product}
-              updateTotal={updateTotal}
-              removeProduct={removeProduct}
-              updateProductInCart={updateProductInCart}
-            />
+              className={`py-4 ${
+                index !== productsCart.value.length - 1
+                  ? 'border-b border-gray-300'
+                  : ''
+              }`}>
+              <ProductCart
+                productCart={product}
+                updateTotal={updateTotal}
+                removeProduct={removeProduct}
+                updateProductInCart={updateProductInCart}
+              />
+            </div>
           ))}
 
           <div className="text-bold text-4xl w-full">
-            <h1 className="text-end p-6">Total: ${total}</h1>
+            <h1 className="sm:text-end text-center p-6">Total: ${total}</h1>
           </div>
 
-          <div className="w-full flex items-center justify-end gap-4 p-4">
+          <div className="w-full flex items-center sm:justify-end justify-center gap-4 p-4">
             <CustomButton handleClick={() => router.push('/')} text="Volver" />
             <CustomButton handleClick={() => setOpen(true)} text="Comprar" />
           </div>

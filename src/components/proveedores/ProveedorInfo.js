@@ -8,7 +8,7 @@ export default function ProveedorInfo({ proveedor }) {
       <h2 className="text-xl font-semibold text-gray-800 ">Proveedor</h2>
 
       <div className="flex flex-row gap-6 w-full justify-start items-start">
-        <div className="grid grid-cols-2 gap-y-2 gap-x-4 w-full capitalize">
+        <div className="grid grid-cols-2 gap-y-2 gap-x-4 w-full capitalize break-words">
           <p className="font-semibold">Nombre Proveedor:</p>
           <p>{proveedor.nombre}</p>
 
@@ -20,7 +20,7 @@ export default function ProveedorInfo({ proveedor }) {
         </div>
       </div>
 
-      <div className="flex justify-end">
+      <div className="flex sm:justify-end justify-center text-center">
         <Link
           href={`/admin/proveedores/editar/${proveedor.id_proveedor}`}
           className="bg-green-300 hover:bg-green-400 text-green-900 font-medium py-1.5 px-4 rounded-md transition-colors">

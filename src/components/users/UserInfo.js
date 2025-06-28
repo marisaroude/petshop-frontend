@@ -13,7 +13,7 @@ export default function UserInfo({ user }) {
       <h2 className="text-xl font-semibold text-gray-800 ">Usuario</h2>
 
       <div className="flex flex-row gap-6 w-full justify-start items-start">
-        <div className="grid grid-cols-2 gap-y-2 gap-x-4 w-full capitalize">
+        <div className="grid grid-cols-2 gap-y-2 gap-x-4 w-full capitalize break-words">
           <p className="font-semibold">Nombre:</p>
           <p>{user.nombre}</p>
 
@@ -42,7 +42,7 @@ export default function UserInfo({ user }) {
         </div>
       </div>
 
-      <div className="flex gap-2 justify-end">
+      <div className="flex gap-2 sm:justify-end justify-center text-center">
         {hasMascotas(user) && (
           <Link
             href={`/admin/clientes/${user.id_persona}/mascotas`}

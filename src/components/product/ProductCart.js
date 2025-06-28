@@ -85,7 +85,6 @@ export default function ProductCart({
               id_ps: productCart.id_ps,
             })
           }
-          bgColor={bgColor}
           text="Quitar Producto"
         />
       </div>

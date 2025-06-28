@@ -7,10 +7,20 @@ import { updateUser } from '@/lib/graphql'
 import { errorMessage } from '../utils/toast/toastMessages'
 import { useRouter } from 'next/navigation'
 import { ArrowLeftIcon } from '@heroicons/react/24/outline'
+import { useBackgroundColor } from '../context/backgroundColorContext'
 
 function UserProfilePage() {
   useSignals()
   const { user, setUser } = useAuth()
+  const {
+    hoverBgColor,
+    textButtonColor,
+    bgButtonColor,
+    bgLightColors,
+    hoverTextColor,
+    borderColor,
+  } = useBackgroundColor()
+
   const router = useRouter()
 
   const [isEditing, setIsEditing] = useState(false)
@@ -115,7 +125,7 @@ function UserProfilePage() {
       <div className="max-w-4xl mx-auto px-4 py-8">
         <button
           onClick={() => router.push('/')}
-          className="mb-6 flex items-center text-gray-700 hover:text-pink-500 transition-colors group">
+          className={`mb-6 flex items-center text-gray-700 ${hoverTextColor} transition-colors group`}>
           <ArrowLeftIcon className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
           <span className="font-medium">Volver a la Tienda</span>
         </button>
@@ -125,8 +135,10 @@ function UserProfilePage() {
             <div className="bg-white rounded-lg shadow-sm overflow-hidden">
               <div className="border-b border-gray-200 px-6 py-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center shadow">
-                    <span className="text-pink-600 font-semibold text-base">
+                  <div
+                    className={`w-10 h-10 rounded-full ${bgLightColors} flex items-center justify-center shadow`}>
+                    <span
+                      className={`${textButtonColor}-600 font-semibold text-base uppercase`}>
                       {user?.nombre?.charAt(0)}
                       {user?.apellido?.charAt(0)}
                     </span>
@@ -166,7 +178,7 @@ function UserProfilePage() {
                           className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm p-2 ${
                             key === 'dni' || key === 'email'
                               ? 'bg-gray-100 text-gray-400 border border-gray-300 cursor-not-allowed'
-                              : 'border border-pink-300 focus:ring-pink-500 focus:border-pink-500'
+                              : `border ${borderColor} `
                           }`}
                         />
                       ) : (
@@ -182,7 +194,7 @@ function UserProfilePage() {
                   {!isEditing ? (
                     <button
                       onClick={handleEdit}
-                      className="px-4 py-2 border border-pink-300 text-pink-700 rounded-md hover:bg-pink-50">
+                      className={`px-4 py-2 border ${borderColor} ${textButtonColor}-700 rounded-md ${hoverBgColor}`}>
                       Editar
                     </button>
                   ) : (
@@ -196,7 +208,7 @@ function UserProfilePage() {
                       <button
                         onClick={handleSave}
                         disabled={isSaving}
-                        className="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-pink-600 disabled:opacity-50">
+                        className={`px-4 py-2 ${bgButtonColor}-300 ${textButtonColor}-700 rounded-md  hover:${bgButtonColor}-400 disabled:opacity-50`}>
                         {isSaving ? 'Guardando...' : 'Guardar cambios'}
                       </button>
                     </>

@@ -344,18 +344,16 @@ export default function page() {
                   {renderInfoServicio()}
                   <div className="mt-4">{renderPrice()}</div>
 
-                  {!isAdmin && (
-                    <div className="flex flex-col gap-4 mt-4">
-                      <div className="flex items-center gap-4">
-                        <p className="font-medium">Cantidad:</p>
-                        <SelectorQuantity
-                          setQuantity={setQuantity}
-                          quantity={quantity}
-                        />
-                      </div>
-                      <ButtonAddToCart handleClick={handleAddToCart} />
+                  <div className="flex flex-col gap-4 mt-4">
+                    <div className="flex items-center gap-4">
+                      <p className="font-medium">Cantidad:</p>
+                      <SelectorQuantity
+                        setQuantity={setQuantity}
+                        quantity={quantity}
+                      />
                     </div>
-                  )}
+                    <ButtonAddToCart handleClick={handleAddToCart} />
+                  </div>
                 </div>
               </div>
             </div>

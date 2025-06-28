@@ -10,7 +10,7 @@ const withUserAuth = WrappedComponent => {
 
     useEffect(() => {
       // If the user is not authenticated, redirect them to the login page
-      if (!user || user.tipo) {
+      if (!user) {
         router.push('/')
       }
     }, [user, router])

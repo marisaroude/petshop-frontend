@@ -12,7 +12,11 @@ import {
   SwatchIcon,
   TruckIcon,
   ArchiveBoxArrowDownIcon,
+  HomeIcon,
+  ClockIcon,
+  HeartIcon,
 } from '@heroicons/react/16/solid'
+import { Divider, ListSubheader } from '@mui/material'
 import { useRouter } from 'next/navigation'
 
 export default function AdminMenu() {
@@ -26,9 +30,54 @@ export default function AdminMenu() {
       </MenuButton>
 
       <MenuItems
+        as="div" // 👈 Esto reemplaza el Fragment por un div
         transition
         anchor="bottom end"
-        className={`w-auto shadow-md origin-top-right rounded-xl border border-black/9 ${bgColor} p-1 text-sm/6 text-black transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0`}>
+        className={`w-auto h-96 shadow-md origin-top-right rounded-xl border border-black/9 ${bgColor} p-1 text-sm/6 text-black transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0`}>
+        <MenuItem>
+          <button
+            onClick={() => router.push('/')}
+            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+            <HomeIcon className="size-4 fill-black" />
+            Inicio
+          </button>
+        </MenuItem>
+
+        <Divider />
+
+        <ListSubheader className={`leading-[24px]! bg-transparent! static!`}>
+          Mi cuenta
+        </ListSubheader>
+        <MenuItem>
+          <button
+            onClick={() => router.push('/datos-user')}
+            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+            <InformationCircleIcon className="size-4 fill-black" />
+            Datos
+          </button>
+        </MenuItem>
+        <MenuItem>
+          <button
+            onClick={() => router.push('/cliente/historial')}
+            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+            <ClockIcon className="size-4 fill-black" />
+            Historial
+          </button>
+        </MenuItem>
+        <MenuItem>
+          <button
+            onClick={() => router.push('/cliente/mascotas')}
+            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+            <HeartIcon className="size-4 fill-black" />
+            Mis Mascotas
+          </button>
+        </MenuItem>
+
+        <Divider />
+
+        <ListSubheader className={`leading-[24px]! bg-transparent! static!`}>
+          Productos
+        </ListSubheader>
         <MenuItem>
           <button
             onClick={() => router.push('/admin/productos/agregar')}
@@ -53,6 +102,12 @@ export default function AdminMenu() {
             Ver Productos y Servicios
           </button>
         </MenuItem>
+
+        <Divider />
+
+        <ListSubheader className={`leading-[24px]! bg-transparent! static!`}>
+          Promociones
+        </ListSubheader>
         <MenuItem>
           <button
             onClick={() => router.push('/admin/promociones/agregar')}
@@ -70,6 +125,12 @@ export default function AdminMenu() {
             Ver Promociones
           </button>
         </MenuItem>
+
+        <Divider />
+
+        <ListSubheader className={`leading-[24px]! bg-transparent! static!`}>
+          Informes
+        </ListSubheader>
         <MenuItem>
           <button
             onClick={() => router.push('/admin/informes')}
@@ -78,6 +139,12 @@ export default function AdminMenu() {
             Informes
           </button>
         </MenuItem>
+
+        <Divider />
+
+        <ListSubheader className={`leading-[24px]! bg-transparent! static!`}>
+          Preguntas
+        </ListSubheader>
         <MenuItem>
           <button
             onClick={() => router.push('/admin/preguntas-pendientes')}
@@ -88,12 +155,32 @@ export default function AdminMenu() {
         </MenuItem>
         <MenuItem>
           <button
+            onClick={() => router.push('/preguntas-frecuentes')}
+            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+            <QuestionMarkCircleIcon className="size-4 fill-black" />
+            Preguntas Frecuentes
+          </button>
+        </MenuItem>
+
+        <Divider />
+
+        <ListSubheader className={`leading-[24px]! bg-transparent! static!`}>
+          Proveedores
+        </ListSubheader>
+        <MenuItem>
+          <button
             onClick={() => router.push('/admin/proveedores')}
             className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
             <TruckIcon className="size-4 fill-black" />
             Proveedores
           </button>
         </MenuItem>
+
+        <Divider />
+
+        <ListSubheader className={`leading-[24px]! bg-transparent! static!`}>
+          Ingresos
+        </ListSubheader>
         <MenuItem>
           <button
             onClick={() => router.push('/admin/ingresos')}
@@ -110,6 +197,9 @@ export default function AdminMenu() {
             Cargar Ingreso
           </button>
         </MenuItem>
+
+        <Divider />
+
         <MenuItem>
           <button
             onClick={handleSignOut}

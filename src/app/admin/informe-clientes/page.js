@@ -6,16 +6,15 @@ import CustomTable from '@/components/table/CustomTable'
 import Button from '@mui/material/Button'
 import { useRouter } from 'next/navigation'
 
-import {
-  getAllPerson,
-  pagosByPersona,
-  getMascotaByPersonaId,
-} from '@/lib/graphql'
+import { pagosByPersona } from '@/lib/graphql'
+import { allUsers } from '@/app/signals/user'
+import { allMascotas } from '@/app/signals/mascota'
 
 function page() {
   useSignals()
   const [clientes, setClientes] = useState([])
   const router = useRouter()
+
   const columns = [
     { field: 'nombre', headerName: 'Nombre', flex: 1 },
     { field: 'apellido', headerName: 'Apellido', flex: 1 },
@@ -33,7 +32,6 @@ function page() {
           size="small"
           style={{ background: '#bae5d5', color: 'black' }}
           onClick={() => {
-            console.log('params', params)
             router.push(`/admin/informe-clientes/detalle/${params.row.id}`)
           }}>
           Ver detalle
@@ -41,24 +39,28 @@ function page() {
       ),
     },
   ]
-  //outer.push(`/admin/ventas/factura/${params.row.id}`)
 
   useEffect(() => {
     const fetchClientes = async () => {
       try {
-        const personas = await getAllPerson()
+        const personas = allUsers.value || []
+        const mascotas = allMascotas.value || []
+
         const soloClientes = personas.filter(p => p.tipo === false)
 
         const ranking = await Promise.all(
           soloClientes.map(async cliente => {
-            const [pagos, mascotas] = await Promise.all([
-              pagosByPersona({ id_persona: cliente.id_persona }),
-              getMascotaByPersonaId({ id_persona: cliente.id_persona }),
-            ])
+            const pagos = await pagosByPersona({
+              id_persona: cliente.id_persona,
+            })
 
             const totalGastado = pagos.reduce(
               (acc, p) => acc + (p?.factura?.total || 0),
               0,
+            )
+
+            const mascotasDelCliente = mascotas.filter(
+              m => m.id_persona === cliente.id_persona,
             )
 
             return {
@@ -68,7 +70,7 @@ function page() {
               correo_electronico: cliente.correo_electronico,
               telefono: cliente.telefono,
               totalGastado,
-              mascotas: mascotas.length,
+              mascotas: mascotasDelCliente.length,
             }
           }),
         )
@@ -85,7 +87,7 @@ function page() {
 
   return (
     <div className="bg-white min-h-screen p-6 w-full flex flex-col items-center gap-6">
-      <CustomTable title="Clienes" rows={clientes} columns={columns} />
+      <CustomTable title="Clientes" rows={clientes} columns={columns} />
     </div>
   )
 }

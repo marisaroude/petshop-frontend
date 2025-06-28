@@ -15,6 +15,7 @@ import {
   fetchProveedores,
   fetchsMascotas,
   fetchsProductsCartById,
+  fetchPersonas,
 } from '@/app/utils/fetchs'
 import { useSignals } from '@preact/signals-react/runtime'
 import { allPromos } from '@/app/signals/promociones'
@@ -22,6 +23,7 @@ import { allProveedores } from '@/app/signals/proveedores'
 import { useAuth } from '@/app/context/authContext'
 import { allMascotas } from '@/app/signals/mascota'
 import { allProductsCart } from '@/app/signals/cart'
+import { allUsers } from '@/app/signals/user'
 
 export default function Layout({ children }) {
   useSignals()
@@ -89,6 +91,20 @@ export default function Layout({ children }) {
         }
       }
     }
+
+    const loadPersonas = async () => {
+      if (!allUsers.value || allUsers.value.length === 0) {
+        try {
+          const response = await fetchPersonas()
+          if (response) {
+            allUsers.value = response.filter(Boolean)
+          }
+        } catch (error) {
+          console.error('Error al cargar personas en Layout:', error)
+        }
+      }
+    }
+
     const loadProductsCart = async () => {
       if (!user) return
       if (!allProductsCart.value || allProductsCart.value.length === 0) {
@@ -109,6 +125,7 @@ export default function Layout({ children }) {
     if (user?.tipo) {
       loadProveedores()
       loadMascotas()
+      loadPersonas()
     }
     loadProductsCart()
   }, [user])

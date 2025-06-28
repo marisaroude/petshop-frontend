@@ -8,7 +8,7 @@ import UserInfo from '@/components/users/UserInfo'
 
 function page() {
   useSignals()
-
+  const [visibleCount, setVisibleCount] = useState(5)
   const [filtro, setFiltro] = useState('todos')
   const isActivo = user => user.fecha_baja === null
   const isAdmin = user => user.tipo === true
@@ -23,6 +23,8 @@ function page() {
       return true // 'todos'
     })
     ?.sort((a, b) => b.id_persona - a.id_persona)
+
+  const visibleUsers = usersFiltered?.slice(0, visibleCount)
 
   useEffect(() => {
     if (!allUsers.value) {
@@ -48,11 +50,18 @@ function page() {
         </select>
       </div>
       <h1 className="text-3xl">Listado de Clientes</h1>
-      {usersFiltered?.map((user, index) => (
+      {visibleUsers?.map((user, index) => (
         <div className="w-full" key={index}>
           <UserInfo user={user} />
         </div>
       ))}
+      {visibleCount < usersFiltered?.length && (
+        <button
+          onClick={() => setVisibleCount(prev => prev + 5)}
+          className="mt-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded">
+          Ver más
+        </button>
+      )}
     </div>
   )
 }

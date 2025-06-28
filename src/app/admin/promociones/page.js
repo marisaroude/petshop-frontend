@@ -19,6 +19,7 @@ function page() {
   useSignals()
 
   const [filtro, setFiltro] = useState('todas') // 'vigentes' | 'vencidas' | 'activas'| 'no activas'|'todas'
+  const [visibleCount, setVisibleCount] = useState(5)
 
   const promosFiltered = allPromos?.value
     ?.filter(promo => {
@@ -30,6 +31,8 @@ function page() {
       return true
     })
     ?.sort((a, b) => b.id_promocion - a.id_promocion)
+
+  const visiblePromos = promosFiltered?.slice(0, visibleCount)
 
   return (
     <div className="bg-white min-h-screen p-6 w-full flex flex-col items-center gap-6">
@@ -46,11 +49,19 @@ function page() {
         </select>
       </div>
 
-      {promosFiltered?.map(promo => (
+      {visiblePromos?.map(promo => (
         <div className="w-full" key={promo.id_promocion}>
           <PromocionInfo promo={promo} />
         </div>
       ))}
+
+      {visibleCount < promosFiltered?.length && (
+        <button
+          onClick={() => setVisibleCount(prev => prev + 5)}
+          className="mt-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded">
+          Ver más
+        </button>
+      )}
     </div>
   )
 }

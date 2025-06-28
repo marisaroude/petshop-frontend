@@ -18,6 +18,7 @@ function page() {
   useSignals()
 
   const [filtro, setFiltro] = useState('todos') // 'activos' | 'no activos' | 'todos'
+  const [visibleCount, setVisibleCount] = useState(5)
 
   const productsFiltered = allProducts?.value
     ?.filter(product => {
@@ -28,6 +29,7 @@ function page() {
       return true
     })
     ?.sort((a, b) => b.id_ps - a.id_ps)
+  const visibleProducts = productsFiltered?.slice(0, visibleCount)
 
   return (
     <div className="bg-white min-h-screen p-6 w-full flex flex-col items-center gap-6">
@@ -43,11 +45,19 @@ function page() {
         </select>
       </div>
       <h1 className="text-3xl">Listado de Productos</h1>
-      {productsFiltered?.map((product, index) => (
+      {visibleProducts?.map((product, index) => (
         <div className="w-full" key={index}>
           <ProductInfo product={product} />
         </div>
       ))}
+
+      {visibleCount < productsFiltered?.length && (
+        <button
+          onClick={() => setVisibleCount(prev => prev + 5)}
+          className="mt-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded">
+          Ver más
+        </button>
+      )}
     </div>
   )
 }

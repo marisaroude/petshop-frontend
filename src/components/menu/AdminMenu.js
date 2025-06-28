@@ -3,21 +3,18 @@ import { useBackgroundColor } from '@/app/context/backgroundColorContext'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import {
   Bars3Icon,
-  HomeIcon,
   InformationCircleIcon,
-  ShoppingCartIcon,
-  ClockIcon,
-  HeartIcon,
   ArrowRightEndOnRectangleIcon,
   QuestionMarkCircleIcon,
-  GiftIcon,
   PlusCircleIcon,
   ShoppingBagIcon,
   TagIcon,
   SwatchIcon,
+  TruckIcon,
+  ArchiveBoxArrowDownIcon,
+  UsersIcon,
 } from '@heroicons/react/16/solid'
 import { useRouter } from 'next/navigation'
-import { FaUpload } from 'react-icons/fa'
 
 export default function AdminMenu() {
   const router = useRouter()
@@ -32,7 +29,7 @@ export default function AdminMenu() {
       <MenuItems
         transition
         anchor="bottom end"
-        className={`w-52 shadow-md origin-top-right rounded-xl border border-black/9 ${bgColor} p-1 text-sm/6 text-black transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0`}>
+        className={`w-auto shadow-md origin-top-right rounded-xl border border-black/9 ${bgColor} p-1 text-sm/6 text-black transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0`}>
         <MenuItem>
           <button
             onClick={() => router.push('/admin/productos/agregar')}
@@ -43,12 +40,30 @@ export default function AdminMenu() {
         </MenuItem>
         <MenuItem>
           <button
+            onClick={() => router.push('/admin/servicios/agregar')}
+            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+            <PlusCircleIcon className="size-4 fill-black" />
+            Agregar Servicios
+          </button>
+        </MenuItem>
+        <MenuItem>
+          <button
             onClick={() => router.push('/admin/productos')}
             className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
             <ShoppingBagIcon className="size-4 fill-black" />
-            Ver Productos
+            Ver Productos y Servicios
           </button>
         </MenuItem>
+
+        <MenuItem>
+          <button
+            onClick={() => router.push('/admin/clientes')}
+            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+            <UsersIcon className="size-4 fill-black" />
+            Ver Clientes
+          </button>
+        </MenuItem>
+
         <MenuItem>
           <button
             onClick={() => router.push('/admin/promociones/agregar')}
@@ -75,19 +90,37 @@ export default function AdminMenu() {
           </button>
         </MenuItem>
         <MenuItem>
-          <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+          <button
+            onClick={() => router.push('/admin/preguntas-pendientes')}
+            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
             <QuestionMarkCircleIcon className="size-4 fill-black" />
             Preguntas Pendientes
           </button>
         </MenuItem>
-        {/* <MenuItem>
+        <MenuItem>
           <button
-            onClick={() => router.push('/cart')}
+            onClick={() => router.push('/admin/proveedores')}
             className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-            <ShoppingCartIcon className="size-4 fill-black" />
-            Carrito
+            <TruckIcon className="size-4 fill-black" />
+            Proveedores
           </button>
-        </MenuItem> */}
+        </MenuItem>
+        <MenuItem>
+          <button
+            onClick={() => router.push('/admin/ingresos')}
+            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+            <ArchiveBoxArrowDownIcon className="size-4 fill-black" />
+            Ingresos
+          </button>
+        </MenuItem>
+        <MenuItem>
+          <button
+            onClick={() => router.push('/admin/ingresos/agregar')}
+            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+            <PlusCircleIcon className="size-4 fill-black" />
+            Cargar Ingreso
+          </button>
+        </MenuItem>
         <MenuItem>
           <button
             onClick={handleSignOut}

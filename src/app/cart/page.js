@@ -2,9 +2,8 @@
 
 import React, { useEffect, useState } from 'react'
 import ProductCart from '@/components/product/ProductCart'
-import { getAllProductsCartById, removeProductCart } from '@/lib/graphql'
+import { removeProductCart, updateProductCart } from '@/lib/graphql'
 import { useSignals } from '@preact/signals-react/runtime'
-import { useAuth } from '../context/authContext'
 import { useRouter } from 'next/navigation'
 import {
   errorMessage,
@@ -14,82 +13,95 @@ import CustomButton from '@/components/inputs/CustomButton'
 import BigSpinner from '@/components/spinner/BigSpinner'
 import ModalRedirectMP from '@/components/modal/ModalRedirectMP'
 import withUserAuth from '../utils/withUserAuth'
+import { useProductsCart } from '../hooks/useProductsCart'
 
 function page() {
   useSignals()
   const router = useRouter()
-  const [productsCart, setProductsCart] = useState()
+  const { handleProductsCart, handleRemoveProduct, productsCart } =
+    useProductsCart()
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const [total, setTotal] = useState(0)
-  const { user } = useAuth()
 
   const updateTotal = amount => {
     setTotal(prev => prev + amount)
   }
 
-  const getProductCarrito = async () => {
-    const response = await getAllProductsCartById({
-      id_carrito: user.id_persona,
-    })
-    if (response) {
-      setProductsCart(response)
-      const initialTotal = response.reduce(
-        (acc, product) => acc + product.subtotal,
-        0,
-      )
-      setTotal(initialTotal)
-    }
-  }
-
   const removeProduct = async ({ id_pc }) => {
     const response = await removeProductCart({ id_pc: id_pc })
     if (response) {
-      productSuccesfullyRemoved(response.message, getProductCarrito)
+      handleRemoveProduct(id_pc)
+      productSuccesfullyRemoved(response.message)
+
+      const newTotal = productsCart.value?.reduce(
+        (acc, p) => acc + p.subtotal,
+        0,
+      )
+      setTotal(newTotal)
     } else {
       errorMessage('Algo ocurrio al intentar elminar el producto del carrito.')
     }
   }
 
-  const updateProductInCart = (id_pc, updatedFields) => {
-    setProductsCart(prev =>
-      prev.map(product =>
-        product.id_pc === id_pc ? { ...product, ...updatedFields } : product,
-      ),
-    )
+  const updateProductInCart = async product => {
+    handleProductsCart(product)
+
+    await updateProductCart({
+      id_pc: product.id_pc,
+      input: {
+        quantity: product.cantidad,
+        subtotal: product.subtotal,
+        id_ps: product.id_ps,
+        id_cart: product.id_carrito,
+      },
+    })
   }
 
   useEffect(() => {
-    user && getProductCarrito()
-  }, [user])
+    if (productsCart.value?.length > 0) {
+      const initialTotal = productsCart.value.reduce(
+        (acc, product) => acc + product.subtotal,
+        0,
+      )
+      setTotal(initialTotal)
+    }
+  }, [productsCart.value])
 
   return (
     <div className="flex flex-col items-center justify-between w-full h-full">
       {loading && <BigSpinner />}
       <ModalRedirectMP
-        productsCart={productsCart}
+        productsCart={productsCart.value}
         setLoading={setLoading}
         loading={loading}
         setOpen={setOpen}
         open={open}
       />
-      {productsCart?.length > 0 ? (
+      {productsCart.value?.length > 0 ? (
         <>
-          {productsCart.map((product, index) => (
-            <ProductCart
-              key={index}
-              productCart={product}
-              updateTotal={updateTotal}
-              removeProduct={removeProduct}
-              updateProductInCart={updateProductInCart}
-            />
+          {productsCart.value.map((product, index) => (
+            <div
+              key={product.id_pc}
+              className={`py-4 ${
+                index !== productsCart.value.length - 1
+                  ? 'border-b border-gray-300'
+                  : ''
+              }`}>
+              <ProductCart
+                productCart={product}
+                updateTotal={updateTotal}
+                removeProduct={removeProduct}
+                updateProductInCart={updateProductInCart}
+              />
+            </div>
           ))}
 
           <div className="text-bold text-4xl w-full">
-            <h1 className="text-end p-6">Total: ${total}</h1>
+            <h1 className="sm:text-end text-center p-6">Total: ${total}</h1>
           </div>
 
-          <div className="w-full flex items-center justify-end gap-4 p-4">
+          <div className="w-full flex items-center sm:justify-end justify-center gap-4 p-4">
             <CustomButton handleClick={() => router.push('/')} text="Volver" />
             <CustomButton handleClick={() => setOpen(true)} text="Comprar" />
           </div>

@@ -1,10 +1,8 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import ProductForm from '@/components/forms/ProductForm'
-import { getProductById, getPersonById } from '@/lib/graphql'
+import { getPersonById } from '@/lib/graphql'
 import { useParams } from 'next/navigation'
 import withAdminAuth from '@/app/utils/withAdminAuth'
-import UserInfo from '@/components/users/UserInfo'
 import UserForm from '@/components/forms/UserForm'
 
 function page() {
@@ -25,5 +23,4 @@ function page() {
   )
 }
 
-//To-do implemntar exportarlo con with admin auth
 export default withAdminAuth(page)

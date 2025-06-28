@@ -106,6 +106,7 @@ export async function getAllProducts() {
             categoria
             activo
             image
+            fechas_servicios
           }
         }
         `
@@ -191,6 +192,7 @@ export async function getProductById({ id_ps }) {
               categoria
               activo
               image
+              fechas_servicios
             }
           }
           `
@@ -235,6 +237,7 @@ export async function getAllProductsCartById({ id_carrito }) {
           subtotal
           id_ps
           id_carrito
+          fecha_servicio
         }
       }
           `
@@ -352,6 +355,433 @@ export async function getPersonById({ id_persona }) {
   }
 }
 
+export async function getAllFacturas() {
+  try {
+    const query = `
+    query GetAllFacturaWithDetails {
+      getAllFacturaWithDetails {
+        factura {
+          id_factura
+          id_pago
+          fecha
+          total
+        }
+        pago {
+          id_pago
+          id_mercadopago
+          id_carrito
+          fecha
+          monto
+        }
+        detalles {
+          id_df
+          cantidad
+          precio
+          id_ps
+          id_factura
+        }
+      }
+    }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data
+    console.log('data from get all facturas', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error fetching all facturas:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed fetchin all facturas. Please check the GraphQL response.',
+    )
+  }
+}
+
+export async function getFacturaById({ id_factura }) {
+  try {
+    const query = `
+      query GetFacturaWithDetailsById($id_factura: Int!) {
+        getFacturaWithDetailsById(id_factura: $id_factura) {
+          factura {
+            id_factura
+            id_pago
+            fecha
+            total
+          }
+          pago {
+            id_pago
+            id_mercadopago
+            id_carrito
+            fecha
+            monto
+          }
+          detalles {
+            id_df
+            cantidad
+            precio
+            id_ps
+            id_factura
+            fecha_servicio
+          }
+        }
+      }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+        variables: {
+          id_factura,
+        },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data
+    console.log('data from get factura by id', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error fetching factura by id:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed fetchin factura by id. Please check the GraphQL response.',
+    )
+  }
+}
+
+export async function getAllProveedores() {
+  try {
+    const query = `
+        query Proveedores {
+          proveedores {
+            id_proveedor
+            nombre
+            cuit
+            activo
+          }
+        }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data.data.proveedores
+    console.log('data from get all proveedores', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error fetching all proveedores:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed fetchin all proveedores. Please check the GraphQL response.',
+    )
+  }
+}
+
+export async function getProveedorById({ id_proveedor }) {
+  console.log('id_proveedor', id_proveedor)
+  if (!id_proveedor) {
+    throw new Error('ID is required')
+  }
+  try {
+    const query = `
+    query ProveedorById($id_proveedor: Int!) {
+      proveedorById(id_proveedor: $id_proveedor) {
+        id_proveedor
+        nombre
+        cuit
+        activo
+      }
+    }
+  `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+        variables: { id_proveedor },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    console.log(response.data.data.proveedorById)
+    return response.data.data.proveedorById
+  } catch (error) {
+    console.error(
+      'Error fetching proveedor by id:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Error fetching proveedor by id:. Please check the GraphQL response.',
+    )
+  }
+}
+
+export async function getMascotaByPersonaId({ id_persona }) {
+  if (!id_persona) {
+    throw new Error('ID is required')
+  }
+  try {
+    const query = `
+    query MascotasByPersona($id_persona: Int!) {
+      mascotasByPersona(id_persona: $id_persona) {
+        id_mascota
+        id_persona
+        nombre
+        tipo
+        raza
+        descripcion
+        fecha_baja
+        image
+      }
+    }
+  `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+        variables: { id_persona },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    console.log(response.data.data.mascotasByPersona)
+    return response.data.data.mascotasByPersona
+  } catch (error) {
+    console.error(
+      'Error fetching mascotas by persona id:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Error fetching mascotas by persona id:. Please check the GraphQL response.',
+    )
+  }
+}
+
+export async function getMascotaById({ id_mascota }) {
+  if (!id_mascota) {
+    throw new Error('ID is required')
+  }
+  try {
+    const query = `
+      query MascotaById($id_mascota: Int!) {
+        mascotaById(id_mascota: $id_mascota) {
+          id_mascota
+          id_persona
+          nombre
+          tipo
+          raza
+          descripcion
+          fecha_baja
+          image
+        }
+      }
+  `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+        variables: { id_mascota },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    console.log(response.data.data.mascotaById)
+    return response.data.data.mascotaById
+  } catch (error) {
+    console.error(
+      'Error fetching mascotas by id:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Error fetching mascotas by id:. Please check the GraphQL response.',
+    )
+  }
+}
+
+export async function getAllMascotas() {
+  try {
+    const query = `
+    query Mascotas {
+      mascotas {
+        id_mascota
+        id_persona
+        nombre
+        tipo
+        raza
+        descripcion
+        fecha_baja
+        image
+      }
+    }
+        `
+
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data.data.mascotas
+    console.log('data from get all mascotas', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error fetching all mascotas:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed fetchin all mascotas. Please check the GraphQL response.',
+    )
+  }
+}
+
+export async function getAllIngresosProductos() {
+  try {
+    const query = `
+    query IngresosProductos {
+      ingresosProductos {
+        id_ip
+        id_proveedor
+        subtotal
+        cantidad
+        id_ps
+      }
+    }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data.data.ingresosProductos
+    console.log('data from get all ingresos productos', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error fetching all ingresos productos:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed fetchin all ingresos productos. Please check the GraphQL response.',
+    )
+  }
+}
+
+export async function pagosByPersona({ id_persona }) {
+  if (!id_persona) {
+    throw new Error('ID is required')
+  }
+  try {
+    const query = `
+    query PagosByPersonaId($id_persona: Int!) {
+      pagosByPersonaId(id_persona: $id_persona) {
+        pago {
+          id_pago
+          id_mercadopago
+          id_carrito
+          fecha
+          monto
+        }
+        factura {
+          id_factura
+          id_pago
+          fecha
+          total
+          detalles_factura {
+            id_df
+            cantidad
+            precio
+            id_ps
+            id_factura
+            producto_servicio {
+              id_ps
+              nombre
+              precio
+              stock
+              descripcion
+              categoria
+              activo
+              image
+            }
+          }
+        }
+      }
+    }
+  `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+        variables: { id_persona },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    console.log(response.data.data.pagosByPersonaId)
+    return response.data.data.pagosByPersonaId
+  } catch (error) {
+    console.error(
+      'Error fetching pagos by persona id:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Error fetching pagos by persona id:. Please check the GraphQL response.',
+    )
+  }
+}
+
 export async function getRespuestasByPreguntaId({ id_preguntas }) {
   try {
     if (!id_preguntas) {
@@ -367,7 +797,6 @@ export async function getRespuestasByPreguntaId({ id_preguntas }) {
         }
       }
     `
-
     const response = await axios.post(
       API_URL,
       {
@@ -391,6 +820,241 @@ export async function getRespuestasByPreguntaId({ id_preguntas }) {
     )
     throw new Error(
       'Failed fetching respuestas. Please check the GraphQL response.',
+    )
+  }
+}
+
+export async function getAllPreguntas() {
+  try {
+    const query = `
+        query Preguntas {
+          preguntas {
+            id_preguntas
+            descripcion
+            estado
+            id_persona
+            id_ps
+          }
+        }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data.data.preguntas
+    console.log('data from get all preguntas', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error fetching all preguntas:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed fetchin all preguntas. Please check the GraphQL response.',
+    )
+  }
+}
+
+export async function getAllRespuestas() {
+  try {
+    const query = `
+        query Respuestas   {
+          respuestas {
+            id_respuesta
+            descripcion
+             id_preguntas
+          }
+        }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data.data.respuestas
+    console.log('data from get all respuestas', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error fetching all respuestas:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed fetchin all respuestas. Please check the GraphQL response.',
+    )
+  }
+}
+
+export async function getPromoById({ id_promocion }) {
+  if (!id_promocion) {
+    throw new Error('ID is required')
+  }
+  try {
+    const query = `
+      query PromocionById($id_promocion: Int!) {
+        promocionById(id_promocion: $id_promocion) {
+          id_promocion
+          valor
+          fecha_inicio
+          fecha_fin
+          activo
+          id_ps
+        }
+      }
+          `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+        variables: { id_promocion },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data.data.promocionById
+    console.log('data from get promo by id', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error fetching promo by id:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed fetching promo by id. Please check the GraphQL response.',
+    )
+  }
+}
+// export async function getPreguntasWithProductInfo() {
+//   const query = `
+//     query {
+//       GetAllpreguntas {
+//         id_preguntas
+//         descripcion
+//         id_persona
+//         id_ps
+//       }
+//     }
+//   `
+
+//   try {
+//     const result = await request(GRAPHQL_URL, query)
+//     return result.allPreguntas
+//   } catch (error) {
+//     console.error('Error fetching preguntas with product info:', error)
+//     throw error
+//   }
+// }
+//       'Failed fetchin all facturas. Please check the GraphQL response.',
+//     )
+//   }
+// }
+
+export async function getAllSalesQuantityProduct() {
+  try {
+    const query = `
+    query AllSalesQuantityProduct {
+      allSalesQuantityProduct {
+        id_ps
+        producto {
+          nombre
+          precio
+          stock
+        }
+        cantidad_ventas
+        total_facturado
+      }
+    }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data.data.allSalesQuantityProduct
+    console.log('data from get all sales products', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error fetching all sales products:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed fetchin all sales products. Please check the GraphQL response.',
+    )
+  }
+}
+
+export async function getInformationIngresosByProductId({ id_ps }) {
+  if (!id_ps) {
+    throw new Error('ID de producto es requerido')
+  }
+  try {
+    const query = `
+      query InformationIngresosByProductId($id_ps: Int!) {
+        informationIngresosByProductId(id_ps: $id_ps) {
+          id_ps
+          cantidad
+          subtotal
+          proveedor {
+            id_proveedor
+            nombre
+            cuit
+            activo
+          }
+        }
+      }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query,
+        variables: {
+          id_ps: id_ps,
+        },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data.data.informationIngresosByProductId
+    console.log('data from get all info ingresos', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error fetching all info ingresos:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed fetchin all info ingresos. Please check the GraphQL response.',
     )
   }
 }

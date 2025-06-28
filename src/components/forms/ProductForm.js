@@ -10,7 +10,7 @@ import { productSchema } from '@/lib/zod/schemas/product'
 import { UploadImage } from '../inputs/UploadImage'
 import { createProductoServicio, updateProductoServicio } from '@/lib/graphql'
 import {
-  productSuccesfullyCreated,
+  errorMessage,
   productSuccesfullyCreatedOrUpdate,
 } from '@/app/utils/toast/toastMessages'
 import { allProducts } from '@/app/signals/products'
@@ -18,6 +18,9 @@ import { allProducts } from '@/app/signals/products'
 export default function ProductForm({ productInfo }) {
   const router = useRouter()
   const [image, setImage] = useState(null)
+  const categoriesForProduct = categories.filter(
+    cat => cat.value !== 'servicios',
+  )
   const {
     register,
     handleSubmit,
@@ -36,7 +39,7 @@ export default function ProductForm({ productInfo }) {
         stock: productInfo.stock.toString(),
         category: productInfo.categoria,
         active: productInfo.activo,
-        description: productInfo.descripcion,
+        description: productInfo.descripcion || '',
       })
       setImage(productInfo.image || null)
     }
@@ -93,8 +96,8 @@ export default function ProductForm({ productInfo }) {
   ]
 
   return (
-    <div className="flex items-center justify-center bg-lightgreen p-8 rounded-lg shadow-lg">
-      <div className="flex flex-col items-center gap-4">
+    <div className="sm:w-auto w-full flex flex-col sm:flex-row gap-2 sm:gap-6 items-center justify-center bg-lightgreen sm:p-8 p-4 rounded-lg shadow-lg">
+      <div className=" w-full flex flex-col items-center gap-4">
         <div className="w-64 h-64 bg-gray-200 rounded-md flex items-center justify-center">
           {image ? (
             <img
@@ -119,7 +122,7 @@ export default function ProductForm({ productInfo }) {
       </div>
 
       {/* Formulario de información */}
-      <form onSubmit={handleSubmit(onSubmit)} className="ml-8 space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
         {InfoForm.map(item => (
           <InputWithLabel
             key={item.value}
@@ -135,7 +138,7 @@ export default function ProductForm({ productInfo }) {
           label="Categoría"
           register={register('category')}
           error={errors.category?.message}
-          options={categories}
+          options={categoriesForProduct}
         />
 
         {/* Checkbox Activo */}
@@ -149,10 +152,10 @@ export default function ProductForm({ productInfo }) {
           />
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex gap-4 justify-center sm:justify-end">
           <button
             type="button"
-            onClick={() => router.push('/')}
+            onClick={() => router.back()}
             className="mt-4 bg-gray-300 text-black px-6 py-2 rounded-md">
             Volver
           </button>

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import SelectorQuantity from '../inputs/SelectorQuantity'
 import { getProductById } from '@/lib/graphql'
 import CustomButton from '../inputs/CustomButton'
+import { useBackgroundColor } from '@/app/context/backgroundColorContext'
 
 export default function ProductCart({
   productCart,
@@ -10,6 +11,8 @@ export default function ProductCart({
   removeProduct,
   updateProductInCart,
 }) {
+  const { bgColor } = useBackgroundColor()
+
   const [product, setProduct] = useState()
   const [quantity, setQuantity] = useState(productCart.cantidad)
 
@@ -35,31 +38,46 @@ export default function ProductCart({
 
     setSubtotal(newSubtotal)
     updateTotal(difference)
-    updateProductInCart(productCart.id_pc, {
+
+    const updatedProduct = {
+      ...productCart,
       cantidad: quantity,
       subtotal: newSubtotal,
-    })
+    }
+    updateProductInCart(updatedProduct)
   }, [quantity])
+
   return (
-    <div className="flex flex-row w-full p-4 justify-around items-center gap-4">
-      <div className="flex gap-2">
+    <div className="flex sm:flex-row flex-col w-full p-4 px-8 justify-between items-end sm:gap-4 gap-2">
+      <div className="flex gap-4 w-full">
         <img
-          src={product?.image ? product.image : '/productImage.png'}
+          src={
+            product?.image ||
+            (product?.categoria === 'servicios'
+              ? '/pets.png'
+              : '/productImage.png')
+          }
           alt={product?.name}
-          className=" h-48 object-contain rounded"
+          className="w-48 h-48 object-contain rounded"
         />
-        <div className="mt-2 flex flex-col items-start gap-2">
+        <div className="flex flex-col justify-between gap-2">
           <h3 className="text-lg font-semibold text-gray-800">
             {product?.nombre}
           </h3>
           <p className="font-bold">Subtotal: ${subtotal}</p>
-          <div className="flex flex-row items-center gap-3">
+          {productCart?.fecha_servicio && (
+            <p className="font-bold">
+              Fecha del servicio: {productCart.fecha_servicio}
+            </p>
+          )}
+          <div className="flex sm:flex-row flex-col items-center gap-2">
             <p>Seleccione Cantidad</p>
             <SelectorQuantity quantity={quantity} setQuantity={setQuantity} />
           </div>
         </div>
       </div>
-      <div>
+
+      <div className="w-full flex sm:justify-end justify-center mt-4 sm:mt-0">
         <CustomButton
           handleClick={() =>
             removeProduct({
@@ -67,7 +85,7 @@ export default function ProductCart({
               id_ps: productCart.id_ps,
             })
           }
-          bgColor={'#F0DFEF'}
+          bgColor={bgColor}
           text="Quitar Producto"
         />
       </div>

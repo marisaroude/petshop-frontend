@@ -1,3 +1,4 @@
+import { parseLocalDate } from '@/app/utils/date/date'
 import { z } from 'zod'
 
 export const userSchema = z.object({
@@ -10,5 +11,8 @@ export const userSchema = z.object({
 })
 
 export const userSchemaWithFechaBaja = userSchema.extend({
-  fecha_baja: z.union([z.string().datetime(), z.null()]),
+  discharge_date: z
+    .string()
+    .nullish()
+    .transform(val => (val ? parseLocalDate(val) : null)),
 })

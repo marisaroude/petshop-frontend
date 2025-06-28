@@ -14,8 +14,15 @@ export default function ModalRedirectMP({
   const { bgColor } = useBackgroundColor()
   const handleContinueMercadoPago = async () => {
     if (loading) return
-    setOpen(false)
-    await onSubmitMercadoPago(setLoading, productsCart)
+
+    try {
+      setOpen(false)
+      await onSubmitMercadoPago(setLoading, productsCart)
+    } catch (error) {
+      console.error('Error antes de redirigir a MercadoPago:', error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (

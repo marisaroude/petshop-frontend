@@ -18,6 +18,8 @@ import {
   getPersonById,
   getRespuestasByPreguntaId,
 } from '@/lib/graphql'
+import { formatLocalDate } from '@/app/utils/date/date'
+import { useProductsCart } from '@/app/hooks/useProductsCart'
 
 function isVigente(promo) {
   const hoy = new Date()
@@ -27,11 +29,13 @@ function isVigente(promo) {
 }
 export default function page() {
   const router = useRouter()
-  const [quantity, setQuantity] = useState(1)
-
-  const [product, setProduct] = useState()
   const { slug } = useParams()
   const { user } = useAuth()
+  const { handleProductsCart } = useProductsCart()
+  const [quantity, setQuantity] = useState(1)
+  const [selectedFecha, setSelectedFecha] = useState('')
+
+  const [product, setProduct] = useState()
 
   //para las preguntas y rtas
   const [preguntas, setPreguntas] = useState([])
@@ -204,6 +208,15 @@ export default function page() {
   // }, [])
 
   const handleAddToCart = async () => {
+    if (!user) return errorMessage('Debe ser usuario registrado para comprar.')
+    if (
+      product.categoria === 'servicios' &&
+      (!selectedFecha || selectedFecha.trim() === '')
+    ) {
+      return errorMessage(
+        'Debe seleccionar una fecha para contratar el servicio.',
+      )
+    }
     const productPrice = product.precio
     const subtotal = productPrice * quantity
     const newProduct = {
@@ -211,6 +224,7 @@ export default function page() {
       id_cart: parseInt(user.id_persona),
       subtotal: subtotal,
       id_ps: parseInt(slug),
+      service_date: selectedFecha,
     }
 
     const response = await addToCart(newProduct)
@@ -218,6 +232,8 @@ export default function page() {
     if (response?.errors?.length > 0) {
       response.errors.forEach(error => errorMessage(error.message))
     } else {
+      const data = response.data.createProductoCarrito
+      handleProductsCart(data)
       productSuccesfullyAdded(router)
     }
   }
@@ -250,6 +266,55 @@ export default function page() {
       <p className="text-black text-xl font-bold">Precio: ${precioOriginal}</p>
     )
   }
+
+  const renderInfoServicio = () => {
+    const today = new Date()
+    const formattedToday = formatLocalDate(today)
+
+    if (product.categoria === 'servicios' && !user?.tipo) {
+      return (
+        <>
+          <div className="bg-pink p-4 text-white font-bold rounded-md shadow-md">
+            <h3>Fechas disponibles para contratar el servicio</h3>
+
+            <select
+              value={selectedFecha}
+              onChange={e => setSelectedFecha(e.target.value)}
+              className="p-2 bg-white text-black rounded-md mt-2">
+              <option value="">Seleccione una fecha</option>
+              {product.fechas_servicios?.map((item, index) => {
+                const fecha = new Date(item)
+                const formattedFecha = formatLocalDate(fecha)
+                if (formattedFecha >= formattedToday)
+                  return (
+                    <option key={index} value={item}>
+                      {item}
+                    </option>
+                  )
+              })}
+            </select>
+
+            {selectedFecha && (
+              <p className="text-white font-bold mt-2">
+                Fecha seleccionada: {selectedFecha}
+              </p>
+            )}
+          </div>
+
+          <div className="text-md italic">
+            <p>
+              Importante: este tipo de servicio se realiza en el local por{' '}
+              <strong>orden de llegada.</strong>
+            </p>
+            <p>
+              Los horarios de atención son de <strong>Lunes a Viernes</strong>{' '}
+              entre las <strong>10:00hs y 17:00hs.</strong>{' '}
+            </p>
+          </div>
+        </>
+      )
+    }
+  }
   return (
     <div className="flex justify-center">
       <div className="w-full max-w-4xl p-4">
@@ -261,7 +326,12 @@ export default function page() {
                 {/* Imagen del producto */}
                 <div className="md:w-1/2">
                   <img
-                    src={product.image || '/productImage.png'}
+                    src={
+                      product.image ||
+                      (product.categoria === 'servicios'
+                        ? '/pets.png'
+                        : '/productImage.png')
+                    }
                     alt={product.nombre}
                     className="w-full h-64 object-contain rounded"
                   />
@@ -271,7 +341,7 @@ export default function page() {
                 <div className="md:w-1/2 flex flex-col gap-4">
                   <h1 className="text-2xl font-bold">{product.nombre}</h1>
                   <p className="text-gray-700">{product.descripcion}</p>
-
+                  {renderInfoServicio()}
                   <div className="mt-4">{renderPrice()}</div>
 
                   {!isAdmin && (
@@ -365,23 +435,24 @@ export default function page() {
                 )}
               </div>
 
-              {/* Formulario para nueva pregunta */}
-              <div className="mt-8 pt-4 border-t">
-                <div className="flex flex-col md:flex-row gap-2">
-                  <input
-                    type="text"
-                    value={nuevaPregunta}
-                    onChange={e => setNuevaPregunta(e.target.value)}
-                    placeholder="Escribe tu pregunta..."
-                    className="flex-1 p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <button
-                    onClick={handleEnviarPregunta}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded transition">
-                    Enviar pregunta
-                  </button>
+              {user && !user.tipo && (
+                <div className="mt-8 pt-4 border-t">
+                  <div className="flex flex-col md:flex-row gap-2">
+                    <input
+                      type="text"
+                      value={nuevaPregunta}
+                      onChange={e => setNuevaPregunta(e.target.value)}
+                      placeholder="Escribe tu pregunta..."
+                      className="flex-1 p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <button
+                      onClick={handleEnviarPregunta}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded transition">
+                      Enviar pregunta
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         ) : (

@@ -5,10 +5,10 @@ import {
   Bars3Icon,
   HomeIcon,
   InformationCircleIcon,
-  ShoppingCartIcon,
   ClockIcon,
   HeartIcon,
   ArrowRightEndOnRectangleIcon,
+  QuestionMarkCircleIcon,
 } from '@heroicons/react/16/solid'
 import { useRouter } from 'next/navigation'
 
@@ -43,23 +43,27 @@ export default function UserMenu() {
           </button>
         </MenuItem>
         <MenuItem>
-          <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+          <button
+            onClick={() => router.push('/cliente/historial')}
+            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
             <ClockIcon className="size-4 fill-black" />
             Historial
           </button>
         </MenuItem>
         <MenuItem>
-          <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+          <button
+            onClick={() => router.push('/cliente/mascotas')}
+            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
             <HeartIcon className="size-4 fill-black" />
-            Mascota
+            Mis Mascotas
           </button>
         </MenuItem>
         <MenuItem>
           <button
-            onClick={() => router.push('/cart')}
+            onClick={() => router.push('/preguntas-frecuentes')}
             className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-            <ShoppingCartIcon className="size-4 fill-black" />
-            Carrito
+            <QuestionMarkCircleIcon className="size-4 fill-black" />
+            Preguntas Frecuentes
           </button>
         </MenuItem>
         <MenuItem>

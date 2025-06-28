@@ -6,6 +6,7 @@ import { allProducts } from './signals/products'
 import Promociones from '@/components/promociones/Promociones'
 import { useBackgroundColor } from './context/backgroundColorContext'
 import { allPromos } from './signals/promociones'
+import { useState } from 'react'
 
 function isVigente(promo) {
   const hoy = new Date()
@@ -20,9 +21,10 @@ function isActive(promo) {
 export default function Home() {
   useSignals()
   const { bgColor } = useBackgroundColor()
+  const [visibleCount, setVisibleCount] = useState(9)
 
   const renderProducts = () => {
-    return allProducts.value
+    const productsFiltered = allProducts.value
       ?.filter(
         product =>
           product.activo &&
@@ -30,7 +32,28 @@ export default function Home() {
           product.categoria !== 'servicios',
       )
       .sort((a, b) => a.nombre.localeCompare(b.nombre))
-      .map((product, index) => <ProductCard key={index} product={product} />)
+
+    const visibleProducts = productsFiltered?.slice(0, visibleCount)
+
+    return (
+      <>
+        <div className="w-full sm:grid sm:grid-cols-3 flex flex-col gap-4">
+          {visibleProducts?.map((product, index) => (
+            <ProductCard key={index} product={product} />
+          ))}
+        </div>
+        {visibleCount < productsFiltered?.length && (
+          <div className="w-full flex justify-center">
+            <button
+              onClick={() => setVisibleCount(prev => prev + 3)}
+              className="mt-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded">
+              Ver más
+            </button>
+          </div>
+        )}
+      </>
+    )
+    // .map((product, index) => <ProductCard key={index} product={product} />)
   }
 
   const promosVigentesYActivas = allPromos.value?.filter(
@@ -57,9 +80,7 @@ export default function Home() {
             Productos
           </h1>
         </div>
-        <div className="w-full sm:grid sm:grid-cols-3 flex flex-col gap-4">
-          {renderProducts()}
-        </div>
+        {renderProducts()}
       </div>
     </div>
   )

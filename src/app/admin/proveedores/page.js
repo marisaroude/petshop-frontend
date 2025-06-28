@@ -65,7 +65,7 @@ function page() {
       {/* Ver más */}
       {visibleCount < proveedoresFiltered?.length && (
         <button
-          onClick={() => setVisibleCount(prev => prev + 10)}
+          onClick={() => setVisibleCount(prev => prev + 5)}
           className="mt-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded">
           Ver más
         </button>

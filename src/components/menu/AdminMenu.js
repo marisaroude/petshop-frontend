@@ -15,6 +15,7 @@ import {
   HomeIcon,
   ClockIcon,
   HeartIcon,
+  UsersIcon,
 } from '@heroicons/react/16/solid'
 import { Divider, ListSubheader } from '@mui/material'
 import { useRouter } from 'next/navigation'
@@ -30,7 +31,7 @@ export default function AdminMenu() {
       </MenuButton>
 
       <MenuItems
-        as="div" // 👈 Esto reemplaza el Fragment por un div
+        as="div"
         transition
         anchor="bottom end"
         className={`w-auto h-96 shadow-md origin-top-right rounded-xl border border-black/9 ${bgColor} p-1 text-sm/6 text-black transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0`}>
@@ -100,6 +101,20 @@ export default function AdminMenu() {
             className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
             <ShoppingBagIcon className="size-4 fill-black" />
             Ver Productos y Servicios
+          </button>
+        </MenuItem>
+
+        <Divider />
+
+        <ListSubheader className={`leading-[24px]! bg-transparent! static!`}>
+          Clientes
+        </ListSubheader>
+        <MenuItem>
+          <button
+            onClick={() => router.push('/admin/clientes')}
+            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+            <UsersIcon className="size-4 fill-black" />
+            Ver Clientes
           </button>
         </MenuItem>
 

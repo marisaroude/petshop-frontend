@@ -1,10 +1,9 @@
+import { useBackgroundColor } from '@/app/context/backgroundColorContext'
 import React from 'react'
 
-export default function CustomButton({
-  handleClick,
-  bgColor = 'bg-[#D7ACD4]',
-  text,
-}) {
+export default function CustomButton({ handleClick, text }) {
+  const { bgColor } = useBackgroundColor()
+
   return (
     <div
       onClick={handleClick}

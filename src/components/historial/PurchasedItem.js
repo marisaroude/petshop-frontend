@@ -7,9 +7,12 @@ import {
 import { addToCart } from '@/lib/graphql'
 import { useRouter } from 'next/navigation'
 import { useProductsCart } from '@/app/hooks/useProductsCart'
+import { useBackgroundColor } from '@/app/context/backgroundColorContext'
 
 export default function PurchasedItem({ purchase }) {
   const { user } = useAuth()
+  const { textButtonColor, bgButtonColor } = useBackgroundColor()
+
   const { handleProductsCart } = useProductsCart()
 
   const { pago, factura } = purchase
@@ -93,7 +96,7 @@ export default function PurchasedItem({ purchase }) {
 
         <button
           onClick={handleReorder}
-          className="bg-pink-600 cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-pink-700 transition">
+          className={`${bgButtonColor}-300 cursor-pointer ${textButtonColor}-900  px-4 py-2 rounded-lg hover:${bgButtonColor}-400 transition`}>
           Volver a comprar
         </button>
       </div>

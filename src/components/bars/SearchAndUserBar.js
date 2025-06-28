@@ -65,9 +65,11 @@ export default function SearchAndUserBar() {
         )}
         {user && (
           <div className="flex gap-2 items-center">
-            <UserIcon className="size-6 fill-black" />
-            {/* TO-DO: remover esto si se implementa que el admin pueda agregar al carrito */}
-            {!user?.tipo && renderCartIcon()}
+            <UserIcon
+              className="cursor-pointer size-6 fill-black"
+              onClick={() => router.push('/datos-user')}
+            />
+            {renderCartIcon()}
             {user?.tipo ? <AdminMenu /> : <UserMenu />}
           </div>
         )}

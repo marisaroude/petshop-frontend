@@ -13,7 +13,7 @@ import IconInfo from '@/components/IconInfo'
 
 function page() {
   const informes = [
-    { title: 'Clientes', icon: <UsersIcon />, route: 'clientes' },
+    { title: 'Clientes', icon: <UsersIcon />, route: 'informe-clientes' },
     { title: 'Productos', icon: <ShoppingBagIcon />, route: 'productos' },
     { title: 'Ventas', icon: <PresentationChartBarIcon />, route: 'ventas' },
   ]

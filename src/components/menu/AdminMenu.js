@@ -12,6 +12,7 @@ import {
   SwatchIcon,
   TruckIcon,
   ArchiveBoxArrowDownIcon,
+  UsersIcon,
 } from '@heroicons/react/16/solid'
 import { useRouter } from 'next/navigation'
 
@@ -53,6 +54,16 @@ export default function AdminMenu() {
             Ver Productos y Servicios
           </button>
         </MenuItem>
+
+        <MenuItem>
+          <button
+            onClick={() => router.push('/admin/clientes')}
+            className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+            <UsersIcon className="size-4 fill-black" />
+            Ver Clientes
+          </button>
+        </MenuItem>
+
         <MenuItem>
           <button
             onClick={() => router.push('/admin/promociones/agregar')}

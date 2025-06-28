@@ -50,6 +50,8 @@ export default function IngresoForm() {
   const handleConfirmIngreso = async () => {
     try {
       const { nameProducto, nameProveedor, ...rest } = formData
+      const today = new Date()
+      rest.dateEntry = today
       const response = await createIngresoProducto(rest)
 
       if (response?.errors?.length > 0) {

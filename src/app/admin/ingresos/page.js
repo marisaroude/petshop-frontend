@@ -45,7 +45,7 @@ function page() {
   }, [allProveedores.value, allProducts.value])
 
   return (
-    <div className="bg-white min-h-screen p-6 w-full flex flex-col items-center gap-6">
+    <div className="bg-white min-h-screen sm:p-6 w-full flex flex-col items-center gap-6">
       <CustomTable
         title="Listado de Ingresos"
         rows={[...ingresos].sort((a, b) => b.id - a.id)}

@@ -131,7 +131,7 @@ export default function Layout({ children }) {
   }, [user])
 
   return (
-    <div className="flex flex-col min-h-screen items-center">
+    <div className="flex flex-col min-h-screen items-center w-screen">
       {!isCompleteProfile && (
         <>
           <HeaderWithImage />

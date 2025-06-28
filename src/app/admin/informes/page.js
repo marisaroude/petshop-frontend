@@ -13,8 +13,12 @@ import IconInfo from '@/components/IconInfo'
 
 function page() {
   const informes = [
-    { title: 'Clientes', icon: <UsersIcon />, route: 'clientes' },
-    { title: 'Productos', icon: <ShoppingBagIcon />, route: 'productos-informes' },
+    { title: 'Clientes', icon: <UsersIcon />, route: 'informe-clientes' },
+    {
+      title: 'Productos',
+      icon: <ShoppingBagIcon />,
+      route: 'productos-informes',
+    },
     { title: 'Ventas', icon: <PresentationChartBarIcon />, route: 'ventas' },
   ]
 
@@ -32,4 +36,3 @@ function page() {
 }
 
 export default withAdminAuth(page)
-

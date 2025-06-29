@@ -5,7 +5,6 @@ import {
   errorMessage,
   productSuccesfullyAdded,
 } from '@/app/utils/toast/toastMessages'
-import Divider from '@/components/Divider'
 import ButtonAddToCart from '@/components/inputs/ButtonAddToCart'
 import SelectorQuantity from '@/components/inputs/SelectorQuantity'
 import { addToCart, getProductById } from '@/lib/graphql'
@@ -30,7 +29,7 @@ function isVigente(promo) {
 export default function page() {
   const router = useRouter()
   const { slug } = useParams()
-  const { user } = useAuth()
+  const { user, handleSignIn } = useAuth()
   const { handleProductsCart } = useProductsCart()
   const [quantity, setQuantity] = useState(1)
   const [selectedFecha, setSelectedFecha] = useState('')
@@ -175,8 +174,7 @@ export default function page() {
     }
 
     if (!user?.id_persona) {
-      errorMessage('Debes iniciar sesión para preguntar')
-      return
+      return handleSignIn()
     }
 
     try {
@@ -208,7 +206,7 @@ export default function page() {
   // }, [])
 
   const handleAddToCart = async () => {
-    if (!user) return errorMessage('Debe ser usuario registrado para comprar.')
+    if (!user) return handleSignIn()
     if (
       product.categoria === 'servicios' &&
       (!selectedFecha || selectedFecha.trim() === '')
@@ -433,7 +431,7 @@ export default function page() {
                 )}
               </div>
 
-              {user && !user.tipo && (
+              {(!user || (user && !user.tipo)) && (
                 <div className="mt-8 pt-4 border-t">
                   <div className="flex flex-col md:flex-row gap-2">
                     <input

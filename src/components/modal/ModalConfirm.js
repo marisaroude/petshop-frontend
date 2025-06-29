@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function ModalConfirmCancel({
+export default function ModalConfirm({
   openModal,
   onClickConfirm,
   textAlert,

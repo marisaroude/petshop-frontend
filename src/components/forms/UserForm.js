@@ -4,19 +4,21 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import InputWithLabel from '../inputs/InputWithLabel'
-import { updateUser, cancelPersona } from '@/lib/graphql'
+import { updateUser, cancelPersona, registerPersona } from '@/lib/graphql'
 import {
   userUpdatedSuccesfully,
   errorMessage,
   userCanceledSuccessfully,
+  userRegisteredSuccessfully,
 } from '@/app/utils/toast/toastMessages'
 import { userSchemaWithFechaBaja } from '@/lib/zod/schemas/user'
 import { allUsers } from '@/app/signals/user'
-import ModalConfirmCancel from '../modal/ModalConfirmCancel'
+import ModalConfirm from '../modal/ModalConfirm'
 
 export default function UserForm({ user }) {
   const router = useRouter()
-  const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [showConfirmCancelModal, setShowConfirmCancelModal] = useState(false)
+  const [showConfirmAltaModal, setShowConfirmAltaModal] = useState(false)
 
   const {
     register,
@@ -71,7 +73,7 @@ export default function UserForm({ user }) {
     try {
       const response = await cancelPersona({ id_persona: user.id_persona })
 
-      setShowConfirmModal(false)
+      setShowConfirmCancelModal(false)
       if (response?.errors?.length > 0) {
         response.errors.forEach(error => errorMessage(error.message))
         return
@@ -86,6 +88,28 @@ export default function UserForm({ user }) {
     } catch (error) {
       console.error(error)
       errorMessage('Error al dar de baja al usuario')
+    }
+  }
+
+  const onConfirmAlta = async () => {
+    try {
+      const response = await registerPersona({ id_persona: user.id_persona })
+
+      setShowConfirmAltaModal(false)
+      if (response?.errors?.length > 0) {
+        response.errors.forEach(error => errorMessage(error.message))
+        return
+      }
+      const personaRegistered = response.data.registerPersona
+      allUsers.value = allUsers.value?.map(u =>
+        u.id_persona === personaRegistered.id_persona ? personaRegistered : u,
+      )
+
+      userRegisteredSuccessfully()
+      router.back()
+    } catch (error) {
+      console.error(error)
+      errorMessage('Error al dar de alta al usuario')
     }
   }
 
@@ -123,9 +147,21 @@ export default function UserForm({ user }) {
             <button
               type="button"
               id="darDeBaja"
-              onClick={() => setShowConfirmModal(true)}
+              onClick={() => setShowConfirmCancelModal(true)}
               className="mt-4 cursor-pointer bg-red-300 text-black px-6 py-2 rounded-md">
               Dar de baja a este usuario
+            </button>
+          </div>
+        )}
+
+        {user?.fecha_baja && (
+          <div className="flex items-center gap-2 mt-4">
+            <button
+              type="button"
+              id="darDeAlta"
+              onClick={() => setShowConfirmAltaModal(true)}
+              className="mt-4 cursor-pointer bg-[#20A920] text-black px-6 py-2 rounded-md">
+              Dar de alta a este usuario
             </button>
           </div>
         )}
@@ -146,12 +182,21 @@ export default function UserForm({ user }) {
       </form>
 
       {/* Modal */}
-      {showConfirmModal && (
-        <ModalConfirmCancel
-          openModal={setShowConfirmModal}
+      {showConfirmCancelModal && (
+        <ModalConfirm
+          openModal={setShowConfirmCancelModal}
           onClickConfirm={onConfirmBaja}
           textAlert={'¿Estás seguro?'}
           bodyText={'¿Desea dar de baja a este usuario?'}
+        />
+      )}
+
+      {showConfirmAltaModal && (
+        <ModalConfirm
+          openModal={setShowConfirmAltaModal}
+          onClickConfirm={onConfirmAlta}
+          textAlert={'¿Estás seguro?'}
+          bodyText={'¿Desea dar de alta a este usuario?'}
         />
       )}
     </div>

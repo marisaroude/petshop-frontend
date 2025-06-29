@@ -5,7 +5,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import InputWithLabel from '../inputs/InputWithLabel'
 import { UploadImage } from '../inputs/UploadImage'
-import { cancelMascota, createMascota, updateMascota } from '@/lib/graphql'
+import {
+  cancelMascota,
+  createMascota,
+  registerMascota,
+  updateMascota,
+} from '@/lib/graphql'
 import {
   mascotaSchema,
   mascotaSchemaWithFechaBaja,
@@ -14,18 +19,20 @@ import { useAuth } from '@/app/context/authContext'
 import {
   errorMessage,
   mascotaCanceledSuccessfully,
+  mascotaRegisteredSuccessfully,
   mascotaSuccesfullyCreatedOrUpdate,
 } from '@/app/utils/toast/toastMessages'
-import ModalConfirmCancel from '../modal/ModalConfirmCancel'
 import { useBackgroundColor } from '@/app/context/backgroundColorContext'
 import { allMascotas } from '@/app/signals/mascota'
+import ModalConfirm from '../modal/ModalConfirm'
 
 export default function MascotaForm({ mascotaInfo }) {
   const router = useRouter()
   const { user } = useAuth()
   const { bgColor } = useBackgroundColor()
   const [image, setImage] = useState(null)
-  const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [showConfirmCancelModal, setShowConfirmCancelModal] = useState(false)
+  const [showConfirmAltaModal, setShowConfirmAltaModal] = useState(false)
 
   const {
     register,
@@ -96,7 +103,7 @@ export default function MascotaForm({ mascotaInfo }) {
         id_mascota: mascotaInfo.id_mascota,
       })
 
-      setShowConfirmModal(false)
+      setShowConfirmCancelModal(false)
 
       if (response?.errors?.length > 0) {
         response.errors.forEach(error => errorMessage(error.message))
@@ -111,6 +118,34 @@ export default function MascotaForm({ mascotaInfo }) {
       }
 
       mascotaCanceledSuccessfully()
+      router.back()
+    } catch (error) {
+      console.error(error)
+      errorMessage('Error al dar de baja la mascota')
+    }
+  }
+
+  const onConfirmAlta = async () => {
+    try {
+      const response = await registerMascota({
+        id_mascota: mascotaInfo.id_mascota,
+      })
+
+      setShowConfirmAltaModal(false)
+
+      if (response?.errors?.length > 0) {
+        response.errors.forEach(error => errorMessage(error.message))
+        return
+      }
+      const mascotaRegistered = response.data.registerMascota
+
+      if (user?.tipo) {
+        allMascotas.value = allMascotas.value.map(u =>
+          u.id_mascota === mascotaRegistered.id_mascota ? mascotaRegistered : u,
+        )
+      }
+
+      mascotaRegisteredSuccessfully()
       router.back()
     } catch (error) {
       console.error(error)
@@ -171,6 +206,7 @@ export default function MascotaForm({ mascotaInfo }) {
           (mascotaInfo?.fecha_baja ? (
             <InputWithLabel
               type="date"
+              disabled={!user?.tipo}
               item={{ label: 'Fecha de baja', value: 'discharge_date' }}
               register={register('discharge_date')}
               error={errors['discharge_date']?.message}
@@ -179,13 +215,25 @@ export default function MascotaForm({ mascotaInfo }) {
             <div className="flex items-center gap-2 mt-4">
               <button
                 type="button"
-                id="darDeBaja"
-                onClick={() => setShowConfirmModal(true)}
+                id="darDeBajaMascota"
+                onClick={() => setShowConfirmCancelModal(true)}
                 className="mt-4 cursor-pointer bg-red-300 text-black px-6 py-2 rounded-md">
                 Dar de baja a esta mascota
               </button>
             </div>
           ))}
+
+        {mascotaInfo?.fecha_baja && user?.tipo && (
+          <div className="flex items-center gap-2 mt-4">
+            <button
+              type="button"
+              id="darDeAltaMascota"
+              onClick={() => setShowConfirmAltaModal(true)}
+              className="mt-4 cursor-pointer bg-[#20A920] text-black px-6 py-2 rounded-md">
+              Dar de alta a esta mascota
+            </button>
+          </div>
+        )}
 
         <div className="flex gap-4 justify-center sm:justify-end">
           <button
@@ -203,12 +251,21 @@ export default function MascotaForm({ mascotaInfo }) {
       </form>
 
       {/* Modal */}
-      {showConfirmModal && (
-        <ModalConfirmCancel
-          openModal={setShowConfirmModal}
+      {showConfirmCancelModal && (
+        <ModalConfirm
+          openModal={setShowConfirmCancelModal}
           onClickConfirm={onConfirmBaja}
           textAlert={'¿Estás seguro?'}
           bodyText={'¿Desea dar de baja a esta mascota?'}
+        />
+      )}
+
+      {showConfirmAltaModal && (
+        <ModalConfirm
+          openModal={setShowConfirmAltaModal}
+          onClickConfirm={onConfirmAlta}
+          textAlert={'¿Estás seguro?'}
+          bodyText={'¿Desea dar de alta a esta mascota?'}
         />
       )}
     </div>

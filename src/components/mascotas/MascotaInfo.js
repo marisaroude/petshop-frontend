@@ -6,7 +6,8 @@ import { useAuth } from '@/app/context/authContext'
 export default function MascotaInfo({ mascota }) {
   if (!mascota) return <></>
 
-  const { bgColor, textButtonColor, bgButtonColor } = useBackgroundColor()
+  const { bgColor, textButtonColor, bgButtonColor, hoverBgColor } =
+    useBackgroundColor()
   const { user } = useAuth()
   return (
     <div
@@ -56,7 +57,7 @@ export default function MascotaInfo({ mascota }) {
               ? `/admin/clientes/${user.id_persona}/mascotas/${mascota.id_mascota}/editar`
               : `/cliente/mascotas/editar/${mascota.id_mascota}`
           }
-          className={`${bgButtonColor}-300 hover:${bgButtonColor}-400 ${textButtonColor}-900 font-medium py-1.5 px-4 rounded-md transition-colors`}>
+          className={`bg-white ${hoverBgColor} ${textButtonColor}-900 font-medium py-1.5 px-4 rounded-md transition-colors`}>
           Editar Mascota
         </Link>
       </div>

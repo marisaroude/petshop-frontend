@@ -77,7 +77,7 @@ export default function ProductCart({
         </div>
       </div>
 
-      <div className="w-full flex sm:justify-end justify-center mt-4 sm:mt-0">
+      <div className="text-center flex sm:justify-end justify-center mt-4 sm:mt-0">
         <CustomButton
           handleClick={() =>
             removeProduct({

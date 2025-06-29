@@ -14,7 +14,8 @@ const isActive = mascota => mascota.fecha_baja === null
 function page() {
   useSignals()
   const { user } = useAuth()
-  const { textButtonColor, bgButtonColor } = useBackgroundColor()
+  const { textButtonColor, bgButtonColor, hoverBgColor, bgColor } =
+    useBackgroundColor()
   const [mascotas, setMascotas] = useState(null)
   const [filtro, setFiltro] = useState('activas') // 'activas' | 'no activas' | 'todas'
 
@@ -51,7 +52,7 @@ function page() {
         <div className="flex justify-end">
           <Link
             href={`/cliente/mascotas/agregar`}
-            className={`${bgButtonColor}-300 hover:${bgButtonColor}-400 ${textButtonColor}-900 font-medium py-1.5 px-4 rounded-md transition-colors`}>
+            className={`${bgColor} ${hoverBgColor} ${textButtonColor}-900 font-medium py-1.5 px-4 rounded-md transition-colors`}>
             Agregar una mascota
           </Link>
         </div>

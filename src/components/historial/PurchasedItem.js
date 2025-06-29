@@ -11,7 +11,7 @@ import { useBackgroundColor } from '@/app/context/backgroundColorContext'
 
 export default function PurchasedItem({ purchase }) {
   const { user } = useAuth()
-  const { textButtonColor, bgButtonColor } = useBackgroundColor()
+  const { textButtonColor, hoverBgColor, bgColor } = useBackgroundColor()
 
   const { handleProductsCart } = useProductsCart()
 
@@ -96,7 +96,7 @@ export default function PurchasedItem({ purchase }) {
 
         <button
           onClick={handleReorder}
-          className={`${bgButtonColor}-300 cursor-pointer ${textButtonColor}-900  px-4 py-2 rounded-lg hover:${bgButtonColor}-400 transition`}>
+          className={` ${bgColor} ${hoverBgColor} ${textButtonColor}-900  cursor-pointer   px-4 py-2 rounded-lg  transition`}>
           Volver a comprar
         </button>
       </div>

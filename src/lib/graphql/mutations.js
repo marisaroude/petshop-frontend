@@ -366,14 +366,11 @@ export async function updateProductCart({ id_pc, input }) {
       },
     )
 
-    const data = response.data.data.updateProductoCarrito
+    const data = response.data
     console.log('data from update  cart', data)
     return data
   } catch (error) {
-    console.error(
-      'Error updating product from cart :',
-      error.response ? error.response.data : error.message,
-    )
+    console.error(error.response ? error.response.data : error.message)
     throw new Error(
       'Failed Error updating product from cart. Please check the GraphQL response.',
     )

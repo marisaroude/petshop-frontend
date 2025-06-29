@@ -12,7 +12,7 @@ function page() {
   const [facturas, setFacturas] = useState([])
   const router = useRouter()
   const columns = [
-    { field: 'factura', headerName: 'Factura', flex: 1 },
+    { field: 'factura', headerName: 'Comprobante', flex: 1 },
     { field: 'fecha', headerName: 'Fecha', flex: 1 },
     { field: 'total', headerName: 'Total', flex: 1 },
     { field: 'pago', headerName: 'Pago (Monto)', flex: 1 },
@@ -54,7 +54,7 @@ function page() {
 
         setFacturas(rows)
       } catch (err) {
-        console.error('Error al cargar facturas:', err)
+        console.error('Error al cargar comprobantes:', err)
       }
     }
 
@@ -64,7 +64,7 @@ function page() {
   return (
     <div className="bg-white min-h-screen sm:p-6 w-full flex flex-col items-center gap-6">
       <CustomTable
-        title="Listado de facturas"
+        title="Comprobantes de Pago"
         rows={[...facturas].sort((a, b) => b.id - a.id)}
         columns={columns}
       />

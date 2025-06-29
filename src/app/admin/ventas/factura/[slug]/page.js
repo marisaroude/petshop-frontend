@@ -57,7 +57,7 @@ function FacturaDetailPage() {
 
         setDetalles(detallesEnriquecidos)
       } catch (err) {
-        console.error('Error al cargar datos de factura:', err)
+        console.error('Error al cargar datos del Comprobante:', err)
       }
     }
 
@@ -66,11 +66,11 @@ function FacturaDetailPage() {
 
   return (
     <div className="flex flex-col gap-8 sm:p-4">
-      <h1 className="text-2xl font-semibold">Factura #{factura?.id}</h1>
+      <h1 className="text-2xl font-semibold">Comprobante #{factura?.id}</h1>
 
       {factura && pago && cliente && (
         <CustomTable
-          title="Información de Factura y Cliente"
+          title="Información del Cliente y Comprobante de Pago "
           rows={[
             {
               id: factura.id,
@@ -85,7 +85,7 @@ function FacturaDetailPage() {
             },
           ]}
           columns={[
-            { field: 'id', headerName: 'Factura', flex: 1 },
+            { field: 'id', headerName: 'Comprobante', flex: 1 },
             { field: 'fecha', headerName: 'Fecha', flex: 1 },
             { field: 'total', headerName: 'Total', flex: 1 },
             { field: 'monto_pago', headerName: 'Pago', flex: 1 },

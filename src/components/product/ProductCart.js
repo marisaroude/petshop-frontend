@@ -12,6 +12,9 @@ export default function ProductCart({
   updateProductInCart,
 }) {
   const { bgColor } = useBackgroundColor()
+  const [lastValidQuantity, setLastValidQuantity] = useState(
+    productCart.cantidad,
+  )
 
   const [product, setProduct] = useState()
   const [quantity, setQuantity] = useState(productCart.cantidad)
@@ -33,18 +36,36 @@ export default function ProductCart({
   }, [])
 
   useEffect(() => {
-    const newSubtotal = parseFloat(initialUnitPrice) * quantity
-    const difference = newSubtotal - subtotal
+    const updateCart = async () => {
+      let newSubtotal = parseFloat(initialUnitPrice) * quantity
+      let difference = newSubtotal - subtotal
 
-    setSubtotal(newSubtotal)
-    updateTotal(difference)
+      setSubtotal(newSubtotal)
+      updateTotal(difference)
 
-    const updatedProduct = {
-      ...productCart,
-      cantidad: quantity,
-      subtotal: newSubtotal,
+      const updatedProduct = {
+        ...productCart,
+        cantidad: quantity,
+        subtotal: newSubtotal,
+      }
+      const response = await updateProductInCart(updatedProduct)
+
+      if (response?.errors?.length > 0) {
+        // si falla, revertimos la cantidad subtotal y total
+        setQuantity(lastValidQuantity)
+        let newSubtotal = subtotal
+
+        setSubtotal(newSubtotal)
+        updateTotal(-difference)
+      } else {
+        // si fue exitoso, guardamos la cantidad válida
+        setLastValidQuantity(quantity)
+      }
     }
-    updateProductInCart(updatedProduct)
+
+    if (quantity !== lastValidQuantity) {
+      updateCart()
+    }
   }, [quantity])
 
   return (

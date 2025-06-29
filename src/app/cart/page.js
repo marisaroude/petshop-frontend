@@ -45,9 +45,7 @@ function page() {
   }
 
   const updateProductInCart = async product => {
-    handleProductsCart(product)
-
-    await updateProductCart({
+    const response = await updateProductCart({
       id_pc: product.id_pc,
       input: {
         quantity: product.cantidad,
@@ -56,6 +54,14 @@ function page() {
         id_cart: product.id_carrito,
       },
     })
+
+    if (response?.errors?.length > 0) {
+      response.errors.forEach(error => errorMessage(error.message))
+    } else {
+      handleProductsCart(product)
+    }
+
+    return response
   }
 
   useEffect(() => {

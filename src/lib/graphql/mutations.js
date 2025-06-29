@@ -174,6 +174,56 @@ export async function cancelPersona({ id_persona }) {
     )
   }
 }
+
+export async function registerPersona({ id_persona }) {
+  try {
+    if (!id_persona) {
+      throw new Error('ID is required')
+    }
+
+    const mutation = `
+      mutation RegisterPersona($id_persona: Int!) {
+        registerPersona(id_persona: $id_persona) {
+          id_persona
+          dni
+          nombre
+          apellido
+          telefono
+          correo_electronico
+          domicilio
+          tipo
+          fecha_baja
+        }
+      }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query: mutation,
+        variables: {
+          id_persona,
+        },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data
+    console.log('data from register user', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error registering user:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed registering user. Please check the GraphQL response.',
+    )
+  }
+}
 //#endregion Persona
 
 //#region Carrito
@@ -1044,6 +1094,55 @@ export async function cancelMascota({ id_mascota }) {
     )
     throw new Error(
       'Failed cancelling mascota. Please check the GraphQL response.',
+    )
+  }
+}
+
+export async function registerMascota({ id_mascota }) {
+  try {
+    if (!id_mascota) {
+      throw new Error('ID is required')
+    }
+
+    const mutation = `
+      mutation RegisterMascota($id_mascota: Int!) {
+        registerMascota(id_mascota: $id_mascota) {
+          id_mascota
+          id_persona
+          nombre
+          tipo
+          raza
+          descripcion
+          fecha_baja
+          image
+        }
+      }
+        `
+    const response = await axios.post(
+      API_URL,
+      {
+        query: mutation,
+        variables: {
+          id_mascota,
+        },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    const data = response.data
+    console.log('data from register mascota', data)
+    return data
+  } catch (error) {
+    console.error(
+      'Error registering mascota:',
+      error.response ? error.response.data : error.message,
+    )
+    throw new Error(
+      'Failed registering mascota. Please check the GraphQL response.',
     )
   }
 }

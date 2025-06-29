@@ -65,6 +65,13 @@ export function mascotaCanceledSuccessfully() {
   })
 }
 
+export function mascotaRegisteredSuccessfully() {
+  toast.success('Mascota dada de alta exitosamente', {
+    closeButton: false,
+    hideProgressBar: true,
+  })
+}
+
 export function ingresoSuccessfullyCreated() {
   toast.success(`Ingreso creado exitosamente`, {
     closeButton: false,
@@ -81,6 +88,13 @@ export function userUpdatedSuccesfully() {
 
 export function userCanceledSuccessfully() {
   toast.success('Usuario dado de baja exitosamente', {
+    closeButton: false,
+    hideProgressBar: true,
+  })
+}
+
+export function userRegisteredSuccessfully() {
+  toast.success('Usuario dado de alta exitosamente', {
     closeButton: false,
     hideProgressBar: true,
   })

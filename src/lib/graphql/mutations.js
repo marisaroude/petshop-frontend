@@ -102,6 +102,7 @@ export async function updateUser({ id_persona, input }) {
             telefono: input.phone,
             correo_electronico: input.email,
             domicilio: input.address,
+            fecha_baja: input.discharge_date,
           },
         },
       },

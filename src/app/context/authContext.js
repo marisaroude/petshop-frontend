@@ -3,12 +3,15 @@ import { createContext, useState, useContext, useEffect } from 'react'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { getPersonByEmail } from '@/lib/graphql'
 import { useRouter } from 'next/navigation'
+import FullScreenUnsubscribed from '@/components/unsubscribedUser/FullScreenUnsubscribed'
 
 const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
   const { data: session, status } = useSession()
   const [user, setUser] = useState(null)
+  const [userUnsubscribed, setUserUnsubscribed] = useState(false)
+
   const [loading, setLoading] = useState(true)
 
   const router = useRouter()
@@ -20,6 +23,11 @@ export const AuthProvider = ({ children }) => {
           const person = await getPersonByEmail({ email: session.user.email })
           session.user.profileCompleted = !!person
           setUser(person)
+          if (person && person.fecha_baja) {
+            setUserUnsubscribed(true)
+            setLoading(false)
+            return
+          }
         } catch (err) {
           console.error('Error fetching person:', err)
         }
@@ -54,7 +62,13 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{ user, handleSignIn, handleSignOut, setUser }}>
-      {loading ? <FullScreenLoader /> : children}
+      {loading ? (
+        <FullScreenLoader />
+      ) : userUnsubscribed ? (
+        <FullScreenUnsubscribed />
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   )
 }

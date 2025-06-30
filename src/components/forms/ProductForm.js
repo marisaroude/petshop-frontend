@@ -77,7 +77,7 @@ export default function ProductForm({ productInfo }) {
       productSuccesfullyCreatedOrUpdate(!!productInfo)
       reset()
       setImage(null)
-      router.push('/')
+      router.push('/admin/productos')
     } catch (error) {
       console.error('Error:', error)
       errorMessage('Ocurrió un error al guardar el producto.')

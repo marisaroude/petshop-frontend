@@ -19,6 +19,7 @@ import {
 } from '@/lib/graphql'
 import { formatLocalDate } from '@/app/utils/date/date'
 import { useProductsCart } from '@/app/hooks/useProductsCart'
+import { useBackgroundColor } from '@/app/context/backgroundColorContext'
 
 function isVigente(promo) {
   const hoy = new Date()
@@ -30,6 +31,7 @@ export default function page() {
   const router = useRouter()
   const { slug } = useParams()
   const { user, handleSignIn } = useAuth()
+  const { bgColor } = useBackgroundColor()
   const { handleProductsCart } = useProductsCart()
   const [quantity, setQuantity] = useState(1)
   const [selectedFecha, setSelectedFecha] = useState('')
@@ -269,10 +271,11 @@ export default function page() {
     const today = new Date()
     const formattedToday = formatLocalDate(today)
 
-    if (product.categoria === 'servicios' && !user?.tipo) {
+    if (product.categoria === 'servicios') {
       return (
         <>
-          <div className="bg-pink p-4 text-white font-bold rounded-md shadow-md">
+          <div
+            className={`${bgColor} p-4 text-white font-bold rounded-md shadow-md`}>
             <h3>Fechas disponibles para contratar el servicio</h3>
 
             <select
@@ -283,7 +286,14 @@ export default function page() {
               {product.fechas_servicios?.map((item, index) => {
                 const fecha = new Date(item)
                 const formattedFecha = formatLocalDate(fecha)
-                if (formattedFecha >= formattedToday)
+
+                const parsedFormated = new Date(
+                  formattedFecha.split('/').reverse().join('/'),
+                )
+                const parsedToday = new Date(
+                  formattedToday.split('/').reverse().join('/'),
+                )
+                if (parsedFormated >= parsedToday)
                   return (
                     <option key={index} value={item}>
                       {item}

@@ -37,7 +37,13 @@ export default function Page() {
           return product.fechas_servicios?.some(fechaStr => {
             const fecha = new Date(fechaStr)
             const formattedFecha = formatLocalDate(fecha)
-            return formattedFecha >= formattedToday
+            const parsedFormated = new Date(
+              formattedFecha.split('/').reverse().join('/'),
+            )
+            const parsedToday = new Date(
+              formattedToday.split('/').reverse().join('/'),
+            )
+            return parsedFormated >= parsedToday
           })
         }
         return true

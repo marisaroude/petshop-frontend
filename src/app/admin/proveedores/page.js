@@ -6,6 +6,7 @@ import { allProveedores } from '@/app/signals/proveedores'
 import { getAllProveedores } from '@/lib/graphql'
 import ProveedorInfo from '@/components/proveedores/ProveedorInfo'
 import Link from 'next/link'
+import SearchInput from '@/components/inputs/SearchInput'
 
 function isActive(proveedor) {
   return proveedor.activo
@@ -15,12 +16,20 @@ function page() {
 
   const [filtro, setFiltro] = useState('todos') // 'activos' | 'no activos' | 'todos'
   const [visibleCount, setVisibleCount] = useState(5)
+  const [searchValue, setSearchValue] = useState('')
 
   const proveedoresFiltered = allProveedores?.value
     ?.filter(proveedores => {
       if (filtro === 'activos') return isActive(proveedores)
       if (filtro === 'no-activos') return !isActive(proveedores)
       return true
+    })
+    ?.filter(proveedor => {
+      const query = searchValue.toLowerCase()
+      return (
+        proveedor.nombre?.toLowerCase().includes(query) ||
+        proveedor.cuit?.toLowerCase().includes(query)
+      )
     })
     ?.sort((a, b) => b.id_proveedor - a.id_proveedor)
 
@@ -37,7 +46,11 @@ function page() {
   }, [])
   return (
     <div className="bg-white min-h-screen p-6 w-full flex flex-col items-center gap-6">
-      <div className="w-full gap-2 max-w-4xl flex justify-end">
+      <div className="w-full max-w-4xl flex flex-col sm:flex-row justify-between gap-2 h-auto">
+        <SearchInput
+          value={searchValue}
+          onChange={e => setSearchValue(e.target.value)}
+        />
         <select
           className="border border-gray-300 rounded-md p-2 text-sm"
           value={filtro}
@@ -47,7 +60,7 @@ function page() {
           <option value="no-activos">Solo No Activos</option>
         </select>
 
-        <div className="flex justify-end">
+        <div className="flex">
           <Link
             href={`/admin/proveedores/agregar`}
             className="bg-green-300 hover:bg-green-400 text-green-900 font-medium py-1.5 px-4 rounded-md transition-colors">

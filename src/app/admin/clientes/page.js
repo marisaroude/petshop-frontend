@@ -5,11 +5,13 @@ import withAdminAuth from '@/app/utils/withAdminAuth'
 import { allUsers } from '@/app/signals/user'
 import { getAllPerson } from '@/lib/graphql'
 import UserInfo from '@/components/users/UserInfo'
+import SearchInput from '@/components/inputs/SearchInput'
 
 function page() {
   useSignals()
   const [visibleCount, setVisibleCount] = useState(5)
   const [filtro, setFiltro] = useState('todos')
+  const [searchValue, setSearchValue] = useState('')
   const isActivo = user => user.fecha_baja === null
   const isAdmin = user => user.tipo === true
   const isCliente = user => user.tipo === false
@@ -21,6 +23,13 @@ function page() {
       if (filtro === 'clientes') return isCliente(user)
       if (filtro === 'admins') return isAdmin(user)
       return true // 'todos'
+    })
+    ?.filter(user => {
+      const query = searchValue.toLowerCase()
+      return (
+        user.nombre?.toLowerCase().includes(query) ||
+        user.apellido?.toLowerCase().includes(query)
+      )
     })
     ?.sort((a, b) => b.id_persona - a.id_persona)
 
@@ -37,7 +46,11 @@ function page() {
   }, [])
   return (
     <div className="bg-white min-h-screen p-6 w-full flex flex-col items-center gap-6">
-      <div className="w-full max-w-2xl flex justify-end">
+      <div className="w-full max-w-2xl flex flex-col sm:flex-row justify-between gap-2">
+        <SearchInput
+          value={searchValue}
+          onChange={e => setSearchValue(e.target.value)}
+        />
         <select
           className="border border-gray-300 rounded-md p-2 text-sm"
           value={filtro}
